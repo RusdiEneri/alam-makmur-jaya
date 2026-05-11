@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Admin — UD. Alam Makmur Jaya</title>
+  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { background: #F0EDE8; }
+    .admin-layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+    .admin-sidebar {
+      background: #1C1C1E;
+      color: white;
+      padding: 1.5rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-brand { font-size: 15px; font-weight: 700; margin-bottom: 2rem; padding: 0 0.5rem; }
+    .sidebar-brand small { display: block; font-size: 11px; color: #9CA3AF; font-weight: 400; margin-top: 2px; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #9CA3AF;
+      margin-bottom: 4px;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active { background: #2D2D2F; color: white; }
+    .sidebar-nav a.active { color: #F97316; }
+    .sidebar-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid #2D2D2F; }
+    .admin-main { padding: 2rem; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .admin-header h1 { font-family: 'Fraunces', serif; font-size: 1.75rem; }
+    .admin-header .user-badge { background: white; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; border: 1px solid #E5E5E5; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: white; border-radius: 12px; padding: 1.25rem; border: 1.5px solid #E5E5E5; }
+    .stat-card .s-label { font-size: 12px; color: #6B6B6B; font-weight: 600; margin-bottom: 8px; }
+    .stat-card .s-val { font-size: 28px; font-weight: 800; color: #1C1C1E; }
+    .stat-card .s-sub { font-size: 12px; color: #6B6B6B; margin-top: 4px; }
+    .stat-card.orange { border-top: 3px solid #E85D26; }
+    .stat-card.green { border-top: 3px solid #1A6B3A; }
+    .stat-card.yellow { border-top: 3px solid #D97706; }
+    .stat-card.red { border-top: 3px solid #DC2626; }
+    .section-card { background: white; border-radius: 12px; padding: 1.5rem; border: 1.5px solid #E5E5E5; margin-bottom: 1.5rem; }
+    .section-card h2 { font-size: 16px; font-weight: 700; margin-bottom: 1.25rem; color: #1C1C1E; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 600; color: #6B6B6B; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #E5E5E5; background: #F9F8F6; }
+    td { padding: 12px 12px; border-bottom: 1px solid #F0EDE8; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    .status-badge { padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+    .status-pending { background: #FEF3C7; color: #92400E; }
+    .status-proses { background: #DBEAFE; color: #1E40AF; }
+    .status-selesai { background: #D1FAE5; color: #065F46; }
+    .status-batal { background: #FEE2E2; color: #991B1B; }
+    .btn-sm { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; font-family: inherit; }
+    .btn-sm.primary { background: #E85D26; color: white; }
+    .btn-sm.secondary { background: #F0EDE8; color: #2D2D2D; }
+    .btn-sm.danger { background: #FEE2E2; color: #DC2626; }
+    .tab-nav { display: flex; gap: 4px; margin-bottom: 1.5rem; }
+    .tab-btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1.5px solid #E5E5E5; background: white; cursor: pointer; color: #6B6B6B; font-family: inherit; transition: all 0.15s; }
+    .tab-btn.active { background: #E85D26; color: white; border-color: #E85D26; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .low-stock { background: #FEF3C7 !important; }
+    .out-stock { background: #FEE2E2 !important; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: white; border-radius: 16px; padding: 2rem; width: 400px; max-width: 90%; }
+    .modal-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 1.5rem; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.5rem; }
+    @media (max-width: 768px) {
+      .admin-layout { grid-template-columns: 1fr; }
+      .admin-sidebar { display: none; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        🏗️ AMJ Admin
+        <small>UD. Alam Makmur Jaya</small>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="active" onclick="showTab('dashboard')">📊 Dashboard</a>
+        <a onclick="showTab('pesanan')">📦 Pesanan</a>
+        <a onclick="showTab('produk')">🛍 Produk</a>
+        <a onclick="showTab('stok')">📋 Stok</a>
+      </nav>
+      <div class="sidebar-footer">
+        <a onclick="logout()" style="color:#9CA3AF;font-size:13px;cursor:pointer">🚪 Keluar</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+      <div class="admin-header">
+        <h1 id="page-title">Dashboard</h1>
+        <span class="user-badge" id="user-badge">👤 Admin</span>
+      </div>
+
+      <!-- TABS -->
+      <div id="tab-dashboard" class="tab-content active">
+        <div class="stats-grid" id="stats-grid"></div>
+        <div class="section-card">
+          <h2>Pesanan Terbaru</h2>
+          <div id="recent-orders"></div>
+        </div>
+        <div class="section-card">
+          <h2>⚠ Stok Menipis / Habis</h2>
+          <div id="low-stock-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-pesanan" class="tab-content">
+        <div class="section-card">
+          <h2>Semua Pesanan</h2>
+          <div id="all-orders"></div>
+        </div>
+      </div>
+
+      <div id="tab-produk" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h2 style="font-size:16px;font-weight:700">Manajemen Produk</h2>
+          <button class="btn-sm primary" onclick="openAddProduct()">+ Tambah Produk</button>
+        </div>
+        <div class="section-card" style="padding:0;overflow:hidden">
+          <div id="product-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-stok" class="tab-content">
+        <div class="section-card" style="padding:0;overflow:hidden">
+          <div style="padding:1.25rem 1.5rem;border-bottom:1px solid #E5E5E5">
+            <h2 style="font-size:16px;font-weight:700;margin:0">Monitor Stok Real-Time</h2>
+          </div>
+          <div id="stok-table"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL ADD/EDIT PRODUCT -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-box">
+      <h3 id="modal-title">Tambah Produk</h3>
+      <input type="hidden" id="edit-id"/>
+      <div class="form-group">
+        <label class="form-label">Nama Produk</label>
+        <input class="form-input" id="p-name" placeholder="cth: Semen Portland 50kg"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Kategori</label>
+        <select class="form-input" id="p-cat">
+          <option value="semen">Semen</option>
+          <option value="pipa">Pipa</option>
+          <option value="kabel">Kabel</option>
+          <option value="cat">Cat</option>
+          <option value="paku">Paku & Baut</option>
+          <option value="kayu">Kayu</option>
+          <option value="lampu">Lampu</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group">
+          <label class="form-label">Harga (Rp)</label>
+          <input class="form-input" id="p-price" type="number" placeholder="68000"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Stok</label>
+          <input class="form-input" id="p-stock" type="number" placeholder="100"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group">
+          <label class="form-label">Satuan</label>
+          <input class="form-input" id="p-unit" placeholder="sak / pcs / kg"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Emoji</label>
+          <input class="form-input" id="p-emoji" placeholder="🧱"/>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-sm secondary" onclick="closeModal()">Batal</button>
+        <button class="btn-sm primary" onclick="saveProduct()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script>
+    // Auth guard
+    const user = getCurrentUser();
+    if (!user || user.role !== 'admin') window.location.href = 'login.html';
+    document.getElementById('user-badge').textContent = '👤 ' + (user?.name || 'Admin');
+
+    function showTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      const titles = { dashboard: 'Dashboard', pesanan: 'Manajemen Pesanan', produk: 'Manajemen Produk', stok: 'Monitor Stok' };
+      document.getElementById('page-title').textContent = titles[tab] || tab;
+      document.querySelectorAll('.sidebar-nav a').forEach((a, i) => {
+        a.classList.remove('active');
+        if (['dashboard','pesanan','produk','stok'][i] === tab) a.classList.add('active');
+      });
+      renderAll();
+    }
+
+    function renderAll() {
+      renderStats();
+      renderRecentOrders();
+      renderLowStock();
+      renderAllOrders();
+      renderProductTable();
+      renderStokTable();
+    }
+
+    function renderStats() {
+      const products = getProducts();
+      const orders = getOrders();
+      const totalRevenue = orders.filter(o => o.status === 'selesai').reduce((s, o) => s + o.total, 0);
+      const pending = orders.filter(o => o.status === 'pending').length;
+      const lowStock = products.filter(p => p.stock < 10).length;
+
+      document.getElementById('stats-grid').innerHTML = `
+        <div class="stat-card orange">
+          <p class="s-label">Total Produk</p>
+          <p class="s-val">${products.length}</p>
+          <p class="s-sub">di sistem</p>
+        </div>
+        <div class="stat-card green">
+          <p class="s-label">Pendapatan</p>
+          <p class="s-val">${formatRupiah(totalRevenue)}</p>
+          <p class="s-sub">pesanan selesai</p>
+        </div>
+        <div class="stat-card yellow">
+          <p class="s-label">Pesanan Pending</p>
+          <p class="s-val">${pending}</p>
+          <p class="s-sub">menunggu proses</p>
+        </div>
+        <div class="stat-card red">
+          <p class="s-label">Stok Kritis</p>
+          <p class="s-val">${lowStock}</p>
+          <p class="s-sub">produk perlu restock</p>
+        </div>
+      `;
+    }
+
+    function statusBadge(s) {
+      const map = { pending: 'status-pending', proses: 'status-proses', selesai: 'status-selesai', batal: 'status-batal' };
+      const label = { pending: '⏳ Pending', proses: '🔄 Diproses', selesai: '✓ Selesai', batal: '✗ Batal' };
+      return `<span class="status-badge ${map[s] || ''}">${label[s] || s}</span>`;
+    }
+
+    function orderTableHTML(orders, showActions = false) {
+      if (orders.length === 0) return '<p style="padding:1.5rem;color:#6B6B6B;font-size:14px">Belum ada pesanan.</p>';
+      return `<table><thead><tr>
+        <th>ID Pesanan</th><th>Pembeli</th><th>Total</th><th>Status</th><th>Tanggal</th>
+        ${showActions ? '<th>Aksi</th>' : ''}
+      </tr></thead><tbody>
+        ${orders.map(o => `<tr>
+          <td><code style="font-size:12px;background:#F0EDE8;padding:2px 6px;border-radius:4px">${o.id}</code></td>
+          <td>${o.buyerName || '-'}</td>
+          <td style="font-weight:700">${formatRupiah(o.total)}</td>
+          <td>${statusBadge(o.status)}</td>
+          <td>${new Date(o.createdAt).toLocaleDateString('id-ID')}</td>
+          ${showActions ? `<td>
+            ${o.status === 'pending' ? `<button class="btn-sm primary" onclick="changeStatus('${o.id}','proses')">Proses</button>` : ''}
+            ${o.status === 'proses' ? `<button class="btn-sm primary" onclick="changeStatus('${o.id}','selesai')">Selesai</button>` : ''}
+            ${o.status !== 'selesai' && o.status !== 'batal' ? `<button class="btn-sm danger" onclick="changeStatus('${o.id}','batal')" style="margin-left:4px">Batal</button>` : ''}
+          </td>` : ''}
+        </tr>`).join('')}
+      </tbody></table>`;
+    }
+
+    function renderRecentOrders() {
+      const el = document.getElementById('recent-orders');
+      if (!el) return;
+      const orders = getOrders().slice(0, 5);
+      el.innerHTML = orderTableHTML(orders);
+    }
+
+    function renderAllOrders() {
+      const el = document.getElementById('all-orders');
+      if (!el) return;
+      el.innerHTML = orderTableHTML(getOrders(), true);
+    }
+
+    function changeStatus(id, status) {
+      updateOrderStatus(id, status);
+      renderAll();
+      showToast('✓ Status pesanan diperbarui');
+    }
+
+    function renderLowStock() {
+      const el = document.getElementById('low-stock-table');
+      if (!el) return;
+      const products = getProducts().filter(p => p.stock < 10).sort((a,b) => a.stock - b.stock);
+      if (products.length === 0) { el.innerHTML = '<p style="color:#1A6B3A;font-size:14px;padding:0.5rem">✓ Semua stok aman.</p>'; return; }
+      el.innerHTML = `<table><thead><tr><th>Produk</th><th>Stok</th><th>Aksi</th></tr></thead><tbody>
+        ${products.map(p => `<tr class="${p.stock === 0 ? 'out-stock' : 'low-stock'}">
+          <td>${p.emoji} ${p.name}</td>
+          <td style="font-weight:700;color:${p.stock === 0 ? '#DC2626' : '#D97706'}">${p.stock} ${p.unit}</td>
+          <td><button class="btn-sm primary" onclick="quickRestock(${p.id})">+ Restock</button></td>
+        </tr>`).join('')}
+      </tbody></table>`;
+    }
+
+    function quickRestock(id) {
+      const product = getProductById(id);
+      const qty = parseInt(prompt(`Tambah berapa ${product.unit} untuk "${product.name}"?`, '50'));
+      if (qty && qty > 0) {
+        product.stock += qty;
+        updateProduct(product);
+        renderAll();
+        showToast(`✓ Stok ditambah ${qty} ${product.unit}`);
+      }
+    }
+
+    function renderProductTable() {
+      const el = document.getElementById('product-table');
+      if (!el) return;
+      const products = getProducts();
+      el.innerHTML = `<table><thead><tr><th>Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr></thead><tbody>
+        ${products.map(p => `<tr>
+          <td>${p.emoji} <strong>${p.name}</strong></td>
+          <td><span style="background:#F0EDE8;padding:3px 8px;border-radius:99px;font-size:12px">${p.category}</span></td>
+          <td style="font-weight:700">${formatRupiah(p.price)}</td>
+          <td style="color:${p.stock===0?'#DC2626':p.stock<10?'#D97706':'#1A6B3A'};font-weight:600">${p.stock} ${p.unit}</td>
+          <td>
+            <button class="btn-sm secondary" onclick="editProduct(${p.id})">✏ Edit</button>
+            <button class="btn-sm danger" onclick="delProduct(${p.id})" style="margin-left:4px">🗑</button>
+          </td>
+        </tr>`).join('')}
+      </tbody></table>`;
+    }
+
+    function renderStokTable() {
+      const el = document.getElementById('stok-table');
+      if (!el) return;
+      const products = getProducts().sort((a,b) => a.stock - b.stock);
+      el.innerHTML = `<table><thead><tr><th>Produk</th><th>Kategori</th><th>Stok</th><th>Status</th><th>Ubah Stok</th></tr></thead><tbody>
+        ${products.map(p => {
+          const sl = stockLabel(p.stock);
+          const rowClass = p.stock === 0 ? 'out-stock' : p.stock < 10 ? 'low-stock' : '';
+          return `<tr class="${rowClass}">
+            <td>${p.emoji} <strong>${p.name}</strong></td>
+            <td>${p.category}</td>
+            <td style="font-weight:700">${p.stock} ${p.unit}</td>
+            <td><span class="status-badge ${p.stock===0?'status-batal':p.stock<10?'status-pending':'status-selesai'}">${sl.text}</span></td>
+            <td>
+              <input type="number" id="stok-${p.id}" value="${p.stock}" style="width:70px;padding:4px 8px;border:1.5px solid #E5E5E5;border-radius:6px;font-size:13px;font-family:inherit"/>
+              <button class="btn-sm primary" onclick="updateStok(${p.id})" style="margin-left:6px">Simpan</button>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody></table>`;
+    }
+
+    function updateStok(id) {
+      const val = parseInt(document.getElementById('stok-' + id).value);
+      if (isNaN(val) || val < 0) { showToast('✗ Stok tidak valid'); return; }
+      const product = getProductById(id);
+      product.stock = val;
+      updateProduct(product);
+      renderAll();
+      showToast('✓ Stok diperbarui');
+    }
+
+    function openAddProduct() {
+      document.getElementById('modal-title').textContent = 'Tambah Produk';
+      document.getElementById('edit-id').value = '';
+      ['p-name','p-price','p-stock','p-unit','p-emoji'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('product-modal').classList.add('open');
+    }
+
+    function editProduct(id) {
+      const p = getProductById(id);
+      document.getElementById('modal-title').textContent = 'Edit Produk';
+      document.getElementById('edit-id').value = p.id;
+      document.getElementById('p-name').value = p.name;
+      document.getElementById('p-cat').value = p.category;
+      document.getElementById('p-price').value = p.price;
+      document.getElementById('p-stock').value = p.stock;
+      document.getElementById('p-unit').value = p.unit;
+      document.getElementById('p-emoji').value = p.emoji;
+      document.getElementById('product-modal').classList.add('open');
+      showTab('produk');
+    }
+
+    function saveProduct() {
+      const id = document.getElementById('edit-id').value;
+      const data = {
+        name: document.getElementById('p-name').value,
+        category: document.getElementById('p-cat').value,
+        price: parseInt(document.getElementById('p-price').value),
+        stock: parseInt(document.getElementById('p-stock').value),
+        unit: document.getElementById('p-unit').value || 'pcs',
+        emoji: document.getElementById('p-emoji').value || '📦',
+      };
+      if (!data.name || !data.price) { showToast('✗ Lengkapi nama dan harga'); return; }
+      if (id) { data.id = parseInt(id); updateProduct(data); showToast('✓ Produk diperbarui'); }
+      else { addProduct(data); showToast('✓ Produk ditambahkan'); }
+      closeModal();
+      renderAll();
+    }
+
+    function delProduct(id) {
+      if (confirm('Hapus produk ini?')) {
+        deleteProduct(id);
+        renderAll();
+        showToast('✓ Produk dihapus');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('product-modal').classList.remove('open');
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keranjang — UD. Alam Makmur Jaya</title>
+  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .cart-layout { display: grid; grid-template-columns: 1fr 360px; gap: 2rem; }
+    .cart-item { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #F0EDE8; }
+    .cart-item:last-child { border-bottom: none; }
+    .item-emoji { font-size: 36px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; background: #F0EDE8; border-radius: 10px; }
+    .item-info { flex: 1; }
+    .item-name { font-weight: 700; font-size: 15px; color: #1C1C1E; }
+    .item-price { font-size: 14px; color: #6B6B6B; margin-top: 2px; }
+    .qty-ctrl { display: flex; align-items: center; gap: 8px; }
+    .qty-btn { width: 28px; height: 28px; border: 1.5px solid #E5E5E5; border-radius: 6px; background: white; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; font-family: inherit; transition: all 0.15s; }
+    .qty-btn:hover { border-color: #E85D26; color: #E85D26; }
+    .qty-num { font-weight: 700; font-size: 15px; min-width: 24px; text-align: center; }
+    .item-total { font-weight: 800; font-size: 15px; color: #E85D26; min-width: 100px; text-align: right; }
+    .remove-btn { background: none; border: none; cursor: pointer; font-size: 18px; color: #9CA3AF; transition: color 0.15s; }
+    .remove-btn:hover { color: #DC2626; }
+    .summary-card { background: white; border-radius: 16px; padding: 1.5rem; border: 1.5px solid #E5E5E5; height: fit-content; position: sticky; top: 80px; }
+    .summary-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 1.25rem; }
+    .summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px; }
+    .summary-row.total { font-weight: 800; font-size: 18px; color: #E85D26; border-top: 1px solid #E5E5E5; padding-top: 12px; margin-top: 4px; }
+    .payment-options { margin: 1rem 0; }
+    .payment-opt { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1.5px solid #E5E5E5; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; }
+    .payment-opt:hover, .payment-opt.selected { border-color: #E85D26; background: #FDF1EC; }
+    .payment-opt input { accent-color: #E85D26; }
+    .payment-opt label { font-size: 14px; font-weight: 600; cursor: pointer; }
+    .success-screen { display: none; text-align: center; padding: 3rem 1rem; }
+    .success-screen .big-check { font-size: 72px; margin-bottom: 1rem; }
+    @media (max-width: 768px) { .cart-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="brand">
+      <span class="brand-icon">🏗</span>
+      <div>
+        <span class="brand-name">Alam Makmur Jaya</span>
+        <span class="brand-sub">Toko Bahan Bangunan</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html">Beranda</a>
+      <a href="catalog.html">Katalog</a>
+      <a href="cart.html" class="active">🛒 Keranjang <span id="cart-count" class="badge">0</span></a>
+      <a href="login.html" class="btn-login">Masuk</a>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1>Keranjang Belanja</h1>
+    <p>Periksa pesanan sebelum checkout</p>
+  </div>
+
+  <div class="page-body">
+    <div id="empty-state" style="display:none;text-align:center;padding:5rem 0">
+      <p style="font-size:64px">🛒</p>
+      <p style="font-size:20px;font-weight:700;margin:1rem 0 0.5rem">Keranjang Kosong</p>
+      <p style="color:#6B6B6B;margin-bottom:1.5rem">Belum ada produk di keranjang Anda.</p>
+      <a href="catalog.html" class="btn-primary">Lihat Katalog →</a>
+    </div>
+
+    <div id="cart-content">
+      <div class="cart-layout">
+        <div>
+          <div class="section-card" style="background:white;border-radius:16px;padding:1.5rem;border:1.5px solid #E5E5E5">
+            <h2 style="font-size:16px;font-weight:700;margin-bottom:1rem">Produk Dipilih (<span id="item-count">0</span> item)</h2>
+            <div id="cart-items"></div>
+          </div>
+
+          <div style="margin-top:1.5rem;background:white;border-radius:16px;padding:1.5rem;border:1.5px solid #E5E5E5">
+            <h2 style="font-size:16px;font-weight:700;margin-bottom:1rem">Data Pemesan</h2>
+            <div class="form-group">
+              <label class="form-label">Nama Lengkap</label>
+              <input class="form-input" id="buyer-name" placeholder="Masukkan nama lengkap"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nomor HP</label>
+              <input class="form-input" id="buyer-phone" type="tel" placeholder="08xxxxxxxxxx"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Alamat Pengiriman</label>
+              <textarea class="form-input" id="buyer-addr" rows="3" placeholder="Jl. Contoh No. 1, Gresik..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUMMARY -->
+        <div>
+          <div class="summary-card">
+            <h3>Ringkasan Pesanan</h3>
+            <div class="summary-row"><span>Subtotal</span><span id="subtotal">Rp 0</span></div>
+            <div class="summary-row"><span>Ongkir</span><span style="color:#1A6B3A;font-weight:600">GRATIS</span></div>
+            <div class="summary-row total"><span>Total</span><span id="total">Rp 0</span></div>
+
+            <div class="payment-options">
+              <p style="font-size:13px;font-weight:600;color:#6B6B6B;margin-bottom:8px">Metode Pembayaran</p>
+              <div class="payment-opt selected" onclick="selectPay(this,'qris')">
+                <input type="radio" name="pay" checked/><label>💳 QRIS / e-Wallet</label>
+              </div>
+              <div class="payment-opt" onclick="selectPay(this,'transfer')">
+                <input type="radio" name="pay"/><label>🏦 Transfer Bank</label>
+              </div>
+              <div class="payment-opt" onclick="selectPay(this,'cash')">
+                <input type="radio" name="pay"/><label>💵 Bayar di Toko</label>
+              </div>
+            </div>
+
+            <button class="btn-primary" style="width:100%;justify-content:center;display:flex" onclick="doCheckout()">
+              Konfirmasi Pesanan →
+            </button>
+            <a href="catalog.html" style="display:block;text-align:center;margin-top:12px;font-size:13px;color:#6B6B6B">← Lanjut Belanja</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="success-screen">
+      <div class="big-check">✅</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:2rem;font-weight:700">Pesanan Berhasil!</h2>
+      <p style="color:#6B6B6B;margin:0.5rem 0 2rem;font-size:16px" id="order-id-display"></p>
+      <div style="background:#F0EDE8;border-radius:12px;padding:1.5rem;max-width:400px;margin:0 auto 2rem;text-align:left">
+        <p style="font-size:13px;font-weight:600;color:#6B6B6B;margin-bottom:8px">Pesanan diterima! Admin akan memproses segera.</p>
+        <div id="qris-display"></div>
+      </div>
+      <a href="../index.html" class="btn-primary">Kembali ke Beranda</a>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script>
+    let selectedPayment = 'qris';
+
+    function selectPay(el, method) {
+      selectedPayment = method;
+      document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      el.querySelector('input').checked = true;
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      const el = document.getElementById('cart-items');
+
+      if (cart.length === 0) {
+        document.getElementById('cart-content').style.display = 'none';
+        document.getElementById('empty-state').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('item-count').textContent = cart.reduce((s,i) => s + i.qty, 0);
+
+      el.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="item-emoji">${item.emoji}</div>
+          <div class="item-info">
+            <p class="item-name">${item.name}</p>
+            <p class="item-price">${formatRupiah(item.price)} / pcs</p>
+          </div>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(${item.productId}, -1)">−</button>
+            <span class="qty-num">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.productId}, 1)">+</button>
+          </div>
+          <span class="item-total">${formatRupiah(item.price * item.qty)}</span>
+          <button class="remove-btn" onclick="removeFromCart(${item.productId});renderCart()">✕</button>
+        </div>
+      `).join('');
+
+      const total = getCartTotal();
+      document.getElementById('subtotal').textContent = formatRupiah(total);
+      document.getElementById('total').textContent = formatRupiah(total);
+    }
+
+    function changeQty(productId, delta) {
+      const cart = getCart();
+      const item = cart.find(c => c.productId === productId);
+      if (!item) return;
+      const product = getProductById(productId);
+      item.qty = Math.max(1, Math.min(item.qty + delta, product.stock));
+      sessionStorage.setItem('amj_cart', JSON.stringify(cart));
+      updateCartBadge();
+      renderCart();
+    }
+
+    function doCheckout() {
+      const name = document.getElementById('buyer-name').value.trim();
+      const phone = document.getElementById('buyer-phone').value.trim();
+      const addr = document.getElementById('buyer-addr').value.trim();
+      if (!name || !phone || !addr) { showToast('✗ Lengkapi data pemesan'); return; }
+
+      const cart = getCart();
+      const order = addOrder({
+        buyerName: name,
+        buyerPhone: phone,
+        address: addr,
+        paymentMethod: selectedPayment,
+        items: cart.map(c => ({ productId: c.productId, name: c.name, qty: c.qty, price: c.price })),
+        total: getCartTotal(),
+      });
+
+      clearCart();
+      document.getElementById('cart-content').style.display = 'none';
+      document.getElementById('success-screen').style.display = 'block';
+      document.getElementById('order-id-display').textContent = 'ID Pesanan: ' + order.id;
+
+      if (selectedPayment === 'qris') {
+        document.getElementById('qris-display').innerHTML = `
+          <p style="font-size:14px;font-weight:600;margin-bottom:8px">Scan QRIS untuk membayar:</p>
+          <div style="background:#E5E5E5;border-radius:8px;height:120px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6B6B6B">
+            [QR Code Simulasi — ${formatRupiah(order.total)}]
+          </div>`;
+      }
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>
