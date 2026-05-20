@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  KASIR
+  PEMBELI
+}
+
+enum PaymentMethod {
+  QRIS
+  TRANSFER
+  CASH
+}
+
+enum OrderStatus {
+  PENDING
+  DIPROSES
+  DIKIRIM
+  SELESAI
+  BATAL
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(PEMBELI)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions     Session[]
+  orders       Order[]
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  tokenHash    String
+  deviceName   String?
+  ipAddress    String?
+  userAgent    String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  expiredAt    DateTime
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isActive])
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category    String
+  price       Int
+  stock       Int
+  unit        String
+  emoji       String?
+  minStock    Int      @default(10)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id              Int           @id @default(autoincrement())
+  orderCode       String        @unique
+  userId          Int?
+  customerName    String
+  phone           String
+  address         String?
+  paymentMethod   PaymentMethod
+  status          OrderStatus   @default(PENDING)
+  total           Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user            User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  qty       Int
+  price     Int
+  subtotal  Int
+
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+}
