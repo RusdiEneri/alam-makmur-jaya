@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Masuk — UD. Alam Makmur Jaya</title>
+  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; background: #F0EDE8; }
+    .login-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .login-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      border: 1.5px solid #E5E5E5;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+    .login-logo { text-align: center; margin-bottom: 2rem; }
+    .login-logo .big { font-size: 40px; }
+    .login-logo h1 { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; color: #1C1C1E; margin-top: 8px; }
+    .login-logo p { font-size: 13px; color: #6B6B6B; }
+    .demo-box { background: #F9F8F6; border-radius: 10px; padding: 12px 14px; margin-bottom: 1.5rem; border: 1px dashed #D1CFC9; }
+    .demo-box p { font-size: 12px; color: #6B6B6B; margin-bottom: 6px; font-weight: 600; }
+    .demo-item { display: flex; justify-content: space-between; font-size: 12px; margin: 4px 0; color: #2D2D2D; }
+    .demo-item .role { background: #E85D26; color: white; padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+    .demo-item .role.user { background: #1A6B3A; }
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      background: #E85D26;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover { background: #C04718; }
+    .err { background: #FEE2E2; color: #DC2626; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; margin-bottom: 1rem; display: none; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="brand">
+      <span class="brand-icon">🏗</span>
+      <div>
+        <span class="brand-name">Alam Makmur Jaya</span>
+        <span class="brand-sub">Toko Bahan Bangunan</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html">Beranda</a>
+      <a href="catalog.html">Katalog</a>
+    </div>
+  </nav>
+
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="big">🏗️</div>
+        <h1>Selamat Datang</h1>
+        <p>Masuk ke akun Anda untuk melanjutkan</p>
+      </div>
+
+      <div class="demo-box">
+        <p>🔑 Akun Demo:</p>
+        <div class="demo-item">
+          <span>admin@amj.com / password</span>
+          <span class="role">Admin</span>
+        </div>
+        <div class="demo-item">
+          <span>kasir@amj.com / password</span>
+          <span class="role">Kasir</span>
+        </div>
+        <div class="demo-item">
+          <span>budi@email.com / password</span>
+          <span class="role user">Pembeli</span>
+        </div>
+      </div>
+
+      <div class="err" id="err-msg">Email atau password salah!</div>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="email" placeholder="email@contoh.com" value="admin@amj.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="password" placeholder="••••••••" value="admin123"/>
+      </div>
+      <button class="btn-submit" onclick="doLogin()">Masuk →</button>
+
+      <p style="text-align:center;margin-top:1.5rem;font-size:13px;color:#6B6B6B">
+        Belum punya akun? <a href="#" style="color:#E85D26;font-weight:600">Daftar di sini</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/data.js"></script>
+  <script>
+  // Redirect kalau sudah login
+  const existing = API.getCurrentUser();
+
+  if (existing) {
+    if (existing.role === 'admin' || existing.role === 'kasir') {
+      window.location.href = 'admin.html';
+    } else {
+      window.location.href = '../index.html';
+    }
+  }
+
+  async function doLogin() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    try {
+      const result = await API.login(email, password);
+      const user = result.user;
+
+      if (!user || !user.role) {
+        throw new Error('Data user tidak valid dari server');
+      }
+
+      // Simpan ulang untuk kompatibilitas dengan kode lama
+      if (result.token) {
+        sessionStorage.setItem('token', result.token);
+      }
+
+      sessionStorage.setItem('user', JSON.stringify(user));
+      sessionStorage.setItem('currentUser', JSON.stringify(user));
+      localStorage.setItem('currentUser', JSON.stringify(user));
+
+      showToast('✓ Berhasil masuk sebagai ' + (user.nama || user.name || user.email));
+
+      setTimeout(() => {
+        if (user.role === 'admin' || user.role === 'kasir') {
+          window.location.href = 'admin.html';
+        } else {
+          window.location.href = '../index.html';
+        }
+      }, 500);
+    } catch (err) {
+      document.getElementById('err-msg').textContent =
+        err.message || 'Email atau password salah';
+      document.getElementById('err-msg').style.display = 'block';
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+</script>
+</body>
+</html>

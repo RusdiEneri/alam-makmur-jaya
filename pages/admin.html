@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Admin — UD. Alam Makmur Jaya</title>
+  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    body { background: #F0EDE8; }
+    .admin-layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+    .admin-sidebar {
+      background: #1C1C1E;
+      color: white;
+      padding: 1.5rem 1rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-brand { font-size: 15px; font-weight: 700; margin-bottom: 2rem; padding: 0 0.5rem; }
+    .sidebar-brand small { display: block; font-size: 11px; color: #9CA3AF; font-weight: 400; margin-top: 2px; }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #9CA3AF;
+      margin-bottom: 4px;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active { background: #2D2D2F; color: white; }
+    .sidebar-nav a.active { color: #F97316; }
+    .sidebar-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid #2D2D2F; }
+    .admin-main { padding: 2rem; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .admin-header h1 { font-family: 'Fraunces', serif; font-size: 1.75rem; }
+    .admin-header .user-badge { background: white; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; border: 1px solid #E5E5E5; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: white; border-radius: 12px; padding: 1.25rem; border: 1.5px solid #E5E5E5; }
+    .stat-card .s-label { font-size: 12px; color: #6B6B6B; font-weight: 600; margin-bottom: 8px; }
+    .stat-card .s-val { font-size: 28px; font-weight: 800; color: #1C1C1E; }
+    .stat-card .s-sub { font-size: 12px; color: #6B6B6B; margin-top: 4px; }
+    .stat-card.orange { border-top: 3px solid #E85D26; }
+    .stat-card.green { border-top: 3px solid #1A6B3A; }
+    .stat-card.yellow { border-top: 3px solid #D97706; }
+    .stat-card.red { border-top: 3px solid #DC2626; }
+    .section-card { background: white; border-radius: 12px; padding: 1.5rem; border: 1.5px solid #E5E5E5; margin-bottom: 1.5rem; }
+    .section-card h2 { font-size: 16px; font-weight: 700; margin-bottom: 1.25rem; color: #1C1C1E; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 600; color: #6B6B6B; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #E5E5E5; background: #F9F8F6; }
+    td { padding: 12px 12px; border-bottom: 1px solid #F0EDE8; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    .status-badge { padding: 4px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+    .status-pending { background: #FEF3C7; color: #92400E; }
+    .status-proses { background: #DBEAFE; color: #1E40AF; }
+    .status-selesai { background: #D1FAE5; color: #065F46; }
+    .status-batal { background: #FEE2E2; color: #991B1B; }
+    .btn-sm { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; cursor: pointer; font-family: inherit; }
+    .btn-sm.primary { background: #E85D26; color: white; }
+    .btn-sm.secondary { background: #F0EDE8; color: #2D2D2D; }
+    .btn-sm.danger { background: #FEE2E2; color: #DC2626; }
+    .tab-nav { display: flex; gap: 4px; margin-bottom: 1.5rem; }
+    .tab-btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1.5px solid #E5E5E5; background: white; cursor: pointer; color: #6B6B6B; font-family: inherit; transition: all 0.15s; }
+    .tab-btn.active { background: #E85D26; color: white; border-color: #E85D26; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .low-stock { background: #FEF3C7 !important; }
+    .out-stock { background: #FEE2E2 !important; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: white; border-radius: 16px; padding: 2rem; width: 400px; max-width: 90%; }
+    .modal-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 1.5rem; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.5rem; }
+    @media (max-width: 768px) {
+      .admin-layout { grid-template-columns: 1fr; }
+      .admin-sidebar { 
+        display: none; 
+        position: fixed; 
+        z-index: 100; 
+        left: 0; top: 0; bottom: 0; width: 260px;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.5);
+      }
+      .admin-sidebar.open { display: block; }
+      .sidebar-overlay { 
+        display: none; 
+        position: fixed; 
+        inset: 0; 
+        background: rgba(0,0,0,0.5); 
+        z-index: 90; 
+      }
+      .sidebar-overlay.open { display: block; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .mobile-menu-btn { display: block !important; margin-right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; }
+    }
+    .mobile-menu-btn { display: none; }
+  </style>
+</head>
+<body>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        🏗️ AMJ Admin
+        <small>UD. Alam Makmur Jaya</small>
+      </div>
+      <nav class="sidebar-nav">
+        <a class="active" onclick="showTab('dashboard')">📊 Dashboard</a>
+        <a onclick="showTab('pesanan')">📦 Pesanan</a>
+        <a onclick="showTab('pembayaran')">💳 Pembayaran</a>
+        <a onclick="showTab('pengiriman')">🚚 Pengiriman</a>
+        <a onclick="showTab('piutang')">📒 Piutang</a>
+        <a onclick="showTab('retur')">🔄 Retur</a>
+        <a onclick="showTab('produk')">🛍 Produk</a>
+        <a onclick="showTab('stok')">📋 Stok</a>
+        <a onclick="showTab('masa-simpan')">⏳ Masa Simpan</a>
+        <a onclick="showTab('staff')">👥 Staff</a>
+        <a onclick="showTab('target')">🎯 Target Penjualan</a>
+        <a onclick="showTab('laporan')">📈 Laporan</a>
+      </nav>
+      <div class="sidebar-footer">
+        <a onclick="API.logout()" style="color:#9CA3AF;font-size:13px;cursor:pointer">🚪 Keluar</a>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+      <div class="admin-header">
+        <div style="display:flex; align-items:center;">
+          <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+          <h1 id="page-title">Dashboard</h1>
+        </div>
+        <span class="user-badge" id="user-badge">👤 Admin</span>
+      </div>
+
+      <!-- TABS -->
+      <div id="tab-dashboard" class="tab-content active">
+        <div class="stats-grid" id="stats-grid"></div>
+        <div class="section-card">
+          <h2>Pesanan Terbaru</h2>
+          <div id="recent-orders"></div>
+        </div>
+        <div class="section-card">
+          <h2>⚠ Stok Menipis / Habis</h2>
+          <div id="low-stock-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-pesanan" class="tab-content">
+        <div class="section-card">
+          <h2>Semua Pesanan</h2>
+          <div id="all-orders"></div>
+        </div>
+      </div>
+
+      <div id="tab-pembayaran" class="tab-content">
+        <div class="section-card">
+          <h2>Verifikasi Pembayaran Transfer</h2>
+          <div id="pembayaran-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-pengiriman" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h2 style="font-size:16px;font-weight:700">Manajemen Pengiriman</h2>
+          <button class="btn-sm primary" onclick="openAddDelivery()">+ Buat Pengiriman</button>
+        </div>
+        <div class="section-card" style="padding:0;overflow:hidden">
+          <div id="pengiriman-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-piutang" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h2 style="font-size:16px;font-weight:700">Manajemen Piutang</h2>
+          <button class="btn-sm primary" onclick="openAddReceivable()">+ Tambah Piutang</button>
+        </div>
+        <div id="piutang-banner"></div>
+        <div class="section-card" style="padding:0;overflow:hidden">
+          <div id="piutang-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-retur" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h2 style="font-size:16px;font-weight:700">Manajemen Retur Barang</h2>
+          <button class="btn-sm primary" onclick="openAddRetur()">+ Ajukan Retur</button>
+        </div>
+        <div class="section-card" style="padding:0;overflow:hidden">
+          <div id="retur-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-produk" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h2 style="font-size:16px;font-weight:700">Manajemen Produk</h2>
+          <button class="btn-sm primary" onclick="openAddProduct()">+ Tambah Produk</button>
+        </div>
+        <div class="section-card" style="padding:0;overflow:hidden">
+          <div id="product-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-stok" class="tab-content">
+        <div class="stats-grid" id="stok-traffic-light"></div>
+        <div class="section-card" style="padding:0;overflow:hidden">
+          <div style="padding:1.25rem 1.5rem;border-bottom:1px solid #E5E5E5">
+            <h2 style="font-size:16px;font-weight:700;margin:0">Monitor Stok Real-Time</h2>
+          </div>
+          <div id="stok-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-masa-simpan" class="tab-content">
+        <div class="section-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <h2 style="font-size:16px;font-weight:700;margin:0">Peringatan Masa Simpan (Kadaluarsa)</h2>
+            <select class="form-input" id="filter-masa-simpan" style="width: auto;" onchange="renderMasaSimpan()">
+              <option value="30">30 Hari</option>
+              <option value="60">60 Hari</option>
+              <option value="90">90 Hari</option>
+              <option value="all">Semua</option>
+            </select>
+          </div>
+          <div id="masa-simpan-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-target" class="tab-content">
+        <div class="stats-grid" id="target-stats-grid"></div>
+        <div class="section-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <h2 style="font-size:16px;font-weight:700;margin:0">Target Penjualan Harian</h2>
+            <button class="btn-sm primary" onclick="openEditTarget()">Ubah Target</button>
+          </div>
+          <div id="target-details"></div>
+        </div>
+      </div>
+
+      <div id="tab-staff" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h2 style="font-size:16px;font-weight:700">Manajemen Staff</h2>
+          <button class="btn-sm primary" onclick="openAddStaff()">+ Tambah Kasir</button>
+        </div>
+        <div class="section-card" style="padding:0;overflow:hidden">
+          <div id="staff-table"></div>
+        </div>
+      </div>
+
+      <div id="tab-laporan" class="tab-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h2 style="font-size:16px;font-weight:700">Laporan Penjualan</h2>
+          <div>
+            <button class="btn-sm secondary" onclick="eksporExcel()">Export Excel</button>
+            <button class="btn-sm secondary" onclick="eksporPDF()">Export PDF</button>
+          </div>
+        </div>
+        <div id="laporan-banner"></div>
+        <div class="section-card" style="padding:0;overflow:hidden">
+          <div id="laporan-content" style="padding: 1.5rem;">Memuat laporan...</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL ADD STAFF -->
+  <div class="modal-overlay" id="staff-modal">
+    <div class="modal-box">
+      <h3>Tambah Kasir Baru</h3>
+      <div class="form-group">
+        <label class="form-label">Nama</label>
+        <input class="form-input" id="s-name" placeholder="Nama Kasir"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="s-email" placeholder="email@contoh.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="s-pass" placeholder="Password"/>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-sm secondary" onclick="closeModal()">Batal</button>
+        <button class="btn-sm primary" onclick="saveStaff()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL ADD/EDIT PRODUCT -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-box">
+      <h3 id="modal-title">Tambah Produk</h3>
+      <input type="hidden" id="edit-id"/>
+      <div class="form-group">
+        <label class="form-label">Nama Produk</label>
+        <input class="form-input" id="p-name" placeholder="cth: Semen Portland 50kg"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Kategori</label>
+        <select class="form-input" id="p-cat">
+          <option value="semen">Semen</option>
+          <option value="pipa">Pipa</option>
+          <option value="kabel">Kabel</option>
+          <option value="cat">Cat</option>
+          <option value="paku">Paku & Baut</option>
+          <option value="kayu">Kayu</option>
+          <option value="lampu">Lampu</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group">
+          <label class="form-label">Harga (Rp)</label>
+          <input class="form-input" id="p-price" type="number" placeholder="68000"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Stok</label>
+          <input class="form-input" id="p-stock" type="number" placeholder="100"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group">
+          <label class="form-label">Satuan</label>
+          <input class="form-input" id="p-unit" placeholder="sak / pcs / kg"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Emoji</label>
+          <input class="form-input" id="p-emoji" placeholder="🧱"/>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-sm secondary" onclick="closeModal()">Batal</button>
+        <button class="btn-sm primary" onclick="saveProduct()">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/admin-extra.js"></script>
+  <script>
+    // Auth guard
+    const user = API.getCurrentUser();
+
+if (!user || (user.role !== 'admin' && user.role !== 'kasir')) {
+  window.location.replace('login.html');
+  throw new Error('Unauthorized: user belum login');
+}
+
+document.getElementById('user-badge').textContent =
+  '👤 ' + (user.nama || user.name || user.email || 'Admin');
+
+function toggleSidebar() {
+  const sidebar = document.querySelector('.admin-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (sidebar.classList.contains('open')) {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('open');
+  }
+}
+
+async function showTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+
+  const titles = {
+    dashboard: 'Dashboard',
+    pesanan: 'Manajemen Pesanan',
+    pembayaran: 'Verifikasi Pembayaran',
+    pengiriman: 'Manajemen Pengiriman',
+    piutang: 'Manajemen Piutang',
+    retur: 'Manajemen Retur',
+    produk: 'Manajemen Produk',
+    stok: 'Monitor Stok',
+    'masa-simpan': 'Masa Simpan',
+    staff: 'Manajemen Staff',
+    target: 'Target Penjualan',
+    laporan: 'Laporan Penjualan'
+  };
+
+  document.getElementById('page-title').textContent = titles[tab] || tab;
+
+  const tabsArray = [
+    'dashboard', 'pesanan', 'pembayaran', 'pengiriman', 'piutang', 'retur', 
+    'produk', 'stok', 'masa-simpan', 'staff', 'target', 'laporan'
+  ];
+
+  document.querySelectorAll('.sidebar-nav a').forEach((a, i) => {
+    a.classList.remove('active');
+    if (tabsArray[i] === tab) {
+      a.classList.add('active');
+    }
+  });
+
+  // Tutup drawer pada mobile setelah diklik
+  const sidebar = document.querySelector('.admin-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('open');
+
+  await renderAll();
+}
+
+   async function renderAll() {
+  await renderStats();
+  await renderRecentOrders();
+  await renderLowStock();
+  await renderAllOrders();
+  await renderProductTable();
+  await renderStokTable();
+  await renderStaffTable();
+  await renderLaporan();
+  
+  if (typeof renderPembayaran === 'function') await renderPembayaran();
+  if (typeof renderPengiriman === 'function') await renderPengiriman();
+  if (typeof renderPiutang === 'function') await renderPiutang();
+  if (typeof renderRetur === 'function') await renderRetur();
+  if (typeof renderMasaSimpan === 'function') await renderMasaSimpan();
+  if (typeof renderTarget === 'function') await renderTarget();
+}
+
+    async function renderStats() {
+      const products = await API.getProducts();
+      const orders = await API.getTransactions();
+      const totalRevenue = orders
+  .filter(o => o.status === 'selesai')
+  .reduce((s, o) => s + (o.total || o.totalHarga || o.grandTotal || 0), 0);
+      const pending = orders.filter(o => o.status === 'pending').length;
+      const lowStock = products.filter(p => Number(p.stock ?? p.stok ?? 0) < 10).length;
+
+      document.getElementById('stats-grid').innerHTML = `
+        <div class="stat-card orange">
+          <p class="s-label">Total Produk</p>
+          <p class="s-val">${products.length}</p>
+          <p class="s-sub">di sistem</p>
+        </div>
+        <div class="stat-card green">
+          <p class="s-label">Pendapatan</p>
+          <p class="s-val">${formatRupiah(totalRevenue)}</p>
+          <p class="s-sub">pesanan selesai</p>
+        </div>
+        <div class="stat-card yellow">
+          <p class="s-label">Pesanan Pending</p>
+          <p class="s-val">${pending}</p>
+          <p class="s-sub">menunggu proses</p>
+        </div>
+        <div class="stat-card red">
+          <p class="s-label">Stok Kritis</p>
+          <p class="s-val">${lowStock}</p>
+          <p class="s-sub">produk perlu restock</p>
+        </div>
+      `;
+    }
+
+    function statusBadge(s) {
+      const map = { pending: 'status-pending', proses: 'status-proses', selesai: 'status-selesai', batal: 'status-batal' };
+      const label = { pending: '⏳ Pending', proses: '🔄 Diproses', selesai: '✓ Selesai', batal: '✗ Batal' };
+      return `<span class="status-badge ${map[s] || ''}">${label[s] || s}</span>`;
+    }
+
+    function orderTableHTML(orders, showActions = false) {
+  if (!orders || orders.length === 0) {
+    return '<p style="padding:1.5rem;color:#6B6B6B;font-size:14px">Belum ada pesanan.</p>';
+  }
+
+  return `<table><thead><tr>
+    <th>ID Pesanan</th>
+    <th>Pembeli</th>
+    <th>Total</th>
+    <th>Status</th>
+    <th>Tanggal</th>
+    ${showActions ? '<th>Aksi</th>' : ''}
+  </tr></thead><tbody>
+    ${orders.map(o => {
+      const buyerName =
+        o.buyerName ||
+        o.namaPembeli ||
+        o.customerName ||
+        o.user?.nama ||
+        o.user?.email ||
+        '-';
+
+      const total = o.total || o.totalHarga || o.grandTotal || 0;
+      const statusP = o.statusPesanan || o.status || 'diproses';
+      const statusB = o.statusPembayaran || 'pending_transfer';
+      const createdAt = o.createdAt || o.tanggal || new Date().toISOString();
+
+      return `<tr>
+        <td><code style="font-size:12px;background:#F0EDE8;padding:2px 6px;border-radius:4px">${o.nomorPesanan || o.id}</code></td>
+        <td>${buyerName} <br><small>${o.noWhatsapp || ''}</small></td>
+        <td style="font-weight:700">${formatRupiah(total)}</td>
+        <td>
+          <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
+            ${statusBadge(statusB.replace('pending_', 'Pending '))}
+            ${statusBadge(statusP)}
+          </div>
+        </td>
+        <td>${new Date(createdAt).toLocaleDateString('id-ID')}</td>
+        ${showActions ? `<td>
+          <div style="display:flex; flex-wrap:wrap; gap:4px;">
+            ${statusB.includes('pending') ? `<button class="btn-sm primary" onclick="changeStatusBayar('${o.id}','berhasil')">💰 Bayar</button>` : ''}
+            ${statusP === 'diproses' ? `<button class="btn-sm primary" onclick="changeStatusPesanan('${o.id}','dikirim')">Kirim</button>` : ''}
+            ${statusP === 'dikirim' ? `<button class="btn-sm primary" onclick="changeStatusPesanan('${o.id}','selesai')">Selesai</button>` : ''}
+            ${statusP !== 'selesai' && statusP !== 'dibatalkan' ? `<button class="btn-sm danger" onclick="changeStatusPesanan('${o.id}','dibatalkan')">Batal</button>` : ''}
+            <button class="btn-sm secondary" onclick='printNotaHandler(${JSON.stringify(o).replace(/'/g, "&apos;")})'>🖨️ Nota</button>
+            <button class="btn-sm secondary" onclick="copyPesanKonfirmasi('${o.nomorPesanan || o.id}', ${o.total}, '${statusP}')">📱 WA</button>
+          </div>
+        </td>` : ''}
+      </tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+    async function changeStatusBayar(id, status) {
+  try {
+    await API.updateStatusBayar(id, status);
+    await renderAll();
+    showToast('✓ Status pembayaran diperbarui');
+  } catch (err) {
+    showToast('✗ ' + err.message);
+  }
+}
+
+    async function changeStatusPesanan(id, status) {
+  try {
+    await API.updateStatusPesanan(id, status);
+    await renderAll();
+    showToast('✓ Status pesanan diperbarui');
+  } catch (err) {
+    showToast('✗ ' + err.message);
+  }
+}
+
+    function printNotaHandler(trx) {
+      API.printNota(trx);
+    }
+
+    function copyPesanKonfirmasi(nomorPesanan, total, statusPesanan) {
+      const pesan =
+        `✅ *Pesanan Anda Dikonfirmasi*\n\n` +
+        `No. Pesanan: *${nomorPesanan}*\n` +
+        `Total: *${formatRupiah(total)}*\n` +
+        `Status: ${statusPesanan}\n\n` +
+        `Terima kasih telah berbelanja di UD. Alam Makmur Jaya! 🏗️`;
+      navigator.clipboard.writeText(pesan).then(() => showToast('✓ Pesan WA disalin'));
+    }
+
+    async function renderRecentOrders() {
+      const el = document.getElementById('recent-orders');
+      if (!el) return;
+      const orders = await API.getTransactions();
+      el.innerHTML = orderTableHTML(orders.slice(0, 5));
+    }
+
+    async function renderAllOrders() {
+  const el = document.getElementById('all-orders');
+  if (!el) return;
+
+  try {
+    const orders = await API.getTransactions();
+    el.innerHTML = orderTableHTML(orders, true);
+  } catch (err) {
+    el.innerHTML =
+      `<p style="padding:1rem;color:#DC2626;font-size:14px">Gagal memuat semua pesanan: ${err.message}</p>`;
+  }
+}
+
+    async function changeStatus(id, status) {
+  try {
+    await API.updateTransactionStatus(id, status);
+    await renderAll();
+    showToast('✓ Status pesanan diperbarui');
+  } catch (err) {
+    showToast('✗ ' + err.message);
+  }
+}
+
+    async function renderLowStock() {
+  const el = document.getElementById('low-stock-table');
+  if (!el) return;
+
+  try {
+    const allProducts = await API.getProducts();
+
+    const products = allProducts
+      .map(p => ({
+        ...p,
+        namaProduk: p.name || p.nama || p.namaProduk || p.nama_produk || p.productName || '-',
+        stokProduk: Number(p.stock ?? p.stok ?? p.jumlahStok ?? p.jumlah_stok ?? 0),
+        satuanProduk: p.unit || p.satuan || 'pcs',
+        emojiProduk: p.emoji || '📦'
+      }))
+      .filter(p => Number(p.stock ?? p.stok ?? 0) < 10)
+      .sort((a, b) => a.stokProduk - b.stokProduk);
+
+    if (products.length === 0) {
+      el.innerHTML = '<p style="color:#1A6B3A;font-size:14px;padding:0.5rem">✓ Semua stok aman.</p>';
+      return;
+    }
+
+    el.innerHTML = `<table><thead><tr><th>Produk</th><th>Stok</th><th>Aksi</th></tr></thead><tbody>
+      ${products.map(p => `<tr class="${p.stokProduk === 0 ? 'out-stock' : 'low-stock'}">
+        <td>${p.emojiProduk} ${p.namaProduk}</td>
+        <td style="font-weight:700;color:${p.stokProduk === 0 ? '#DC2626' : '#D97706'}">
+          ${p.stokProduk} ${p.satuanProduk}
+        </td>
+        <td><button class="btn-sm primary" onclick="quickRestock('${p.id}')">+ Restock</button></td>
+      </tr>`).join('')}
+    </tbody></table>`;
+  } catch (err) {
+    el.innerHTML = `<p style="padding:1rem;color:#DC2626;font-size:14px">Gagal memuat stok menipis: ${err.message}</p>`;
+  }
+}
+
+    async function quickRestock(id) {
+  try {
+    const product = await API.getProduct(id);
+
+    const currentStock = Number(product.stock ?? product.stok ?? 0);
+    const unit = product.unit || product.satuan || 'pcs';
+    const name = product.name || product.nama || 'Produk';
+
+    const qty = parseInt(
+      prompt(`Tambah berapa ${unit} untuk "${name}"?`, '50')
+    );
+
+    if (isNaN(qty) || qty <= 0) return;
+
+    const newStock = currentStock + qty;
+
+    const updatedProduct = {
+      ...product,
+
+      // dua-duanya dikirim agar aman untuk frontend lama dan backend field Indonesia
+      stock: newStock,
+      stok: newStock
+    };
+
+    await API.updateProduct(id, updatedProduct);
+    await renderAll();
+
+    showToast(`✓ Stok ditambah ${qty} ${unit}`);
+  } catch (err) {
+    showToast('✗ ' + err.message);
+  }
+}
+
+    async function renderProductTable() {
+  const el = document.getElementById('product-table');
+  if (!el) return;
+
+  try {
+    const products = await API.getProducts();
+
+    el.innerHTML = `<table><thead><tr><th>Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr></thead><tbody>
+      ${products.map(p => {
+        const name = p.name || p.nama || p.namaProduk || p.nama_produk || '-';
+        const category = p.category || p.kategori || '-';
+        const price = Number(p.price ?? p.harga ?? 0);
+        const stock = Number(p.stock ?? p.stok ?? p.jumlahStok ?? p.jumlah_stok ?? 0);
+        const unit = p.unit || p.satuan || 'pcs';
+        const emoji = p.emoji || '📦';
+
+        return `<tr>
+          <td>${emoji} <strong>${name}</strong></td>
+          <td><span style="background:#F0EDE8;padding:3px 8px;border-radius:99px;font-size:12px">${category}</span></td>
+          <td style="font-weight:700">${formatRupiah(price)}</td>
+          <td style="color:${stock === 0 ? '#DC2626' : stock < 10 ? '#D97706' : '#1A6B3A'};font-weight:600">${stock} ${unit}</td>
+          <td>
+            <button class="btn-sm secondary" onclick="editProduct('${p.id}')">✏ Edit</button>
+            <button class="btn-sm danger" onclick="delProduct('${p.id}')" style="margin-left:4px">🗑</button>
+          </td>
+        </tr>`;
+      }).join('')}
+    </tbody></table>`;
+  } catch (err) {
+    el.innerHTML = `<p style="padding:1rem;color:#DC2626;font-size:14px">Gagal memuat produk: ${err.message}</p>`;
+  }
+}
+
+    async function renderStokTable() {
+  const el = document.getElementById('stok-table');
+  if (!el) return;
+
+  try {
+    const products = (await API.getProducts())
+      .sort((a, b) => (a.stok ?? a.stock ?? 0) - (b.stok ?? b.stock ?? 0));
+
+    // Traffic light widget (ANTI-03)
+    let aman = 0, menipis = 0, kritis = 0;
+    products.forEach(p => {
+      const stock = Number(p.stock ?? p.stok ?? 0);
+      const min = Number(p.stokMinimum || 5);
+      if (stock <= min) kritis++;
+      else if (stock <= min * 2) menipis++;
+      else aman++;
+    });
+    
+    document.getElementById('stok-traffic-light').innerHTML = `
+      <div class="stat-card green">
+        <p class="s-label">Stok Aman</p>
+        <p class="s-val">${aman}</p>
+        <p class="s-sub">produk</p>
+      </div>
+      <div class="stat-card yellow">
+        <p class="s-label">Stok Menipis</p>
+        <p class="s-val">${menipis}</p>
+        <p class="s-sub">≤ 2x batas minimum</p>
+      </div>
+      <div class="stat-card red">
+        <p class="s-label">Stok Kritis/Habis</p>
+        <p class="s-val">${kritis}</p>
+        <p class="s-sub">≤ batas minimum</p>
+      </div>
+    `;
+
+    el.innerHTML = `<table><thead><tr><th>Produk</th><th>Kategori</th><th>Stok</th><th>Status</th><th>Ubah Stok</th></tr></thead><tbody>
+      ${products.map(p => {
+        const stock = Number(p.stock ?? p.stok ?? 0);
+        const sl = stockLabel(stock);
+        const rowClass = stock === 0 ? 'out-stock' : stock < 10 ? 'low-stock' : '';
+
+        return `<tr class="${rowClass}">
+          <td>${p.emoji || '📦'} <strong>${p.name || p.nama || p.namaProduk || p.nama_produk || '-'}</strong></td>
+          <td>${p.category || p.kategori || '-'}</td>
+          <td style="font-weight:700">${stock} ${p.unit || p.satuan || 'pcs'}</td>
+          <td><span class="status-badge ${stock===0?'status-batal':stock<10?'status-pending':'status-selesai'}">${sl.text}</span></td>
+          <td>
+            <input type="number" id="stok-${p.id}" value="${stock}" style="width:70px;padding:4px 8px;border:1.5px solid #E5E5E5;border-radius:6px;font-size:13px;font-family:inherit"/>
+            <button class="btn-sm primary" onclick="updateStok('${p.id}')" style="margin-left:6px">Simpan</button>
+          </td>
+        </tr>`;
+      }).join('')}
+    </tbody></table>`;
+  } catch (err) {
+    el.innerHTML = `<p style="padding:1rem;color:#DC2626;font-size:14px">Gagal memuat stok: ${err.message}</p>`;
+  }
+}
+
+    async function updateStok(id) {
+  const val = parseInt(document.getElementById('stok-' + id).value);
+
+  if (isNaN(val) || val < 0) {
+    showToast('✗ Stok tidak valid');
+    return;
+  }
+
+  try {
+    const product = await API.getProduct(id);
+    product.stock = val;
+
+    await API.updateProduct(id, product);
+    await renderAll();
+
+    showToast('✓ Stok diperbarui');
+  } catch (err) {
+    showToast('✗ ' + err.message);
+  }
+}
+
+    function openAddProduct() {
+      document.getElementById('modal-title').textContent = 'Tambah Produk';
+      document.getElementById('edit-id').value = '';
+      ['p-name','p-price','p-stock','p-unit','p-emoji'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('product-modal').classList.add('open');
+    }
+
+    async function editProduct(id) {
+  try {
+    const p = await API.getProduct(id);
+
+    document.getElementById('modal-title').textContent = 'Edit Produk';
+    document.getElementById('edit-id').value = p.id;
+    document.getElementById('p-name').value = p.nama || p.name || '';
+    document.getElementById('p-cat').value = p.kategori || p.category || 'Bahan Bangunan';
+    document.getElementById('p-price').value = p.harga || p.price || 0;
+    document.getElementById('p-stock').value = p.stok ?? p.stock ?? 0;
+    document.getElementById('p-unit').value = p.satuan || p.unit || 'pcs';
+    document.getElementById('p-emoji').value = p.emoji || '📦';
+
+    document.getElementById('product-modal').classList.add('open');
+    showTab('produk');
+  } catch (err) {
+    showToast('✗ ' + err.message);
+  }
+}
+
+    async function saveProduct() {
+  const id = document.getElementById('edit-id').value;
+
+  const data = {
+    name: document.getElementById('p-name').value.trim(),
+    category: document.getElementById('p-cat').value,
+    price: parseInt(document.getElementById('p-price').value),
+    stock: parseInt(document.getElementById('p-stock').value),
+    unit: document.getElementById('p-unit').value || 'pcs',
+    emoji: document.getElementById('p-emoji').value || '📦',
+  };
+
+  if (!data.name || isNaN(data.price)) {
+    showToast('✗ Lengkapi nama dan harga');
+    return;
+  }
+
+  if (isNaN(data.stock)) {
+    data.stock = 0;
+  }
+
+  try {
+    if (id) {
+      await API.updateProduct(id, data);
+      showToast('✓ Produk diperbarui');
+    } else {
+      await API.createProduct(data);
+      showToast('✓ Produk ditambahkan');
+    }
+
+    closeModal();
+    await renderAll();
+  } catch (err) {
+    showToast('✗ ' + err.message);
+  }
+}
+
+    async function delProduct(id) {
+  if (!confirm('Hapus produk ini?')) return;
+
+  try {
+    await API.deleteProduct(id);
+    await renderAll();
+    showToast('✓ Produk dihapus');
+  } catch (err) {
+    showToast('✗ ' + err.message);
+  }
+}
+
+    function closeModal() {
+      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+    }
+
+    // --- Manajemen Staff ---
+    async function renderStaffTable() {
+      const el = document.getElementById('staff-table');
+      if (!el) return;
+      try {
+        const users = await API.getUsers();
+        el.innerHTML = `<table><thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
+          ${users.map(u => `<tr>
+            <td>${u.nama}</td>
+            <td>${u.email}</td>
+            <td><span style="background:#F0EDE8;padding:3px 8px;border-radius:99px;font-size:12px">${u.role}</span></td>
+            <td>${u.aktif ? '<span class="status-badge status-selesai">Aktif</span>' : '<span class="status-badge status-batal">Nonaktif</span>'}</td>
+            <td>
+              <button class="btn-sm danger" onclick="delStaff('${u.id}')">Hapus</button>
+            </td>
+          </tr>`).join('')}
+        </tbody></table>`;
+      } catch (err) {
+        el.innerHTML = `<p style="padding:1rem;color:#DC2626;font-size:14px">Gagal memuat staff.</p>`;
+      }
+    }
+    
+    function openAddStaff() {
+      document.getElementById('s-name').value = '';
+      document.getElementById('s-email').value = '';
+      document.getElementById('s-pass').value = '';
+      document.getElementById('staff-modal').classList.add('open');
+    }
+    
+    async function saveStaff() {
+      const nama = document.getElementById('s-name').value;
+      const email = document.getElementById('s-email').value;
+      const password = document.getElementById('s-pass').value;
+      if (!nama || !email || !password) return showToast('✗ Lengkapi semua form');
+      
+      try {
+        await API.createUser({ nama, email, password, role: 'kasir' });
+        showToast('✓ Kasir ditambahkan');
+        closeModal();
+        renderStaffTable();
+      } catch(err) {
+        showToast('✗ ' + err.message);
+      }
+    }
+    
+    async function delStaff(id) {
+      if(!confirm('Hapus staff ini?')) return;
+      try {
+        await API.deleteUser(id);
+        showToast('✓ Staff dihapus');
+        renderStaffTable();
+      } catch(err) {
+        showToast('✗ ' + err.message);
+      }
+    }
+
+    // --- Laporan ---
+    let currentLaporan = null;
+    
+    async function renderLaporan() {
+      const el = document.getElementById('laporan-content');
+      const banner = document.getElementById('laporan-banner');
+      if (!el) return;
+      try {
+        const today = new Date().toISOString().slice(0,10);
+        const l = await API.getLaporanHarian(today);
+        currentLaporan = l;
+        
+        if (!l.labaKotorAkurat) {
+          banner.innerHTML = `<div style="background:#FEF3C7; color:#92400E; padding:1rem; border-radius:8px; margin-bottom:1rem; font-size:14px;">
+            ⚠️ <b>Peringatan:</b> Estimasi laba berdasarkan margin rata-rata industri bahan bangunan (15% biaya operasional). Untuk akurasi penuh, pastikan Anda mengisi <b>Harga Pokok</b> di setiap produk yang dijual.
+          </div>`;
+        } else {
+          banner.innerHTML = '';
+        }
+        
+        el.innerHTML = `
+          <div class="stats-grid" style="margin-bottom:0">
+            <div class="stat-card">
+              <p class="s-label">Total Pendapatan</p>
+              <p class="s-val">${formatRupiah(l.totalPendapatan)}</p>
+            </div>
+            <div class="stat-card">
+              <p class="s-label">Laba Kotor</p>
+              <p class="s-val">${formatRupiah(l.labaKotor)}</p>
+            </div>
+            <div class="stat-card">
+              <p class="s-label">Laba Bersih (Est)</p>
+              <p class="s-val" style="color:#1A6B3A">${formatRupiah(l.labaBersih)}</p>
+            </div>
+            <div class="stat-card">
+              <p class="s-label">Transaksi Selesai</p>
+              <p class="s-val">${l.transaksiSelesai}</p>
+            </div>
+          </div>
+        `;
+      } catch(err) {
+        el.innerHTML = `<p style="color:#DC2626">Gagal memuat laporan</p>`;
+      }
+    }
+
+    // --- Export ---
+    function eksporExcel() {
+      if (typeof XLSX === 'undefined') {
+        return showToast('✗ Gagal memuat library Excel (CDN bermasalah). Pastikan koneksi internet aktif.');
+      }
+      if(!currentLaporan || !currentLaporan.transaksi) return showToast('✗ Tidak ada data');
+      const rows = currentLaporan.transaksi.map(t => {
+        let labaKotor = 0;
+        if (t.items) {
+          t.items.forEach(i => {
+            const hargaJual = i.hargaSatuan || i.harga || 0;
+            const hargaModal = i.hargaPokokSatuan || i.hargaPokok || 0;
+            labaKotor += (hargaJual - hargaModal) * i.qty;
+          });
+        }
+        return {
+          'No. Pesanan':   t.nomorPesanan || t.id,
+          'Tanggal':       new Date(t.tanggal).toLocaleDateString('id-ID'),
+          'Pembeli':       t.namaPembeli || t.buyerName || '-',
+          'Metode Bayar':  t.metodeBayar || '-',
+          'Status Bayar':  t.statusPembayaran || 'pending',
+          'Total':         t.total,
+          'Laba Kotor':    labaKotor
+        };
+      });
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Laporan');
+      XLSX.writeFile(wb, `laporan-amj-${new Date().toISOString().slice(0,10)}.xlsx`);
+    }
+
+    function eksporPDF() {
+      if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
+        return showToast('✗ Gagal memuat library PDF (CDN bermasalah). Pastikan koneksi internet aktif.');
+      }
+      if(!currentLaporan || !currentLaporan.transaksi) return showToast('✗ Tidak ada data');
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text(`Laporan Penjualan — ${currentLaporan.periode}`, 14, 16);
+      doc.autoTable({
+        startY: 25,
+        head: [['No. Pesanan', 'Tanggal', 'Pembeli', 'Total', 'Status']],
+        body: currentLaporan.transaksi.map(t => [
+          t.nomorPesanan || t.id,
+          new Date(t.tanggal).toLocaleDateString('id-ID'),
+          t.namaPembeli || t.buyerName || '-',
+          'Rp ' + t.total.toLocaleString('id-ID'),
+          t.statusPesanan || t.status || '-'
+        ])
+      });
+      doc.save(`laporan-amj-${new Date().toISOString().slice(0,10)}.pdf`);
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>

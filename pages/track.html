@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lacak Pesanan — UD. Alam Makmur Jaya</title>
+  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .track-container { max-width: 600px; margin: 3rem auto; background: white; padding: 2rem; border-radius: 16px; border: 1.5px solid #E5E5E5; }
+    .track-result { margin-top: 2rem; padding-top: 2rem; border-top: 1px dashed #E5E5E5; display: none; }
+    .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+    .status-pending { background: #FFF4E5; color: #E85D26; }
+    .status-proses { background: #E5F0FF; color: #0056D2; }
+    .status-dikirim { background: #F0E5FF; color: #6B00D2; }
+    .status-selesai { background: #E5FFF0; color: #008A2E; }
+    .item-list { margin-top: 1rem; background: #F9F9F9; padding: 1rem; border-radius: 8px; font-size: 14px; }
+    .item-list p { margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="brand">
+      <span class="brand-icon">🏗</span>
+      <div>
+        <span class="brand-name">Alam Makmur Jaya</span>
+        <span class="brand-sub">Toko Bahan Bangunan</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html">Beranda</a>
+      <a href="catalog.html">Katalog</a>
+      <a href="track.html" class="active">Lacak Pesanan</a>
+      <a href="cart.html">🛒 Keranjang <span id="cart-count" class="badge">0</span></a>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <h1>Lacak Pesanan</h1>
+    <p>Cek status pesanan Anda dengan Nomor Pesanan dan Nomor WhatsApp</p>
+  </div>
+
+  <div class="page-body">
+    <div class="track-container">
+      <div class="form-group">
+        <label class="form-label">Nomor Pesanan</label>
+        <input type="text" id="noOrder" class="form-input" placeholder="Contoh: AMJ-20260611-001" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nomor WhatsApp</label>
+        <input type="tel" id="noWa" class="form-input" placeholder="08xxxxxxxxxx" />
+      </div>
+      <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="trackOrder()">Lacak Sekarang</button>
+
+      <div class="track-result" id="result-container">
+        <h3 style="font-size: 18px; margin-bottom: 1rem;">Detail Pesanan</h3>
+        <p><strong>Nomor Pesanan:</strong> <span id="res-no"></span></p>
+        <p><strong>Tanggal:</strong> <span id="res-date"></span></p>
+        <p><strong>Total:</strong> <span id="res-total"></span></p>
+        <div style="margin: 1rem 0;">
+          <p style="margin-bottom: 4px;"><strong>Status Pembayaran:</strong> <span id="res-bayar" class="status-badge"></span></p>
+          <p><strong>Status Pesanan:</strong> <span id="res-pesanan" class="status-badge"></span></p>
+        </div>
+        <div class="item-list" id="res-items"></div>
+        <button class="btn-primary" style="margin-top: 1rem; width: 100%; justify-content: center; background: #6B6B6B;" onclick="cetak()">🖨️ Cetak Nota</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/data.js"></script>
+  <script>
+    let currentTrx = null;
+
+    async function trackOrder() {
+      const noOrder = document.getElementById('noOrder').value.trim();
+      const noWa = document.getElementById('noWa').value.trim();
+      
+      if (!noOrder || !noWa) {
+        showToast('✗ Lengkapi kedua kolom');
+        return;
+      }
+      
+      try {
+        const data = await API.trackOrder(noOrder, noWa);
+        
+        currentTrx = data;
+        
+        document.getElementById('res-no').textContent = data.noOrder;
+        document.getElementById('res-date').textContent = new Date(data.tanggal).toLocaleDateString('id-ID');
+        document.getElementById('res-total').textContent = formatRupiah(data.total);
+        
+        const b = document.getElementById('res-bayar');
+        b.textContent = data.statusPembayaran;
+        b.className = 'status-badge ' + (data.statusPembayaran === 'berhasil' ? 'status-selesai' : 'status-pending');
+        
+        const p = document.getElementById('res-pesanan');
+        p.textContent = data.statusPesanan;
+        p.className = 'status-badge status-' + (data.statusPesanan === 'selesai' ? 'selesai' : data.statusPesanan === 'diproses' ? 'proses' : 'dikirim');
+        
+        document.getElementById('res-items').innerHTML = data.items.map(i => 
+          `<p>• ${i.nama} (${i.qty} ${i.satuan}) = ${formatRupiah(i.subtotal)}</p>`
+        ).join('');
+
+        // Timeline Riwayat Status
+        if (data.riwayatStatus && data.riwayatStatus.length > 0) {
+           const historyHtml = data.riwayatStatus.map(h => 
+             `<div style="margin-bottom:8px; font-size:13px; color:#6B6B6B;">
+                <strong>${h.tipe.toUpperCase()}</strong>: ${h.status} 
+                <span style="font-size:11px;">(${new Date(h.timestamp).toLocaleString('id-ID')})</span>
+              </div>`
+           ).join('');
+           document.getElementById('res-items').innerHTML += `<div style="margin-top:1rem; padding-top:1rem; border-top:1px dashed #E5E5E5;"><h5>Timeline</h5>${historyHtml}</div>`;
+        }
+        
+        document.getElementById('result-container').style.display = 'block';
+      } catch (err) {
+        showToast('✗ ' + err.message);
+        document.getElementById('result-container').style.display = 'none';
+      }
+    }
+
+    function cetak() {
+      if (currentTrx) {
+        // Cetak nota transfer hanya valid jika berhasil
+        if (currentTrx.metodeBayar === 'transfer' && currentTrx.statusPembayaran !== 'berhasil') {
+          showToast('Nota transfer hanya dapat dicetak setelah pembayaran berhasil diverifikasi.');
+          return;
+        }
+        API.printNota(currentTrx);
+      }
+    }
+  </script>
+</body>
+</html>
