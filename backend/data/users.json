@@ -1,0 +1,20 @@
+[
+  {
+    "id": "user-001",
+    "nama": "Admin Toko",
+    "email": "admin@amj.com",
+    "password": "$2a$10$y84P7eUD2e91j8D5e//dd.s4nY3.jkWizgEadDIlkMuBTFh/34LpS",
+    "role": "admin",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "aktif": true
+  },
+  {
+    "id": "user-002",
+    "nama": "Kasir Satu",
+    "email": "kasir@amj.com",
+    "password": "$2a$10$y84P7eUD2e91j8D5e//dd.s4nY3.jkWizgEadDIlkMuBTFh/34LpS",
+    "role": "kasir",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "aktif": true
+  }
+]

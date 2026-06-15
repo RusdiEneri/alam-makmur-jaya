@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UD. Alam Makmur Jaya — Toko Bahan Bangunan</title>
+  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <span class="brand-icon">🏗</span>
+      <div>
+        <span class="brand-name">Alam Makmur Jaya</span>
+        <span class="brand-sub">Toko Bahan Bangunan</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Beranda</a>
+      <a href="pages/catalog.html">Katalog</a>
+      <a href="pages/cart.html">🛒 Keranjang <span id="cart-count" class="badge">0</span></a>
+      <a href="pages/login.html" class="btn-login">Masuk</a>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <span class="hero-tag">Terpercaya Sejak 2010 · Gresik, Jawa Timur</span>
+      <h1>Material Bangunan <em>Berkualitas</em>, Harga <em>Terjangkau</em></h1>
+      <p>Temukan ribuan produk bahan bangunan dari semen, pipa, kabel, hingga cat — tersedia stok real-time, pesan kapanpun dan dimanapun.</p>
+      <div class="hero-actions">
+        <a href="pages/catalog.html" class="btn-primary">Lihat Katalog →</a>
+        <a href="#categories" class="btn-ghost">Kategori Produk</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Produk</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Online</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-num">QRIS</span><span class="stat-label">Pembayaran</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-num">COD</span><span class="stat-label">Pembayaran</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card floating">
+        <div class="hcard-row">
+          <span class="hcard-icon">📦</span>
+          <div>
+            <p class="hcard-label">Stok Tersedia</p>
+            <p class="hcard-val">Semen Portland 50kg</p>
+          </div>
+          <span class="hcard-badge in">✓ Ada</span>
+        </div>
+      </div>
+      <div class="hero-img-box">
+        <div class="img-placeholder">
+          <span class="big-emoji">🏗️</span>
+          <p>UD. Alam Makmur Jaya</p>
+          <small>Gresik, Jawa Timur</small>
+        </div>
+      </div>
+      <div class="hero-card floating-2">
+        <p class="hcard-label">Pesanan Baru ✓</p>
+        <p class="hcard-val">Pipa PVC 3/4" · 20 pcs</p>
+        <p class="hcard-price">Rp 480.000</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories" id="categories">
+    <div class="section-header">
+      <h2>Kategori Produk</h2>
+      <a href="pages/catalog.html" class="see-all">Lihat semua →</a>
+    </div>
+    <div class="cat-grid">
+      <a href="pages/catalog.html?cat=semen" class="cat-card">
+        <span class="cat-emoji">🧱</span>
+        <p class="cat-name">Semen</p>
+        <p class="cat-count">12 produk</p>
+      </a>
+      <a href="pages/catalog.html?cat=pipa" class="cat-card">
+        <span class="cat-emoji">🔧</span>
+        <p class="cat-name">Pipa & Fitting</p>
+        <p class="cat-count">38 produk</p>
+      </a>
+      <a href="pages/catalog.html?cat=kabel" class="cat-card">
+        <span class="cat-emoji">⚡</span>
+        <p class="cat-name">Kabel Listrik</p>
+        <p class="cat-count">25 produk</p>
+      </a>
+      <a href="pages/catalog.html?cat=cat" class="cat-card">
+        <span class="cat-emoji">🎨</span>
+        <p class="cat-name">Cat</p>
+        <p class="cat-count">30 produk</p>
+      </a>
+      <a href="pages/catalog.html?cat=paku" class="cat-card">
+        <span class="cat-emoji">🔩</span>
+        <p class="cat-name">Paku & Baut</p>
+        <p class="cat-count">44 produk</p>
+      </a>
+      <a href="pages/catalog.html?cat=kayu" class="cat-card">
+        <span class="cat-emoji">🪵</span>
+        <p class="cat-name">Kayu</p>
+        <p class="cat-count">18 produk</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="featured">
+    <div class="section-header">
+      <h2>Produk Terlaris</h2>
+      <a href="pages/catalog.html" class="see-all">Lihat semua →</a>
+    </div>
+    <div class="product-grid" id="featured-grid"></div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="feat-grid">
+      <div class="feat-card">
+        <span class="feat-icon">📱</span>
+        <h3>Pesan Online</h3>
+        <p>Cek stok dan pesan kapanpun dari rumah atau lokasi proyek.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">⚡</span>
+        <h3>Stok Real-Time</h3>
+        <p>Informasi ketersediaan barang selalu up-to-date, tidak ada kecewaan.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">💳</span>
+        <h3>Bayar via QRIS</h3>
+        <p>Pembayaran digital yang cepat dan praktis, semua e-wallet diterima.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📊</span>
+        <h3>Riwayat Transaksi</h3>
+        <p>Semua pesanan tercatat rapi, bisa dicek kapanpun.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <p class="footer-brand">🏗 UD. Alam Makmur Jaya</p>
+        <p class="footer-addr">Gresik, Jawa Timur 61124</p>
+        <p class="footer-addr">Pemilik: Muhammad Alam Shah</p>
+      </div>
+      <div class="footer-links">
+        <a href="pages/catalog.html">Katalog</a>
+        <a href="pages/login.html">Login Admin</a>
+        <a href="pages/cart.html">Keranjang</a>
+      </div>
+    </div>
+    <p class="footer-copy">© 2025 UD. Alam Makmur Jaya · Dibuat oleh Kelompok 8 UISI</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
