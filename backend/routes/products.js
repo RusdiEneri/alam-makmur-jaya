@@ -37,23 +37,6 @@ router.get('/', (req, res) => {
   res.json(result);
 });
 
-// ────────────────────────────────────────────
-// GET /api/products/:id
-// ────────────────────────────────────────────
-router.get('/:id', (req, res) => {
-  const products = db.read('products');
-  const product  = products.find(p => p.id === req.params.id);
-  if (!product) return res.status(404).json({ message: 'Produk tidak ditemukan' });
-  let statusStok = 'Tersedia';
-  if (product.stok <= 0) {
-    statusStok = 'Habis';
-  } else if (product.stok <= (product.stokMinimum || 0)) {
-    statusStok = 'Stok Menipis';
-  }
-  
-  res.json({ ...product, statusStok });
-});
-
 // Helper to check valid units
 const validSatuan = ['sak', 'meter', 'biji', 'kubik', 'roll', 'kg', 'batang', 'liter', 'unit'];
 
@@ -91,6 +74,23 @@ router.get('/expiring', authenticate, (req, res) => {
     totalExpiring: expiring.length,
     totalExpired: expired.length
   });
+});
+
+// ────────────────────────────────────────────
+// GET /api/products/:id
+// ────────────────────────────────────────────
+router.get('/:id', (req, res) => {
+  const products = db.read('products');
+  const product  = products.find(p => p.id === req.params.id);
+  if (!product) return res.status(404).json({ message: 'Produk tidak ditemukan' });
+  let statusStok = 'Tersedia';
+  if (product.stok <= 0) {
+    statusStok = 'Habis';
+  } else if (product.stok <= (product.stokMinimum || 0)) {
+    statusStok = 'Stok Menipis';
+  }
+  
+  res.json({ ...product, statusStok });
 });
 
 // ────────────────────────────────────────────

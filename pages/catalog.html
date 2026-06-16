@@ -65,23 +65,16 @@
         <div class="filter-group">
           <p class="filter-label">Kategori</p>
           <div class="filter-item"><input type="radio" name="cat" id="all" value="" checked onchange="filterProducts()"><label for="all">Semua</label></div>
-          <div class="filter-item"><input type="radio" name="cat" id="semen" value="semen" onchange="filterProducts()"><label for="semen">🧱 Semen</label></div>
-          <div class="filter-item"><input type="radio" name="cat" id="pipa" value="pipa" onchange="filterProducts()"><label for="pipa">🔧 Pipa & Fitting</label></div>
-          <div class="filter-item"><input type="radio" name="cat" id="kabel" value="kabel" onchange="filterProducts()"><label for="kabel">⚡ Kabel Listrik</label></div>
-          <div class="filter-item"><input type="radio" name="cat" id="cat" value="cat" onchange="filterProducts()"><label for="cat">🎨 Cat</label></div>
-          <div class="filter-item"><input type="radio" name="cat" id="paku" value="paku" onchange="filterProducts()"><label for="paku">🔩 Paku & Baut</label></div>
-          <div class="filter-item"><input type="radio" name="cat" id="kayu" value="kayu" onchange="filterProducts()"><label for="kayu">🪵 Kayu</label></div>
-          <div class="filter-item"><input type="radio" name="cat" id="lampu" value="lampu" onchange="filterProducts()"><label for="lampu">💡 Lampu</label></div>
-=======
-          <!-- Nilai value harus SAMA PERSIS dengan field "kategori" di products.json -->
-          <div class="filter-item"><input type="radio" name="cat" id="all" value="" checked onchange="filterProducts()"><label for="all">Semua</label></div>
           <div class="filter-item"><input type="radio" name="cat" id="bahan" value="Bahan Bangunan" onchange="filterProducts()"><label for="bahan">🧱 Bahan Bangunan</label></div>
           <div class="filter-item"><input type="radio" name="cat" id="pipa" value="Pipa & Selang" onchange="filterProducts()"><label for="pipa">🔧 Pipa & Selang</label></div>
           <div class="filter-item"><input type="radio" name="cat" id="listrik" value="Listrik" onchange="filterProducts()"><label for="listrik">⚡ Listrik</label></div>
+          <div class="filter-item"><input type="radio" name="cat" id="paku" value="Paku & Baut" onchange="filterProducts()"><label for="paku">🔩 Paku & Baut</label></div>
           <div class="filter-item"><input type="radio" name="cat" id="kayu" value="Kayu" onchange="filterProducts()"><label for="kayu">🪵 Kayu</label></div>
+          <div class="filter-item"><input type="radio" name="cat" id="lampu" value="Lampu" onchange="filterProducts()"><label for="lampu">💡 Lampu</label></div>
+          <div class="filter-item"><input type="radio" name="cat" id="cat" value="Cat" onchange="filterProducts()"><label for="cat">🎨 Cat</label></div>
           <div class="filter-item"><input type="radio" name="cat" id="material" value="Material" onchange="filterProducts()"><label for="material">🪨 Material</label></div>
           <div class="filter-item"><input type="radio" name="cat" id="sanitasi" value="Sanitasi" onchange="filterProducts()"><label for="sanitasi">🚿 Sanitasi</label></div>
-          <div class="filter-item"><input type="radio" name="cat" id="paku" value="Paku & Baut" onchange="filterProducts()"><label for="paku">🔩 Paku & Baut</label></div>
+          <div class="filter-item"><input type="radio" name="cat" id="umum" value="Umum" onchange="filterProducts()"><label for="umum">📦 Lainnya</label></div>
         </div>
         <div class="filter-group">
           <p class="filter-label">Ketersediaan</p>
@@ -124,19 +117,21 @@
     const EMOJI_MAP = {
       'Bahan Bangunan': '🧱', 'Pipa & Selang': '🔧', 'Listrik': '⚡',
       'Kayu': '🪵', 'Material': '🪨', 'Sanitasi': '🚿',
-      'Paku & Baut': '🔩', 'Umum': '📦'
+      'Paku & Baut': '🔩', 'Umum': '📦', 'Lampu': '💡', 'Cat': '🎨'
     };
 
     // FIX: simpan produk secara global agar handleAdd bisa lookup tanpa fetch ulang
     let catalogProducts = [];
 
     async function filterProducts() {
-      const search     = document.getElementById('search-input').value.toLowerCase();
+      const search     = document.getElementById('search-input').value;
       const cat        = document.querySelector('input[name="cat"]:checked').value;
       const stokFilter = document.querySelector('input[name="stok"]:checked').value;
 
       try {
-        catalogProducts = await API.getProducts();
+        // Encode URI Component per FR requirement Bug 4
+        // Panggil API dengan search dan encodeURIComponent kategori
+        catalogProducts = await API.getProducts(encodeURIComponent(search), encodeURIComponent(cat));
       } catch (err) {
         document.getElementById('catalog-grid').innerHTML =
           '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:#E85D26">' +
@@ -146,15 +141,10 @@
 
       let products = [...catalogProducts];
 
-      if (cat)                   products = products.filter(p => p.kategori === cat);
+      // Kategori dan Search sudah difilter oleh backend, 
+      // hanya perlu memfilter stokFilter secara lokal
       if (stokFilter === 'ada')   products = products.filter(p => p.stok > 0);
       if (stokFilter === 'habis') products = products.filter(p => p.stok <= 0);
-      if (search) {
-        products = products.filter(p =>
-          p.nama.toLowerCase().includes(search) ||
-          (p.kategori && p.kategori.toLowerCase().includes(search))
-        );
-      }
 
       document.getElementById('product-count').textContent = `${products.length} produk ditemukan`;
 

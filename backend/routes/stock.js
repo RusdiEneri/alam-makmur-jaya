@@ -10,7 +10,7 @@ const router = express.Router();
 // ────────────────────────────────────────────
 router.get('/alerts', authenticate, staffOnly, (req, res) => {
   const products = db.read('products');
-  const kritis   = products.filter(p => p.stok <= p.stokMinimum);
+  const kritis   = products.filter(p => p.stokMinimum > 0 && p.stok <= p.stokMinimum);
 
   res.json({
     jumlah:    kritis.length,

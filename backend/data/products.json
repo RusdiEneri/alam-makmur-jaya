@@ -2,7 +2,7 @@
   {
     "id": "prod-001",
     "nama": "Semen Tiga Roda 40kg",
-    "kategori": "Bahan bangunan",
+    "kategori": "Bahan Bangunan",
     "harga": 72000,
     "stok": 85,
     "satuan": "sak",
@@ -16,7 +16,7 @@
   {
     "id": "prod-002",
     "nama": "Pipa PVC AW 1/2 inch",
-    "kategori": "Pipa & selang",
+    "kategori": "Pipa & Selang",
     "harga": 38000,
     "stok": 42,
     "satuan": "batang",
@@ -30,7 +30,7 @@
   {
     "id": "prod-003",
     "nama": "Paku Biasa 5cm",
-    "kategori": "Paku & baut",
+    "kategori": "Paku & Baut",
     "harga": 18000,
     "stok": 3,
     "satuan": "kg",
@@ -114,7 +114,7 @@
   {
     "id": "prod-0ada13b6",
     "nama": "Semen Gresik 40kg",
-    "kategori": "Semen",
+    "kategori": "Bahan Bangunan",
     "harga": 68000,
     "stok": 100,
     "satuan": "sak",

@@ -152,7 +152,7 @@ function normalizeProductPayload(data) {
     hargaPokok:         Number(data.hargaPokok ?? 0),
     stok:               Number(data.stok      ?? data.stock   ?? 0),
     stokMinimum:        Number(data.stokMinimum ?? data.stok_minimum ?? 5),
-    satuan:             data.satuan       || data.unit    || 'pcs',
+    satuan:             data.satuan       || data.unit    || 'unit',
     bolehDesimal:       data.bolehDesimal === true || data.bolehDesimal === 'true',
     tanggalKadaluarsa:  data.tanggalKadaluarsa || null,
     aktif:              data.aktif !== false && data.aktif !== 'false'
@@ -403,6 +403,14 @@ function printNota(trx) {
   const win = window.open('', '_blank');
   const noOrder = trx.noOrder || trx.nomorPesanan || trx.id;
   const nama = trx.namaPelanggan || trx.namaPembeli || 'Pelanggan';
+
+  const formatRupiah = (angka) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0
+    }).format(angka);
+  };
   
   win.document.write(`
     <html><head><title>Nota ${noOrder}</title>

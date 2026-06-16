@@ -144,6 +144,7 @@
 
       <!-- TABS -->
       <div id="tab-dashboard" class="tab-content active">
+        <div id="dashboard-stok-alert"></div>
         <div class="stats-grid" id="stats-grid"></div>
         <div class="section-card">
           <h2>Pesanan Terbaru</h2>
@@ -370,6 +371,15 @@ function toggleSidebar() {
   }
 }
 
+// Security: Hide tabs for kasir
+if (user.role === 'kasir') {
+  document.querySelectorAll('.sidebar-nav a').forEach(a => {
+    if (a.textContent.includes('Laporan') || a.textContent.includes('Staff')) {
+      a.style.display = 'none';
+    }
+  });
+}
+
 async function showTab(tab) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
@@ -413,14 +423,14 @@ async function showTab(tab) {
 }
 
    async function renderAll() {
+  await renderDashboardAlerts();
   await renderStats();
   await renderRecentOrders();
   await renderLowStock();
   await renderAllOrders();
   await renderProductTable();
-  await renderStokTable();
-  await renderStaffTable();
-  await renderLaporan();
+  if (user.role === 'admin') await renderStaffTable();
+  if (user.role === 'admin') await renderLaporan();
   
   if (typeof renderPembayaran === 'function') await renderPembayaran();
   if (typeof renderPengiriman === 'function') await renderPengiriman();
@@ -428,6 +438,28 @@ async function showTab(tab) {
   if (typeof renderRetur === 'function') await renderRetur();
   if (typeof renderMasaSimpan === 'function') await renderMasaSimpan();
   if (typeof renderTarget === 'function') await renderTarget();
+}
+
+async function renderDashboardAlerts() {
+  const alertContainer = document.getElementById('dashboard-stok-alert');
+  if (!alertContainer) return;
+  try {
+    const alerts = await API.getStokAlerts();
+    if (alerts && alerts.length > 0) {
+      alertContainer.innerHTML = `
+        <div style="background:#FEE2E2; border-left: 4px solid #DC2626; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+          <h3 style="color:#991B1B; font-size:15px; margin-bottom: 0.5rem;">⚠️ Stok Kritis (${alerts.length} Produk)</h3>
+          <ul style="margin: 0; padding-left: 1.5rem; color: #7F1D1D; font-size: 13px;">
+            ${alerts.map(a => `<li><b>${escapeHtml(a.nama)}</b>: sisa ${a.stok} ${a.satuan} (Min: ${a.stokMinimum})</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    } else {
+      alertContainer.innerHTML = '';
+    }
+  } catch (err) {
+    alertContainer.innerHTML = '';
+  }
 }
 
     async function renderStats() {
@@ -679,7 +711,7 @@ async function showTab(tab) {
           <td style="color:${stock === 0 ? '#DC2626' : stock < 10 ? '#D97706' : '#1A6B3A'};font-weight:600">${stock} ${escapeHtml(unit)}</td>
           <td>
             <button class="btn-sm secondary" onclick="editProduct('${p.id}')">✏ Edit</button>
-            <button class="btn-sm danger" onclick="delProduct('${p.id}')" style="margin-left:4px">🗑</button>
+            ${user.role === 'admin' ? `<button class="btn-sm danger" onclick="delProduct('${p.id}')" style="margin-left:4px">🗑</button>` : ''}
           </td>
         </tr>`;
       }).join('')}
