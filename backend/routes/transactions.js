@@ -31,6 +31,40 @@ router.get('/:id', authenticate, (req, res) => {
   res.json(trx);
 });
 
+// ── GET /api/transactions/:id/invoice ─────────────────────────
+router.get('/:id/invoice', authenticate, (req, res) => {
+  const transactions = db.read('transactions');
+  const trx = transactions.find(t => t.id === req.params.id);
+
+  if (!trx) return res.status(404).json({ message: 'Transaksi tidak ditemukan' });
+
+  // Format data specifically for frontend printing
+  res.json({
+    noOrder: trx.noOrder,
+    tanggal: trx.tanggal,
+    namaPelanggan: trx.namaPelanggan,
+    alamat: trx.alamat,
+    noWhatsapp: trx.noWhatsapp,
+    kasir: (trx.statusHistory && trx.statusHistory.length > 0) ? trx.statusHistory[0].oleh : 'Sistem',
+    items: trx.items.map(i => ({
+      namaProduk: i.namaProduk,
+      qty: i.qty,
+      satuan: i.satuan,
+      hargaSatuan: i.hargaSatuan,
+      subtotal: i.subtotal
+    })),
+    total: trx.total,
+    metodeBayar: trx.metodeBayar,
+    statusPembayaran: trx.statusPembayaran,
+    catatanPengiriman: trx.catatanPengiriman,
+    toko: {
+      nama: 'UD. Alam Makmur Jaya',
+      alamat: 'Jl. Raya Alam Makmur No. 123',
+      telepon: '081234567890'
+    }
+  });
+});
+
 // ── GET /api/transactions/:id/bukti-transfer ──────────────────
 router.get('/:id/bukti-transfer', authenticate, (req, res) => {
   const transactions = db.read('transactions');
@@ -71,6 +105,10 @@ router.put('/:id/status-bayar', authenticate, staffOnly, (req, res) => {
   const trx = transactions[idx];
 
   // Transition rules for Pembayaran
+  if (trx.metodeBayar === 'transfer' && trx.statusPembayaran !== 'pending') {
+    return res.status(400).json({ message: 'Status pembayaran transfer yang sudah diproses tidak dapat diubah lagi' });
+  }
+
   if (trx.statusPembayaran === 'berhasil' && status === 'ditolak') {
     return res.status(400).json({ message: 'Pembayaran yang sudah berhasil tidak dapat ditolak' });
   }

@@ -29,6 +29,7 @@ function filterByDate(records, start, end) {
 
 function isTransaksiValid(t) {
   if (t.metodeBayar === "transfer") return t.statusPembayaran === "berhasil";
+  if (t.metodeBayar === "piutang") return t.statusPembayaran === "berhasil"; // 'berhasil' diset ketika piutang lunas
   // COD: only count as valid revenue when the order is completed
   return t.statusPembayaran === "berhasil" && t.statusPesanan === "selesai";
 }
@@ -38,19 +39,22 @@ function summarize(transactions, receivables) {
   const lunasRec = (receivables || []).filter(r => r.status === "lunas");
 
   const pendapatanTrx = validTrx.reduce((s, t) => s + (t.total || 0), 0);
-  const pendapatanRec = lunasRec.reduce((s, r) => s + (r.total || 0), 0);
-  const totalPendapatan = pendapatanTrx + pendapatanRec;
+  const pendapatanRecManual = lunasRec.filter(r => !r.transaksiId).reduce((s, r) => s + (r.total || 0), 0);
+  const totalPendapatan = pendapatanTrx + pendapatanRecManual;
 
-  let labaKotor = 0;
+  let totalModal = 0;
   let adaHargaPokok = false;
 
   for (const trx of validTrx) {
     for (const item of (trx.items || [])) {
       const hp = item.hargaPokokSatuan || 0;
       if (hp > 0) adaHargaPokok = true;
-      labaKotor += ((item.hargaSatuan || 0) - hp) * (item.qty || 0);
+      totalModal += hp * (item.qty || 0);
     }
   }
+
+  const labaKotor = totalPendapatan;
+  const labaBersih = totalPendapatan - totalModal;
 
   const labaBelumAkurat = !adaHargaPokok && validTrx.some(t => (t.items || []).length > 0);
   const transaksiSelesai = validTrx.length;
@@ -61,12 +65,19 @@ function summarize(transactions, receivables) {
     transaksiSelesai,
     totalPendapatan,
     pendapatanTrx,
-    pendapatanRec,
-    labaKotor,
+    pendapatanRec:         pendapatanRecManual,
+    laba_kotor:            labaKotor,
+    laba_bersih:           labaBersih,
+    labaKotor:             labaKotor,
+    labaBersih:            labaBersih,
     labaKotorAkurat:       adaHargaPokok,
     labaBelumAkurat,
-    labaBersih:            null,
-    pesanLabaBersih:       "Laba bersih belum dapat dihitung karena data biaya operasional belum tersedia.",
+    biayaOperasional:      0,
+    costOfGoodsSold:       totalModal,
+    totalRevenue:          totalPendapatan,
+    grossProfit:           labaKotor,
+    operatingExpenses:     0,
+    netProfit:             labaBersih,
     jumlahPending:         transactions.filter(t => t.statusPembayaran === "pending").length,
     jumlahDibatalkan:      transactions.filter(t => t.statusPesanan === "dibatalkan").length
   };
@@ -190,6 +201,20 @@ router.get("/best-products", authenticate, adminOnly, (req, res) => {
 
   const result = Object.values(penjualan).sort((a, b) => b.totalQty - a.totalQty).slice(0, limit);
   res.json(result);
+});
+
+router.get("/export/csv", authenticate, adminOnly, (req, res) => {
+  const transactions = db.read("transactions");
+  const validTrx = transactions.filter(isTransaksiValid);
+
+  let csv = "No Order,Tanggal,Nama Pelanggan,Total,Metode Bayar\n";
+  for (const t of validTrx) {
+    csv += `${t.noOrder},${t.tanggal},"${t.namaPelanggan}",${t.total},${t.metodeBayar}\n`;
+  }
+
+  res.header('Content-Type', 'text/csv');
+  res.attachment('laporan_penjualan.csv');
+  return res.send(csv);
 });
 
 module.exports = router;

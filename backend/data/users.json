@@ -3,7 +3,7 @@
     "id": "user-001",
     "nama": "Admin Toko",
     "email": "admin@amj.com",
-    "password": "$2a$10$y84P7eUD2e91j8D5e//dd.s4nY3.jkWizgEadDIlkMuBTFh/34LpS",
+    "password": "$2a$10$3XSWdw7DUX8Qn2TCS9MpPOMeBgOb2qUQ3t9e0PjItR3q1ct4tLijC",
     "role": "admin",
     "createdAt": "2025-01-01T00:00:00.000Z",
     "aktif": true
@@ -12,7 +12,7 @@
     "id": "user-002",
     "nama": "Kasir Satu",
     "email": "kasir@amj.com",
-    "password": "$2a$10$y84P7eUD2e91j8D5e//dd.s4nY3.jkWizgEadDIlkMuBTFh/34LpS",
+    "password": "$2a$10$3XSWdw7DUX8Qn2TCS9MpPOMeBgOb2qUQ3t9e0PjItR3q1ct4tLijC",
     "role": "kasir",
     "createdAt": "2025-01-01T00:00:00.000Z",
     "aktif": true

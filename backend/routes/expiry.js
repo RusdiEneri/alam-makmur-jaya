@@ -7,8 +7,8 @@
  * CARA PAKAI:
  *   Di server.js: app.use('/api/expiry', require('./routes/expiry'));
  *
- * Untuk menambah tanggalKadaluarsa pada produk, gunakan PUT /api/products/:id
- * dengan body { tanggalKadaluarsa: "2025-09-30" }
+ * Untuk menambah masa_simpan pada produk, gunakan PUT /api/products/:id
+ * dengan body { masa_simpan: "2025-09-30" }
  */
 
 const express = require('express');
@@ -40,9 +40,9 @@ router.get('/alerts', authenticate, staffOnly, (req, res) => {
   const products = db.read('products');
 
   const alerts = products
-    .filter(p => p.tanggalKadaluarsa)
+    .filter(p => p.masa_simpan)
     .map(p => {
-      const status = ekspiryStatus(p.tanggalKadaluarsa);
+      const status = ekspiryStatus(p.masa_simpan);
       return { ...p, ekspiryInfo: status };
     })
     .filter(p => p.ekspiryInfo && p.ekspiryInfo.hari <= batas)
@@ -59,7 +59,7 @@ router.get('/alerts', authenticate, staffOnly, (req, res) => {
       nama:               p.nama,
       stok:               p.stok,
       satuan:             p.satuan,
-      tanggalKadaluarsa:  p.tanggalKadaluarsa,
+      masa_simpan:        p.masa_simpan,
       sisaHari:           p.ekspiryInfo.hari,
       status:             p.ekspiryInfo.label,
       warna:              p.ekspiryInfo.warna
@@ -75,14 +75,14 @@ router.get('/all', authenticate, staffOnly, (req, res) => {
   const products = db.read('products');
 
   const result = products
-    .filter(p => p.tanggalKadaluarsa)
+    .filter(p => p.masa_simpan)
     .map(p => ({
       id:                p.id,
       nama:              p.nama,
       stok:              p.stok,
       satuan:            p.satuan,
-      tanggalKadaluarsa: p.tanggalKadaluarsa,
-      ekspiryInfo:       ekspiryStatus(p.tanggalKadaluarsa)
+      masa_simpan:       p.masa_simpan,
+      ekspiryInfo:       ekspiryStatus(p.masa_simpan)
     }))
     .sort((a, b) => a.ekspiryInfo.hari - b.ekspiryInfo.hari);
 

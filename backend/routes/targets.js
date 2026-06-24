@@ -4,8 +4,8 @@ const { authenticate, adminOnly } = require('../middleware/auth');
 
 const router = express.Router();
 
-// GET /api/targets/daily?tanggal=YYYY-MM-DD
-router.get('/daily', authenticate, (req, res) => {
+// GET /api/reports/target
+router.get('/', authenticate, adminOnly, (req, res) => {
   const { tanggal } = req.query;
   const tgl = tanggal || new Date().toISOString().slice(0, 10);
   
@@ -43,22 +43,23 @@ router.get('/daily', authenticate, (req, res) => {
   });
 });
 
-// PUT /api/targets/daily
-router.put('/daily', authenticate, adminOnly, (req, res) => {
+// POST /api/targets
+router.post('/', authenticate, adminOnly, (req, res) => {
   const { tanggal, target } = req.body;
+  const tgl = tanggal || new Date().toISOString().slice(0, 10);
   
-  if (!tanggal || target === undefined) {
-    return res.status(400).json({ message: 'Tanggal dan target wajib diisi' });
+  if (target === undefined) {
+    return res.status(400).json({ message: 'Target wajib diisi' });
   }
   
   const targets = db.read('targets') || [];
-  const idx = targets.findIndex(t => t.tanggal === tanggal);
+  const idx = targets.findIndex(t => t.tanggal === tgl);
   
   if (idx > -1) {
     targets[idx].target = Number(target);
   } else {
     targets.push({
-      tanggal,
+      tanggal: tgl,
       target: Number(target)
     });
   }

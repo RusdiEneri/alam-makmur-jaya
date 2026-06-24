@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 require('express-async-errors');
 const cors    = require('cors');
@@ -11,15 +12,22 @@ const allowedOrigins = [
   'http://localhost:3000'
 ];
 
-// Tambahkan origin production dari env jika ada
-if (process.env.ALLOWED_ORIGINS) {
+// Cek apakah di .env CORS dimatikan (menggunakan string 'false')
+const disableCorsProtection = process.env.ALLOWED_ORIGINS === 'false';
+
+// Tambahkan origin production dari env JIKA nilainya bukan 'false'
+if (process.env.ALLOWED_ORIGINS && !disableCorsProtection) {
   process.env.ALLOWED_ORIGINS.split(',').forEach(o => allowedOrigins.push(o.trim()));
 }
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Hapus izin untuk !origin kecuali untuk keperluan development yang ketat, 
-    // namun kita hanya izinkan yang terdaftar.
+    // 1. JIKA SAKLAR NYALA: Izinkan SEMUA request (Cocok buat gonta-ganti Wi-Fi)
+    if (disableCorsProtection) {
+      return callback(null, true);
+    }
+
+    // 2. JIKA SAKLAR MATI (Mode Strict): Cek array allowedOrigins
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -43,7 +51,7 @@ app.use('/api/receivables',  require('./routes/receivables'));
 app.use('/api/stock',        require('./routes/stock'));
 app.use('/api/returns',      require('./routes/returns'));
 app.use('/api/expiry',       require('./routes/expiry'));
-app.use('/api/targets',      require('./routes/targets'));
+app.use('/api/reports/target', require('./routes/targets'));
 
 // ── Static serving ────────────────────────────────────────────
 // Bukti transfer tidak lagi diserve secara publik

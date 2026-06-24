@@ -4,14 +4,14 @@
     "nama": "Semen Tiga Roda 40kg",
     "kategori": "Bahan Bangunan",
     "harga": 72000,
-    "stok": 85,
+    "stok": 78,
     "satuan": "sak",
     "stokMinimum": 10,
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "hargaPokok": 0,
+    "hargaPokok": 57600,
     "aktif": true,
     "bolehDesimal": false,
-    "tanggalKadaluarsa": null
+    "masa_simpan": null
   },
   {
     "id": "prod-002",
@@ -22,10 +22,10 @@
     "satuan": "batang",
     "stokMinimum": 8,
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "hargaPokok": 0,
+    "hargaPokok": 30400,
     "aktif": true,
     "bolehDesimal": false,
-    "tanggalKadaluarsa": null
+    "masa_simpan": null
   },
   {
     "id": "prod-003",
@@ -36,10 +36,10 @@
     "satuan": "kg",
     "stokMinimum": 5,
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "hargaPokok": 0,
+    "hargaPokok": 14400,
     "aktif": true,
     "bolehDesimal": true,
-    "tanggalKadaluarsa": null
+    "masa_simpan": null
   },
   {
     "id": "prod-004",
@@ -50,10 +50,10 @@
     "satuan": "meter",
     "stokMinimum": 30,
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "hargaPokok": 0,
+    "hargaPokok": 5200,
     "aktif": true,
     "bolehDesimal": true,
-    "tanggalKadaluarsa": null
+    "masa_simpan": null
   },
   {
     "id": "prod-005",
@@ -64,10 +64,10 @@
     "satuan": "batang",
     "stokMinimum": 10,
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "hargaPokok": 0,
+    "hargaPokok": 22400,
     "aktif": true,
     "bolehDesimal": false,
-    "tanggalKadaluarsa": null
+    "masa_simpan": null
   },
   {
     "id": "prod-006",
@@ -78,10 +78,10 @@
     "satuan": "kubik",
     "stokMinimum": 3,
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "hargaPokok": 0,
+    "hargaPokok": 224000,
     "aktif": true,
     "bolehDesimal": true,
-    "tanggalKadaluarsa": null
+    "masa_simpan": null
   },
   {
     "id": "prod-007",
@@ -92,10 +92,10 @@
     "satuan": "biji",
     "stokMinimum": 5,
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "hargaPokok": 0,
+    "hargaPokok": 36000,
     "aktif": true,
     "bolehDesimal": false,
-    "tanggalKadaluarsa": null
+    "masa_simpan": null
   },
   {
     "id": "prod-008",
@@ -106,10 +106,10 @@
     "satuan": "biji",
     "stokMinimum": 10,
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "hargaPokok": 0,
+    "hargaPokok": 25600,
     "aktif": true,
     "bolehDesimal": false,
-    "tanggalKadaluarsa": null
+    "masa_simpan": null
   },
   {
     "id": "prod-0ada13b6",
@@ -120,9 +120,9 @@
     "satuan": "sak",
     "stokMinimum": 5,
     "createdAt": "2026-05-21T03:55:35.416Z",
-    "hargaPokok": 0,
+    "hargaPokok": 54400,
     "aktif": true,
     "bolehDesimal": false,
-    "tanggalKadaluarsa": null
+    "masa_simpan": null
   }
 ]

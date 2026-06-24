@@ -54,7 +54,10 @@
       <button class="btn-primary" style="width: 100%; justify-content: center;" onclick="trackOrder()">Lacak Sekarang</button>
 
       <div class="track-result" id="result-container">
-        <h3 style="font-size: 18px; margin-bottom: 1rem;">Detail Pesanan</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h3 style="font-size: 18px; margin: 0;">Detail Pesanan</h3>
+          <span id="polling-badge" style="font-size:11px;color:#6B6B6B;background:#F0EDE8;padding:3px 10px;border-radius:99px;display:none">🔄 Auto-refresh aktif</span>
+        </div>
         <p><strong>Nomor Pesanan:</strong> <span id="res-no"></span></p>
         <p><strong>Tanggal:</strong> <span id="res-date"></span></p>
         <p><strong>Total:</strong> <span id="res-total"></span></p>
@@ -72,49 +75,112 @@
   <script src="../js/data.js"></script>
   <script>
     let currentTrx = null;
+    let pollingInterval = null;
+    let pollingNoOrder = null;
+    let pollingNoWa = null;
+
+    function renderTrackResult(data) {
+      currentTrx = data;
+
+      document.getElementById('res-no').textContent = data.noOrder || '-';
+      document.getElementById('res-date').textContent =
+        new Date(data.createdAt || data.tanggal).toLocaleDateString('id-ID');
+      document.getElementById('res-total').textContent = formatRupiah(data.total || 0);
+
+      // Status pembayaran
+      const b = document.getElementById('res-bayar');
+      const bayarLabel = {
+        pending:  '⏳ Menunggu Verifikasi',
+        berhasil: '✓ Berhasil',
+        ditolak:  '✗ Ditolak'
+      }[data.statusPembayaran] || data.statusPembayaran;
+      b.textContent = bayarLabel;
+      b.className = 'status-badge ' + (
+        data.statusPembayaran === 'berhasil' ? 'status-selesai' :
+        data.statusPembayaran === 'ditolak'  ? 'status-dikirim' : 'status-pending'
+      );
+
+      // Status pesanan
+      const p = document.getElementById('res-pesanan');
+      const pesananLabel = {
+        pending:   '⏳ Menunggu Proses',
+        diproses:  '⚙️ Diproses',
+        dikirim:   '🚚 Dikirim',
+        selesai:   '✅ Selesai',
+        dibatalkan: '❌ Dibatalkan'
+      }[data.statusPesanan] || data.statusPesanan;
+      p.textContent = pesananLabel;
+      p.className = 'status-badge status-' + (
+        data.statusPesanan === 'selesai'    ? 'selesai' :
+        data.statusPesanan === 'diproses'   ? 'proses'  :
+        data.statusPesanan === 'dikirim'    ? 'dikirim' : 'pending'
+      );
+
+      // FIX Bug #7: gunakan namaProduk (bukan nama) sesuai schema backend
+      const itemsHtml = (data.items || []).map(i =>
+        `<p>• <strong>${escapeHtml(i.namaProduk || i.nama || '-')}</strong> &times; ${i.qty} ${escapeHtml(i.satuan || '')} = ${formatRupiah(i.subtotal || 0)}</p>`
+      ).join('');
+
+      // Timeline
+      let timelineHtml = '';
+      if (data.statusPembayaran === 'berhasil') {
+        timelineHtml += `<div style="margin-bottom:8px;font-size:13px;color:#1A6B3A">✅ <strong>Pembayaran berhasil diverifikasi</strong></div>`;
+      } else if (data.statusPembayaran === 'pending') {
+        timelineHtml += `<div style="margin-bottom:8px;font-size:13px;color:#E85D26">⏳ <strong>Menunggu verifikasi transfer dari admin</strong></div>`;
+      }
+      if (data.statusPesanan === 'dikirim' || data.statusPesanan === 'selesai') {
+        timelineHtml += `<div style="margin-bottom:8px;font-size:13px;color:#6B6B6B">🚚 <strong>Pengiriman:</strong> ${(data.statusPesanan || '').toUpperCase()}</div>`;
+      }
+
+      document.getElementById('res-items').innerHTML =
+        itemsHtml +
+        (timelineHtml
+          ? `<div style="margin-top:1rem;padding-top:1rem;border-top:1px dashed #E5E5E5"><h5 style="margin-bottom:8px">Timeline Status</h5>${timelineHtml}</div>`
+          : '');
+
+      document.getElementById('result-container').style.display = 'block';
+    }
+
+    // FR-18: Auto-refresh polling setiap 30 detik (hanya saat status belum final)
+    function startPolling(noOrder, noWa) {
+      if (pollingInterval) clearInterval(pollingInterval);
+      pollingNoOrder = noOrder;
+      pollingNoWa    = noWa;
+
+      const badge = document.getElementById('polling-badge');
+
+      pollingInterval = setInterval(async () => {
+        // Hentikan polling jika status sudah final
+        if (currentTrx &&
+            (currentTrx.statusPembayaran === 'berhasil' || currentTrx.statusPembayaran === 'ditolak') &&
+            (currentTrx.statusPesanan === 'selesai' || currentTrx.statusPesanan === 'dibatalkan')) {
+          clearInterval(pollingInterval);
+          if (badge) badge.style.display = 'none';
+          return;
+        }
+        try {
+          const data = await API.trackOrder(pollingNoOrder, pollingNoWa);
+          renderTrackResult(data);
+        } catch { /* silent */ }
+      }, 30000);
+
+      if (badge) badge.style.display = 'inline-block';
+    }
 
     async function trackOrder() {
       const noOrder = document.getElementById('noOrder').value.trim();
-      const noWa = document.getElementById('noWa').value.trim();
-      
+      const noWa    = document.getElementById('noWa').value.trim();
+
       if (!noOrder || !noWa) {
         showToast('✗ Lengkapi kedua kolom');
         return;
       }
-      
-      try {
-        const data = await API.trackOrder(noOrder, noWa);
-        
-        currentTrx = data;
-        
-        document.getElementById('res-no').textContent = data.noOrder;
-        document.getElementById('res-date').textContent = new Date(data.tanggal).toLocaleDateString('id-ID');
-        document.getElementById('res-total').textContent = formatRupiah(data.total);
-        
-        const b = document.getElementById('res-bayar');
-        b.textContent = data.statusPembayaran;
-        b.className = 'status-badge ' + (data.statusPembayaran === 'berhasil' ? 'status-selesai' : 'status-pending');
-        
-        const p = document.getElementById('res-pesanan');
-        p.textContent = data.statusPesanan;
-        p.className = 'status-badge status-' + (data.statusPesanan === 'selesai' ? 'selesai' : data.statusPesanan === 'diproses' ? 'proses' : 'dikirim');
-        
-        document.getElementById('res-items').innerHTML = data.items.map(i => 
-          `<p>• ${i.nama} (${i.qty} ${i.satuan}) = ${formatRupiah(i.subtotal)}</p>`
-        ).join('');
 
-        // Timeline Riwayat Status
-        if (data.riwayatStatus && data.riwayatStatus.length > 0) {
-           const historyHtml = data.riwayatStatus.map(h => 
-             `<div style="margin-bottom:8px; font-size:13px; color:#6B6B6B;">
-                <strong>${h.tipe.toUpperCase()}</strong>: ${h.status} 
-                <span style="font-size:11px;">(${new Date(h.timestamp).toLocaleString('id-ID')})</span>
-              </div>`
-           ).join('');
-           document.getElementById('res-items').innerHTML += `<div style="margin-top:1rem; padding-top:1rem; border-top:1px dashed #E5E5E5;"><h5>Timeline</h5>${historyHtml}</div>`;
-        }
-        
-        document.getElementById('result-container').style.display = 'block';
+      try {
+        // Gunakan API.trackOrder (GET /checkout/track?noOrder=&noWa=)
+        const data = await API.trackOrder(noOrder, noWa);
+        renderTrackResult(data);
+        startPolling(noOrder, noWa);
       } catch (err) {
         showToast('✗ ' + err.message);
         document.getElementById('result-container').style.display = 'none';
@@ -122,15 +188,28 @@
     }
 
     function cetak() {
-      if (currentTrx) {
-        // Cetak nota transfer hanya valid jika berhasil
-        if (currentTrx.metodeBayar === 'transfer' && currentTrx.statusPembayaran !== 'berhasil') {
-          showToast('Nota transfer hanya dapat dicetak setelah pembayaran berhasil diverifikasi.');
-          return;
-        }
-        API.printNota(currentTrx);
+      if (!currentTrx) return;
+      if (currentTrx.metodeBayar === 'transfer' && currentTrx.statusPembayaran !== 'berhasil') {
+        showToast('Nota transfer hanya dapat dicetak setelah pembayaran berhasil diverifikasi.');
+        return;
+      }
+      if (typeof API.cetakNota === 'function') {
+        API.cetakNota(currentTrx);
+      } else {
+        window.print();
       }
     }
+
+    // Auto-isi dari query string (kalau dari cart.html setelah checkout)
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const noOrder = params.get('noOrder');
+      if (noOrder) {
+        document.getElementById('noOrder').value = noOrder;
+        const savedWa = sessionStorage.getItem('lastOrderWa');
+        if (savedWa) document.getElementById('noWa').value = savedWa;
+      }
+    })();
   </script>
 </body>
 </html>

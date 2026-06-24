@@ -128,7 +128,8 @@
         <a onclick="showTab('laporan')">📈 Laporan</a>
       </nav>
       <div class="sidebar-footer">
-        <a onclick="API.logout()" style="color:#9CA3AF;font-size:13px;cursor:pointer">🚪 Keluar</a>
+        <a href="gudang.html" target="_blank" style="color:#9CA3AF;font-size:13px;cursor:pointer;display:flex;gap:8px;align-items:center;padding:8px 12px;border-radius:8px;transition:all 0.15s" onmouseover="this.style.background='#2D2D2F'" onmouseout="this.style.background='none'">📦 View Gudang</a>
+        <a onclick="API.logout()" style="color:#9CA3AF;font-size:13px;cursor:pointer;display:flex;gap:8px;align-items:center;padding:8px 12px;border-radius:8px;transition:all 0.15s" onmouseover="this.style.background='#2D2D2F'" onmouseout="this.style.background='none'">🚪 Keluar</a>
       </div>
     </aside>
 
@@ -250,7 +251,7 @@
       <div id="tab-staff" class="tab-content">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
           <h2 style="font-size:16px;font-weight:700">Manajemen Staff</h2>
-          <button class="btn-sm primary" onclick="openAddStaff()">+ Tambah Kasir</button>
+          <button class="btn-sm primary" onclick="openAddStaff()">+ Tambah Staff</button>
         </div>
         <div class="section-card" style="padding:0;overflow:hidden">
           <div id="staff-table"></div>
@@ -276,10 +277,17 @@
   <!-- MODAL ADD STAFF -->
   <div class="modal-overlay" id="staff-modal">
     <div class="modal-box">
-      <h3>Tambah Kasir Baru</h3>
+      <h3>Tambah Staff Baru</h3>
       <div class="form-group">
         <label class="form-label">Nama</label>
-        <input class="form-input" id="s-name" placeholder="Nama Kasir"/>
+        <input class="form-input" id="s-name" placeholder="Nama Staff"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-input" id="s-role">
+          <option value="kasir">Kasir</option>
+          <option value="admin">Admin</option>
+        </select>
       </div>
       <div class="form-group">
         <label class="form-label">Email</label>
@@ -319,12 +327,22 @@
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
         <div class="form-group">
-          <label class="form-label">Harga (Rp)</label>
+          <label class="form-label">Harga Jual (Rp)</label>
           <input class="form-input" id="p-price" type="number" placeholder="68000"/>
         </div>
         <div class="form-group">
+          <label class="form-label">Harga Pokok/HPP (Rp)</label>
+          <input class="form-input" id="p-cost" type="number" placeholder="50000"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group">
           <label class="form-label">Stok</label>
           <input class="form-input" id="p-stock" type="number" placeholder="100"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Stok Minimum</label>
+          <input class="form-input" id="p-min-stock" type="number" placeholder="10"/>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
@@ -346,6 +364,10 @@
 
   <script src="../js/api.js"></script>
   <script src="../js/data.js"></script>
+  <!-- Libraries untuk Export Excel & PDF (FR-06) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script src="../js/admin-extra.js"></script>
   <script>
     // Auth guard
@@ -429,6 +451,8 @@ async function showTab(tab) {
   await renderLowStock();
   await renderAllOrders();
   await renderProductTable();
+  // FIX: renderStokTable harus dipanggil eksplisit
+  if (typeof renderStokTable === 'function') await renderStokTable();
   if (user.role === 'admin') await renderStaffTable();
   if (user.role === 'admin') await renderLaporan();
   
@@ -437,20 +461,25 @@ async function showTab(tab) {
   if (typeof renderPiutang === 'function') await renderPiutang();
   if (typeof renderRetur === 'function') await renderRetur();
   if (typeof renderMasaSimpan === 'function') await renderMasaSimpan();
-  if (typeof renderTarget === 'function') await renderTarget();
+  
+  // FIX: renderTarget hanya boleh dipanggil admin karena memanggil /api/reports/daily (adminOnly)
+  // Ini mencegah Kasir mengalami 403 Forbidden dan langsung mental ke login.html
+  if (user.role === 'admin' && typeof renderTarget === 'function') await renderTarget();
 }
 
 async function renderDashboardAlerts() {
   const alertContainer = document.getElementById('dashboard-stok-alert');
   if (!alertContainer) return;
   try {
-    const alerts = await API.getStokAlerts();
-    if (alerts && alerts.length > 0) {
+    // FIX Bug #3: API.getStokAlerts() returns { jumlah, produkKritis } object, NOT array
+    const data = await API.getStokAlerts();
+    const kritis = data.produkKritis || [];
+    if (kritis.length > 0) {
       alertContainer.innerHTML = `
         <div style="background:#FEE2E2; border-left: 4px solid #DC2626; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
-          <h3 style="color:#991B1B; font-size:15px; margin-bottom: 0.5rem;">⚠️ Stok Kritis (${alerts.length} Produk)</h3>
+          <h3 style="color:#991B1B; font-size:15px; margin-bottom: 0.5rem;">⚠️ Stok Kritis (${kritis.length} Produk)</h3>
           <ul style="margin: 0; padding-left: 1.5rem; color: #7F1D1D; font-size: 13px;">
-            ${alerts.map(a => `<li><b>${escapeHtml(a.nama)}</b>: sisa ${a.stok} ${a.satuan} (Min: ${a.stokMinimum})</li>`).join('')}
+            ${kritis.map(a => `<li><b>${escapeHtml(a.nama || '-')}</b>: ${a.stok} ${escapeHtml(a.satuan || 'unit')} (min: ${a.stokMinimum}) — kekurangan ${a.kekurangan}</li>`).join('')}
           </ul>
         </div>
       `;
@@ -466,10 +495,10 @@ async function renderDashboardAlerts() {
       const products = await API.getProducts();
       const orders = await API.getTransactions();
       const totalRevenue = orders
-  .filter(o => o.status === 'selesai')
-  .reduce((s, o) => s + (o.total || o.totalHarga || o.grandTotal || 0), 0);
-      const pending = orders.filter(o => o.status === 'pending').length;
-      const lowStock = products.filter(p => Number(p.stock ?? p.stok ?? 0) < 10).length;
+  .filter(o => o.statusPembayaran === 'berhasil')
+  .reduce((s, o) => s + (o.total || 0), 0);
+      const pending = orders.filter(o => o.statusPembayaran === 'pending').length;
+      const lowStock = products.filter(p => Number(p.stok || 0) <= Number(p.stokMinimum || 0)).length;
 
       document.getElementById('stats-grid').innerHTML = `
         <div class="stat-card orange">
@@ -496,9 +525,9 @@ async function renderDashboardAlerts() {
     }
 
     function statusBadge(s) {
-      const map = { pending: 'status-pending', proses: 'status-proses', selesai: 'status-selesai', batal: 'status-batal' };
-      const label = { pending: '⏳ Pending', proses: '🔄 Diproses', selesai: '✓ Selesai', batal: '✗ Batal' };
-      return `<span class="status-badge ${map[s] || ''}">${label[s] || s}</span>`;
+      const map = { pending: 'status-pending', diproses: 'status-proses', berhasil: 'status-selesai', selesai: 'status-selesai', ditolak: 'status-batal', batal: 'status-batal', dikirim: 'status-proses', dijadwalkan: 'status-pending', terkirim: 'status-selesai' };
+      const label = { pending: '⏳ Pending', diproses: '🔄 Diproses', berhasil: '✓ Berhasil', selesai: '✓ Selesai', ditolak: '✗ Ditolak', batal: '✗ Batal', dikirim: '🚚 Dikirim', dijadwalkan: '📅 Dijadwalkan', terkirim: '✓ Terkirim' };
+      return `<span class="status-badge ${map[s] || 'status-pending'}">${label[s] || s}</span>`;
     }
 
     function orderTableHTML(orders, showActions = false) {
@@ -507,46 +536,34 @@ async function renderDashboardAlerts() {
   }
 
   return `<table><thead><tr>
-    <th>ID Pesanan</th>
+    <th>No. Pesanan</th>
     <th>Pembeli</th>
     <th>Total</th>
-    <th>Status</th>
+    <th>Status Bayar</th>
+    <th>Status Pesanan</th>
     <th>Tanggal</th>
     ${showActions ? '<th>Aksi</th>' : ''}
   </tr></thead><tbody>
     ${orders.map(o => {
-      const buyerName =
-        o.buyerName ||
-        o.namaPembeli ||
-        o.customerName ||
-        o.user?.nama ||
-        o.user?.email ||
-        '-';
-
-      const total = o.total || o.totalHarga || o.grandTotal || 0;
-      const statusP = o.statusPesanan || o.status || 'diproses';
-      const statusB = o.statusPembayaran || 'pending_transfer';
+      const buyerName = o.namaPelanggan || '-';
+      const total = o.total || 0;
+      const statusB = o.statusPembayaran || 'pending';
+      const statusP = o.statusPesanan || 'diproses';
       const createdAt = o.createdAt || o.tanggal || new Date().toISOString();
 
       return `<tr>
-        <td><code style="font-size:12px;background:#F0EDE8;padding:2px 6px;border-radius:4px">${escapeHtml(o.nomorPesanan || o.id)}</code></td>
+        <td><code style="font-size:12px;background:#F0EDE8;padding:2px 6px;border-radius:4px">${escapeHtml(o.noOrder || '-')}</code></td>
         <td>${escapeHtml(buyerName)} <br><small>${escapeHtml(o.noWhatsapp || '')}</small></td>
         <td style="font-weight:700">${formatRupiah(total)}</td>
-        <td>
-          <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
-            ${statusBadge(statusB.replace('pending_', 'Pending '))}
-            ${statusBadge(statusP)}
-          </div>
-        </td>
+        <td>${statusBadge(statusB)}</td>
+        <td>${statusBadge(statusP)}</td>
         <td>${new Date(createdAt).toLocaleDateString('id-ID')}</td>
         ${showActions ? `<td>
           <div style="display:flex; flex-wrap:wrap; gap:4px;">
-            ${statusB.includes('pending') ? `<button class="btn-sm primary" onclick="changeStatusBayar('${o.id}','berhasil')">💰 Bayar</button>` : ''}
-            ${statusP === 'diproses' ? `<button class="btn-sm primary" onclick="changeStatusPesanan('${o.id}','dikirim')">Kirim</button>` : ''}
-            ${statusP === 'dikirim' ? `<button class="btn-sm primary" onclick="changeStatusPesanan('${o.id}','selesai')">Selesai</button>` : ''}
-            ${statusP !== 'selesai' && statusP !== 'dibatalkan' ? `<button class="btn-sm danger" onclick="changeStatusPesanan('${o.id}','dibatalkan')">Batal</button>` : ''}
-            <button class="btn-sm secondary" onclick='printNotaHandler(${JSON.stringify(o).replace(/'/g, "&apos;")})'>🖨️ Nota</button>
-            <button class="btn-sm secondary" onclick="copyPesanKonfirmasi('${o.nomorPesanan || o.id}', ${o.total}, '${statusP}')">📱 WA</button>
+            ${statusB === 'pending' ? `<button class="btn-sm primary" onclick="changeStatusBayar('${o.id}','berhasil')">💰 Terima</button>` : ''}
+            ${statusB === 'berhasil' && statusP !== 'selesai' ? `<button class="btn-sm secondary" onclick="changeStatusPesanan('${o.id}','selesai')">✓ Selesai</button>` : ''}
+            <button class="btn-sm secondary" onclick="printNotaHandler('${o.id}')">🖨️ Nota</button>
+            <button class="btn-sm secondary" onclick="copyPesanKonfirmasi('${o.noOrder}', ${total}, '${statusB}')">📱 WA</button>
           </div>
         </td>` : ''}
       </tr>`;
@@ -575,7 +592,12 @@ async function renderDashboardAlerts() {
 }
 
     function printNotaHandler(trx) {
-      API.printNota(trx);
+      // trx bisa berupa object atau noOrder string
+      if (typeof trx === 'string') {
+        API.getTransaction(trx).then(t => API.cetakNota(t)).catch(e => showToast('✗ ' + e.message));
+      } else {
+        API.cetakNota(trx);
+      }
     }
 
     function copyPesanKonfirmasi(nomorPesanan, total, statusPesanan) {
@@ -628,12 +650,13 @@ async function renderDashboardAlerts() {
     const products = allProducts
       .map(p => ({
         ...p,
-        namaProduk: p.name || p.nama || p.namaProduk || p.nama_produk || p.productName || '-',
-        stokProduk: Number(p.stock ?? p.stok ?? p.jumlahStok ?? p.jumlah_stok ?? 0),
-        satuanProduk: p.unit || p.satuan || 'pcs',
+        namaProduk: p.nama || '-',
+        stokProduk: Number(p.stok || 0),
+        satuanProduk: p.satuan || 'pcs',
+        batasMin: Number(p.stokMinimum || 5),
         emojiProduk: p.emoji || '📦'
       }))
-      .filter(p => Number(p.stock ?? p.stok ?? 0) < 10)
+      .filter(p => p.stokProduk <= p.batasMin)
       .sort((a, b) => a.stokProduk - b.stokProduk);
 
     if (products.length === 0) {
@@ -672,10 +695,6 @@ async function renderDashboardAlerts() {
     const newStock = currentStock + qty;
 
     const updatedProduct = {
-      ...product,
-
-      // dua-duanya dikirim agar aman untuk frontend lama dan backend field Indonesia
-      stock: newStock,
       stok: newStock
     };
 
@@ -697,18 +716,18 @@ async function renderDashboardAlerts() {
 
     el.innerHTML = `<table><thead><tr><th>Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr></thead><tbody>
       ${products.map(p => {
-        const name = p.name || p.nama || p.namaProduk || p.nama_produk || '-';
-        const category = p.category || p.kategori || '-';
-        const price = Number(p.price ?? p.harga ?? 0);
-        const stock = Number(p.stock ?? p.stok ?? p.jumlahStok ?? p.jumlah_stok ?? 0);
-        const unit = p.unit || p.satuan || 'pcs';
+        const name = p.nama || '-';
+        const category = p.kategori || '-';
+        const price = Number(p.harga || 0);
+        const stock = Number(p.stok || 0);
+        const unit = p.satuan || 'pcs';
         const emoji = p.emoji || '📦';
 
         return `<tr>
           <td>${escapeHtml(emoji)} <strong>${escapeHtml(name)}</strong></td>
           <td><span style="background:#F0EDE8;padding:3px 8px;border-radius:99px;font-size:12px">${escapeHtml(category)}</span></td>
           <td style="font-weight:700">${formatRupiah(price)}</td>
-          <td style="color:${stock === 0 ? '#DC2626' : stock < 10 ? '#D97706' : '#1A6B3A'};font-weight:600">${stock} ${escapeHtml(unit)}</td>
+          <td style="color:${stock === 0 ? '#DC2626' : stock <= (p.stokMinimum || 5) ? '#D97706' : '#1A6B3A'};font-weight:600">${stock} ${escapeHtml(unit)}</td>
           <td>
             <button class="btn-sm secondary" onclick="editProduct('${p.id}')">✏ Edit</button>
             ${user.role === 'admin' ? `<button class="btn-sm danger" onclick="delProduct('${p.id}')" style="margin-left:4px">🗑</button>` : ''}
@@ -727,13 +746,13 @@ async function renderDashboardAlerts() {
 
   try {
     const products = (await API.getProducts())
-      .sort((a, b) => (a.stok ?? a.stock ?? 0) - (b.stok ?? b.stock ?? 0));
+      .sort((a, b) => (a.stok || 0) - (b.stok || 0));
 
     // Traffic light widget (ANTI-03)
     let aman = 0, menipis = 0, kritis = 0;
     products.forEach(p => {
-      const stock = Number(p.stock ?? p.stok ?? 0);
-      const min = Number(p.stokMinimum || 5);
+      const stock = Number(p.stok || 0);
+      const min = Number(p.batas_stok_minimum || 5);
       if (stock <= min) kritis++;
       else if (stock <= min * 2) menipis++;
       else aman++;
@@ -759,17 +778,18 @@ async function renderDashboardAlerts() {
 
     el.innerHTML = `<table><thead><tr><th>Produk</th><th>Kategori</th><th>Stok</th><th>Status</th><th>Ubah Stok</th></tr></thead><tbody>
       ${products.map(p => {
-        const stock = Number(p.stock ?? p.stok ?? 0);
+        const stock = Number(p.stok || 0);
+        const min   = Number(p.stokMinimum || 5);
         const sl = stockLabel(stock);
-        const rowClass = stock === 0 ? 'out-stock' : stock < 10 ? 'low-stock' : '';
+        const rowClass = stock === 0 ? 'out-stock' : stock <= min ? 'low-stock' : '';
 
         return `<tr class="${rowClass}">
-          <td>${escapeHtml(p.emoji || '📦')} <strong>${escapeHtml(p.name || p.nama || p.namaProduk || p.nama_produk || '-')}</strong></td>
-          <td>${escapeHtml(p.category || p.kategori || '-')}</td>
-          <td style="font-weight:700">${stock} ${escapeHtml(p.unit || p.satuan || 'pcs')}</td>
-          <td><span class="status-badge ${stock===0?'status-batal':stock<10?'status-pending':'status-selesai'}">${sl.text}</span></td>
+          <td>${escapeHtml(p.emoji || '📦')} <strong>${escapeHtml(p.nama || '-')}</strong></td>
+          <td>${escapeHtml(p.kategori || '-')}</td>
+          <td style="font-weight:700">${stock} ${escapeHtml(p.satuan || 'pcs')}</td>
+          <td><span class="status-badge ${stock===0?'status-batal':stock<=min?'status-pending':'status-selesai'}">${sl.text}</span></td>
           <td>
-            <input type="number" id="stok-${p.id}" value="${stock}" style="width:70px;padding:4px 8px;border:1.5px solid #E5E5E5;border-radius:6px;font-size:13px;font-family:inherit"/>
+            <input type="number" step="0.1" id="stok-${p.id}" value="${stock}" style="width:70px;padding:4px 8px;border:1.5px solid #E5E5E5;border-radius:6px;font-size:13px;font-family:inherit"/>
             <button class="btn-sm primary" onclick="updateStok('${p.id}')" style="margin-left:6px">Simpan</button>
           </td>
         </tr>`;
@@ -789,10 +809,8 @@ async function renderDashboardAlerts() {
   }
 
   try {
-    const product = await API.getProduct(id);
-    product.stock = val;
-
-    await API.updateProduct(id, product);
+    // Gunakan API.updateStok untuk update stok via backend /api/stock/:id
+    await API.updateStok(id, parseFloat(val));
     await renderAll();
 
     showToast('✓ Stok diperbarui');
@@ -804,7 +822,10 @@ async function renderDashboardAlerts() {
     function openAddProduct() {
       document.getElementById('modal-title').textContent = 'Tambah Produk';
       document.getElementById('edit-id').value = '';
-      ['p-name','p-price','p-stock','p-unit','p-emoji'].forEach(id => document.getElementById(id).value = '');
+      ['p-name','p-price','p-cost','p-stock','p-min-stock','p-unit','p-emoji'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
       document.getElementById('product-modal').classList.add('open');
     }
 
@@ -815,9 +836,11 @@ async function renderDashboardAlerts() {
     document.getElementById('modal-title').textContent = 'Edit Produk';
     document.getElementById('edit-id').value = p.id;
     document.getElementById('p-name').value = p.nama || p.name || '';
-    document.getElementById('p-cat').value = p.kategori || p.category || 'Bahan Bangunan';
-    document.getElementById('p-price').value = p.harga || p.price || 0;
+    document.getElementById('p-cat').value = p.kategori || p.category || 'semen';
+    document.getElementById('p-price').value = p.harga || 0;
+    document.getElementById('p-cost').value = p.hargaPokok || '';
     document.getElementById('p-stock').value = p.stok ?? p.stock ?? 0;
+    document.getElementById('p-min-stock').value = p.stokMinimum || 10;
     document.getElementById('p-unit').value = p.satuan || p.unit || 'pcs';
     document.getElementById('p-emoji').value = p.emoji || '📦';
 
@@ -831,23 +854,24 @@ async function renderDashboardAlerts() {
     async function saveProduct() {
   const id = document.getElementById('edit-id').value;
 
+  const hargaJual = parseInt(document.getElementById('p-price').value) || 0;
+  const hargaPokokInput = parseInt(document.getElementById('p-cost').value);
+
   const data = {
-    name: document.getElementById('p-name').value.trim(),
-    category: document.getElementById('p-cat').value,
-    price: parseInt(document.getElementById('p-price').value),
-    stock: parseInt(document.getElementById('p-stock').value),
-    unit: document.getElementById('p-unit').value || 'pcs',
-    emoji: document.getElementById('p-emoji').value || '📦',
+    nama:         document.getElementById('p-name').value.trim(),
+    kategori:     document.getElementById('p-cat').value,
+    harga:        hargaJual,
+    hargaPokok:   !isNaN(hargaPokokInput) && hargaPokokInput > 0
+                    ? hargaPokokInput
+                    : Math.round(hargaJual * 0.8), // Estimasi 80% jika kosong
+    stok:         parseFloat(document.getElementById('p-stock').value) || 0,
+    stokMinimum:  parseInt(document.getElementById('p-min-stock').value) || 10,
+    satuan:       document.getElementById('p-unit').value.trim() || 'pcs',
+    emoji:        document.getElementById('p-emoji').value || '📦',
   };
 
-  if (!data.name || isNaN(data.price)) {
-    showToast('✗ Lengkapi nama dan harga');
-    return;
-  }
-
-  if (isNaN(data.stock)) {
-    data.stock = 0;
-  }
+  if (!data.nama) { showToast('✗ Nama produk wajib diisi'); return; }
+  if (!data.harga || isNaN(data.harga)) { showToast('✗ Harga tidak valid'); return; }
 
   try {
     if (id) {
@@ -857,7 +881,6 @@ async function renderDashboardAlerts() {
       await API.createProduct(data);
       showToast('✓ Produk ditambahkan');
     }
-
     closeModal();
     await renderAll();
   } catch (err) {
@@ -907,6 +930,7 @@ async function renderDashboardAlerts() {
       document.getElementById('s-name').value = '';
       document.getElementById('s-email').value = '';
       document.getElementById('s-pass').value = '';
+      document.getElementById('s-role').value = 'kasir';
       document.getElementById('staff-modal').classList.add('open');
     }
     
@@ -914,11 +938,12 @@ async function renderDashboardAlerts() {
       const nama = document.getElementById('s-name').value;
       const email = document.getElementById('s-email').value;
       const password = document.getElementById('s-pass').value;
-      if (!nama || !email || !password) return showToast('✗ Lengkapi semua form');
+      const role = document.getElementById('s-role').value;
+      if (!nama || !email || !password || !role) return showToast('✗ Lengkapi semua form');
       
       try {
-        await API.createUser({ nama, email, password, role: 'kasir' });
-        showToast('✓ Kasir ditambahkan');
+        await API.createUser({ nama, email, password, role });
+        showToast('✓ Staff ditambahkan');
         closeModal();
         renderStaffTable();
       } catch(err) {
@@ -937,103 +962,7 @@ async function renderDashboardAlerts() {
       }
     }
 
-    // --- Laporan ---
-    let currentLaporan = null;
-    
-    async function renderLaporan() {
-      const el = document.getElementById('laporan-content');
-      const banner = document.getElementById('laporan-banner');
-      if (!el) return;
-      try {
-        const today = new Date().toISOString().slice(0,10);
-        const l = await API.getLaporanHarian(today);
-        currentLaporan = l;
-        
-        if (!l.labaKotorAkurat) {
-          banner.innerHTML = `<div style="background:#FEF3C7; color:#92400E; padding:1rem; border-radius:8px; margin-bottom:1rem; font-size:14px;">
-            ⚠️ <b>Peringatan:</b> Estimasi laba berdasarkan margin rata-rata industri bahan bangunan (15% biaya operasional). Untuk akurasi penuh, pastikan Anda mengisi <b>Harga Pokok</b> di setiap produk yang dijual.
-          </div>`;
-        } else {
-          banner.innerHTML = '';
-        }
-        
-        el.innerHTML = `
-          <div class="stats-grid" style="margin-bottom:0">
-            <div class="stat-card">
-              <p class="s-label">Total Pendapatan</p>
-              <p class="s-val">${formatRupiah(l.totalPendapatan)}</p>
-            </div>
-            <div class="stat-card">
-              <p class="s-label">Laba Kotor</p>
-              <p class="s-val">${formatRupiah(l.labaKotor)}</p>
-            </div>
-            <div class="stat-card">
-              <p class="s-label">Laba Bersih (Est)</p>
-              <p class="s-val" style="color:#1A6B3A">${formatRupiah(l.labaBersih)}</p>
-            </div>
-            <div class="stat-card">
-              <p class="s-label">Transaksi Selesai</p>
-              <p class="s-val">${l.transaksiSelesai}</p>
-            </div>
-          </div>
-        `;
-      } catch(err) {
-        el.innerHTML = `<p style="color:#DC2626">Gagal memuat laporan</p>`;
-      }
-    }
-
-    // --- Export ---
-    function eksporExcel() {
-      if (typeof XLSX === 'undefined') {
-        return showToast('✗ Gagal memuat library Excel (CDN bermasalah). Pastikan koneksi internet aktif.');
-      }
-      if(!currentLaporan || !currentLaporan.transaksi) return showToast('✗ Tidak ada data');
-      const rows = currentLaporan.transaksi.map(t => {
-        let labaKotor = 0;
-        if (t.items) {
-          t.items.forEach(i => {
-            const hargaJual = i.hargaSatuan || i.harga || 0;
-            const hargaModal = i.hargaPokokSatuan || i.hargaPokok || 0;
-            labaKotor += (hargaJual - hargaModal) * i.qty;
-          });
-        }
-        return {
-          'No. Pesanan':   t.nomorPesanan || t.id,
-          'Tanggal':       new Date(t.tanggal).toLocaleDateString('id-ID'),
-          'Pembeli':       t.namaPembeli || t.buyerName || '-',
-          'Metode Bayar':  t.metodeBayar || '-',
-          'Status Bayar':  t.statusPembayaran || 'pending',
-          'Total':         t.total,
-          'Laba Kotor':    labaKotor
-        };
-      });
-      const ws = XLSX.utils.json_to_sheet(rows);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Laporan');
-      XLSX.writeFile(wb, `laporan-amj-${new Date().toISOString().slice(0,10)}.xlsx`);
-    }
-
-    function eksporPDF() {
-      if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
-        return showToast('✗ Gagal memuat library PDF (CDN bermasalah). Pastikan koneksi internet aktif.');
-      }
-      if(!currentLaporan || !currentLaporan.transaksi) return showToast('✗ Tidak ada data');
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      doc.text(`Laporan Penjualan — ${currentLaporan.periode}`, 14, 16);
-      doc.autoTable({
-        startY: 25,
-        head: [['No. Pesanan', 'Tanggal', 'Pembeli', 'Total', 'Status']],
-        body: currentLaporan.transaksi.map(t => [
-          t.nomorPesanan || t.id,
-          new Date(t.tanggal).toLocaleDateString('id-ID'),
-          t.namaPembeli || t.buyerName || '-',
-          'Rp ' + t.total.toLocaleString('id-ID'),
-          t.statusPesanan || t.status || '-'
-        ])
-      });
-      doc.save(`laporan-amj-${new Date().toISOString().slice(0,10)}.pdf`);
-    }
+    // Laporan and Export logic is now exclusively handled by admin-extra.js
 
     renderAll();
   </script>

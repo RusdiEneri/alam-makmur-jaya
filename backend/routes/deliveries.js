@@ -30,7 +30,7 @@ router.post('/', authenticate, staffOnly, (req, res) => {
     tanggalKirim,
     kurir:            kurir || null,
     kendaraan:        kendaraan || null,
-    statusPengiriman: 'dijadwalkan',   // dijadwalkan | diproses | dikirim | sampai | dibatalkan
+    status:           'dijadwalkan',   // dijadwalkan | diproses | dikirim | sampai | dibatalkan
     catatan:          catatan || '',
     createdAt:        new Date().toISOString(),
     updatedAt:        new Date().toISOString()
@@ -57,7 +57,7 @@ router.put('/:id/status', authenticate, staffOnly, (req, res) => {
   if (idx === -1) return res.status(404).json({ message: 'Data pengiriman tidak ditemukan' });
 
   const delivery = deliveries[idx];
-  delivery.statusPengiriman = status;
+  delivery.status = status;
   delivery.updatedAt = new Date().toISOString();
 
   if (status === 'dikirim') delivery.waktuKirim = new Date().toISOString();

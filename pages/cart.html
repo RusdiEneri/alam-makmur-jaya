@@ -31,8 +31,14 @@
     .payment-opt:hover, .payment-opt.selected { border-color: #E85D26; background: #FDF1EC; }
     .payment-opt input { accent-color: #E85D26; }
     .payment-opt label { font-size: 14px; font-weight: 600; cursor: pointer; }
-    .success-screen { display: none; text-align: center; padding: 3rem 1rem; }
+    .success-screen { display: none; text-align: center; padding: 3rem 1rem; animation: fadeIn 0.3s ease-in-out; }
     .success-screen .big-check { font-size: 72px; margin-bottom: 1rem; }
+    
+    .receipt-card { background: white; border: 1.5px solid #E5E5E5; border-radius: 16px; padding: 1.5rem; max-width: 500px; margin: 0 auto 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .receipt-item { display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #F0EDE8; }
+    .receipt-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
     @media (max-width: 768px) { .cart-layout { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -115,12 +121,26 @@
 
               <!-- BUG-03: Upload section -->
               <div id="upload-section" style="display:none; margin-top: 1rem;">
+                <div style="background:#FFF;border:1px solid #E5E5E5;border-radius:8px;padding:12px;margin-bottom:12px;text-align:center;">
+                  <p style="font-size:12px;font-weight:600;margin-bottom:8px">Silakan transfer ke rekening berikut atau scan QRIS:</p>
+                  <p style="font-size:14px;font-weight:700;color:#1C1C1E;margin-bottom:4px">BCA: 1234567890</p>
+                  <p style="font-size:13px;color:#6B6B6B;margin-bottom:12px">a.n. UD. Alam Makmur Jaya</p>
+                  <div style="background:#F9F8F6;border-radius:8px;padding:10px;display:inline-block;border:1px dashed #CCC">
+                    <!-- Dummy QRIS Placeholder -->
+                    <!-- <div style="width:120px;height:120px;background:#E5E5E5;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto">📱</div> -->
+                     <!-- <img src="../assets/mieayam.jpg" alt="QRIS Placeholder" style="width:120px;height:120px;object-fit:contain;margin:0 auto;display:block"/> -->
+                      <a href="../assets/mieayam.jpg" target="_blank" rel="noopener noreferrer" style="display:block; width:fit-content; margin:0 auto;">
+  <img src="../assets/mieayam.jpg" alt="QRIS Placeholder" style="width:120px; height:120px; object-fit:contain; display:block;"/>
+</a>
+                    <!-- <p style="font-size:10px;font-weight:700;margin-top:6px;color:#1C1C1E">QRIS DUMMY</p> -->
+                  </div>
+                </div>
                 <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Upload Bukti Transfer (JPG/PNG/PDF, max 5MB)</label>
                 <input type="file" id="bukti-transfer" accept="image/*,.pdf" style="width:100%; border:1px solid #E5E5E5; padding:8px; border-radius:6px; font-size:13px;"/>
               </div>
             </div>
 
-            <button class="btn-primary" style="width:100%;justify-content:center;display:flex" onclick="doCheckout()">
+            <button type="button" id="btn-checkout" class="btn-primary" style="width:100%;justify-content:center;display:flex" onclick="doCheckout(event)">
               Konfirmasi Pesanan →
             </button>
             <a href="catalog.html" style="display:block;text-align:center;margin-top:12px;font-size:13px;color:#6B6B6B">← Lanjut Belanja</a>
@@ -129,15 +149,84 @@
       </div>
     </div>
 
-    <!-- SUCCESS -->
+    <!-- SUCCESS RECEIPT PAGE -->
     <div class="success-screen" id="success-screen">
       <div class="big-check">✅</div>
-      <h2 style="font-family:'Fraunces',serif;font-size:2rem;font-weight:700">Pesanan Berhasil!</h2>
+      <h2 style="font-family:'Fraunces',serif;font-size:2rem;font-weight:700;margin-bottom:0.25rem">Pesanan Berhasil!</h2>
       <p style="color:#6B6B6B;margin:0.5rem 0 2rem;font-size:16px" id="order-id-display"></p>
-      <div style="background:#F0EDE8;border-radius:12px;padding:1.5rem;max-width:400px;margin:0 auto 2rem;text-align:left">
-        <p style="font-size:13px;font-weight:600;color:#6B6B6B;margin-bottom:8px">Pesanan diterima! Admin akan memproses segera.</p>
+      
+      <!-- NOTA/RECEIPT CARD -->
+      <div style="background:white;border:1.5px solid #E5E5E5;border-radius:16px;padding:1.5rem;max-width:500px;margin:0 auto 2rem;text-align:left">
+        <h3 style="font-size:14px;font-weight:700;color:#1C1C1E;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid #E5E5E5">
+          RINCIAN PESANAN
+        </h3>
+        
+        <!-- ITEMS DETAIL -->
+        <div id="receipt-items" style="margin-bottom:1rem;font-size:13px">
+          <!-- Dinamis: item details akan di-render di sini -->
+        </div>
+        
+        <!-- DIVIDER -->
+        <div style="border-bottom:1px dashed #E5E5E5;margin:1rem 0"></div>
+        
+        <!-- TOTALS -->
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-weight:600;font-size:13px">
+          <span>Subtotal:</span>
+          <span id="receipt-subtotal">Rp 0</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-weight:600;font-size:13px">
+          <span>Ongkos Kirim:</span>
+          <span style="color:#1A6B3A">GRATIS</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-weight:800;font-size:16px;color:#E85D26;border-top:1px solid #E5E5E5;padding-top:12px">
+          <span>TOTAL:</span>
+          <span id="receipt-total">Rp 0</span>
+        </div>
+        
+        <!-- PAYMENT & DELIVERY INFO -->
+        <div style="background:#F9F8F6;border-radius:10px;padding:12px;margin-top:1rem;font-size:12px">
+          <p style="margin:0 0 8px;color:#6B6B6B"><strong>Metode Pembayaran:</strong></p>
+          <p style="margin:0 0 12px;font-weight:600;color:#1C1C1E" id="receipt-payment-method">-</p>
+          
+          <p style="margin:8px 0 8px;color:#6B6B6B"><strong>Alamat Pengiriman:</strong></p>
+          <p style="margin:0;font-weight:600;color:#1C1C1E;line-height:1.4" id="receipt-address">-</p>
+        </div>
+        
+        <!-- STATUS INFO -->
+        <div style="background:#FDF1EC;border-radius:10px;padding:12px;margin-top:1rem;border-left:4px solid #E85D26;font-size:12px">
+          <p style="margin:0;color:#6B6B6B">
+            <strong>Status Pesanan:</strong> 
+            <span style="color:#E85D26;font-weight:700" id="receipt-status">Diproses</span>
+          </p>
+          <p style="margin:8px 0 0;color:#6B6B6B;font-size:11px">
+            Admin akan memproses pesanan Anda dalam waktu maksimal 24 jam.
+          </p>
+        </div>
       </div>
-      <a href="../index.html" class="btn-primary">Kembali ke Beranda</a>
+      
+      <!-- ACTION BUTTONS -->
+      <div style="max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:8px">
+        <button type="button" id="btn-print-receipt" class="btn-primary" style="background:#E85D26;width:100%;justify-content:center;display:flex;align-items:center;gap:8px">
+          🖨️ Cetak Nota (PDF)
+        </button>
+        <button type="button" id="btn-share-wa" class="btn-primary" style="background:#25D366;width:100%;justify-content:center;display:flex;align-items:center;gap:8px">
+          📱 Konfirmasi ke WhatsApp
+        </button>
+        <a href="track.html" id="btn-track-receipt" class="btn-primary" style="background:white;color:#E85D26;border:1.5px solid #E5E5E5;width:100%;text-align:center;text-decoration:none;display:flex;justify-content:center;align-items:center;gap:8px">
+          📦 Lacak Pesanan
+        </a>
+        <a href="../index.html" class="btn-primary" style="background:#F0EDE8;color:#1C1C1E;width:100%;text-align:center;text-decoration:none;display:flex;justify-content:center;align-items:center;gap:8px">
+          ← Kembali ke Beranda
+        </a>
+      </div>
+    </div>
+
+    <!-- ERROR STATE (jika checkout gagal) -->
+    <div id="error-screen" style="display:none;text-align:center;padding:3rem 1rem">
+      <div style="font-size:72px;margin-bottom:1rem">❌</div>
+      <h2 style="font-family:'Fraunces',serif;font-size:2rem;font-weight:700">Pesanan Gagal Diproses</h2>
+      <p style="color:#6B6B6B;margin:0.5rem 0 2rem;font-size:16px" id="error-message"></p>
+      <a href="cart.html" class="btn-primary" style="background:#E85D26">← Kembali ke Keranjang</a>
     </div>
   </div>
 
@@ -175,17 +264,17 @@
 
       el.innerHTML = cart.map(item => `
         <div class="cart-item">
-          <div class="item-emoji">📦</div>
+          <div class="item-emoji">${item.emoji || '📦'}</div>
           <div class="item-info">
-            <p class="item-name">${item.name || 'Produk'}</p>
-            <p class="item-price">${formatRupiah(item.price)} / ${item.satuan || 'pcs'}</p>
+            <p class="item-name">${item.nama || item.name || 'Produk'}</p>
+            <p class="item-price">${formatRupiah(item.harga || item.price || 0)} / ${item.satuan || 'pcs'}</p>
           </div>
           <div class="qty-ctrl">
             <button class="qty-btn" onclick="changeQty('${item.productId}', -1)">−</button>
             <span class="qty-num">${item.qty}</span>
             <button class="qty-btn" onclick="changeQty('${item.productId}', 1)">+</button>
           </div>
-          <span class="item-total">${formatRupiah(item.price * item.qty)}</span>
+          <span class="item-total">${formatRupiah((item.harga || item.price || 0) * item.qty)}</span>
           <button class="remove-btn" onclick="removeFromCart('${item.productId}');renderCart()">✕</button>
         </div>
       `).join('');
@@ -209,9 +298,60 @@
       updateCartBadge();
       renderCart();
     }
+    
+    // Render Receipt Details
+    function renderReceipt(transaction) {
+      if (!transaction || !transaction.items) return;
+      
+      const fmt = (n) => new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+      }).format(n);
+      
+      // Render items
+      const itemsHtml = transaction.items.map(item => `
+        <div class="receipt-item">
+          <div>
+            <div style="font-weight:700">${item.namaProduk}</div>
+            <div style="color:#6B6B6B;font-size:12px">${item.qty} ${item.satuan} @ ${fmt(item.hargaSatuan)}</div>
+          </div>
+          <div style="font-weight:600">${fmt(item.subtotal)}</div>
+        </div>
+      `).join('');
+      
+      document.getElementById('receipt-items').innerHTML = itemsHtml;
+      document.getElementById('receipt-subtotal').textContent = fmt(transaction.total);
+      document.getElementById('receipt-total').textContent = fmt(transaction.total);
+      document.getElementById('receipt-payment-method').textContent = 
+        transaction.metodeBayar === 'cod' ? '🚚 COD (Bayar di Tempat)' : '🏦 Transfer Bank';
+      document.getElementById('receipt-address').textContent = transaction.alamat;
+      
+      // Capitalize first letter
+      let st = transaction.statusPesanan || 'diproses';
+      st = st.charAt(0).toUpperCase() + st.slice(1);
+      document.getElementById('receipt-status').textContent = st;
+    }
 
-    async function doCheckout() {
+    async function doCheckout(event) {
+      if (event) event.preventDefault();
+      
+      const btnConf = document.getElementById('btn-checkout');
+      if (btnConf) {
+        if (btnConf.disabled) return;
+        btnConf.disabled = true;
+        btnConf.innerHTML = 'Memproses...';
+      }
+
+      const restoreBtn = () => {
+        if (btnConf) {
+           btnConf.disabled = false;
+           btnConf.innerHTML = 'Konfirmasi Pesanan →';
+        }
+      };
+
       if (!navigator.onLine) {
+        restoreBtn();
         showToast('✗ Checkout tidak dapat dilakukan saat offline.');
         return;
       }
@@ -221,74 +361,135 @@
       const addr = document.getElementById('buyer-addr').value.trim(); 
       const notes = document.getElementById('buyer-notes').value.trim();
 
-      if (!name) { showToast('✗ Nama pembeli wajib diisi'); return; }
-      if (!phone) { showToast('✗ Nomor WhatsApp wajib diisi'); return; }
+      if (!name) { restoreBtn(); showToast('✗ Nama pembeli wajib diisi'); return; }
+      if (!phone) { restoreBtn(); showToast('✗ Nomor WhatsApp wajib diisi'); return; }
       
       const cleanedPhone = phone.replace(/\D/g, '');
       if (cleanedPhone.length < 9 || cleanedPhone.length > 15) {
-        showToast('✗ Nomor WhatsApp tidak valid'); return;
+        restoreBtn(); showToast('✗ Nomor WhatsApp tidak valid'); return;
       }
       
-      if (!addr) { showToast('✗ Alamat pengiriman wajib diisi'); return; }
+      if (!addr) { restoreBtn(); showToast('✗ Alamat pengiriman wajib diisi'); return; }
 
       const cart = getCart(); 
 
       if (cart.length === 0) {
-        showToast('✗ Keranjang masih kosong');
+        restoreBtn(); showToast('✗ Keranjang masih kosong');
         return;
       }
 
       if (selectedPayment === 'transfer') {
         const fileInput = document.getElementById('bukti-transfer');
         if (!fileInput.files || fileInput.files.length === 0) {
-          showToast('✗ Bukti transfer wajib diupload');
+          restoreBtn(); showToast('✗ Bukti transfer wajib diupload');
           return;
         }
         if (fileInput.files[0].size > 5 * 1024 * 1024) {
-          showToast('✗ Bukti pembayaran maksimal 5 MB');
+          restoreBtn(); showToast('✗ Bukti pembayaran maksimal 5 MB');
           return;
         }
       }
 
+      // Payload sesuai backend: { productId, qty }
       const items = cart.map(item => ({
-        productId: item.productId,
+        productId: item.productId || item.id,
         qty: item.qty
       }));
 
       try {
-        const result = await API.checkout(items, selectedPayment, addr, name, phone, notes);
+        const metodeBayar = selectedPayment; // 'cod' atau 'transfer'
+        const result = await API.checkout({
+          nama: name,
+          alamat: addr,
+          noWhatsapp: phone,
+          items,
+          metodeBayar,
+          catatanPengiriman: notes || null
+        });
 
-        if (selectedPayment === 'transfer') {
+        // Jika transfer dan ada file, upload bukti
+        if (selectedPayment === 'transfer' && result.transaction) {
           const fileInput = document.getElementById('bukti-transfer');
-          await API.uploadBuktiTransfer(result.transaction.id, fileInput.files[0], phone);
+          if (fileInput.files && fileInput.files.length > 0) {
+            try {
+              await API.uploadBuktiTransfer(result.transaction.id, fileInput.files[0], phone);
+            } catch (upErr) {
+              console.warn('Bukti upload warning:', upErr.message);
+            }
+          }
         }
 
         clearCart();
-
+        
+        // Show success screen
         document.getElementById('cart-content').style.display = 'none';
+        document.getElementById('error-screen').style.display = 'none';
         const ss = document.getElementById('success-screen');
         ss.style.display = 'block';
-        const displayId = result.transaction?.noOrder || result.transaction?.id || '-';
-        document.getElementById('order-id-display').textContent = 'ID Pesanan: ' + displayId;
         
-        // ANTI-02: Share via WhatsApp button
-        const btnWa = document.createElement('button');
-        btnWa.className = 'btn-primary';
-        btnWa.style.marginTop = '1rem';
-        btnWa.style.background = '#25D366';
-        btnWa.textContent = 'Bagikan ke WhatsApp';
-        btnWa.onclick = () => {
-          const pesan = encodeURIComponent(
-            `Halo UD. Alam Makmur Jaya,\n` +
-            `Saya baru saja memesan dengan nomor: *${displayId}*.\n` +
-            `Mohon konfirmasi pesanan saya. Terima kasih!`
-          );
-          window.open(`https://wa.me/6281234567890?text=${pesan}`, '_blank'); // Ganti 6281234567890 dengan nomor toko sebenarnya
-        };
-        ss.appendChild(btnWa);
+        // Get transaction data
+        const transaction = result.transaction;
+        const noOrder = (transaction && transaction.noOrder) || '-';
+        
+        // Display order number
+        document.getElementById('order-id-display').innerHTML =
+          `No. Pesanan: <strong style="color:#E85D26;font-size:18px">${noOrder}</strong><br>` +
+          `<small style="color:#6B6B6B">Simpan nomor ini untuk cek status pesanan</small>`;
+        
+        // Simpan noWa ke sessionStorage untuk auto-fill di track.html (FR-18)
+        sessionStorage.setItem('lastOrderWa', phone);
+        
+        // Render receipt details
+        if (typeof renderReceipt === 'function') {
+          renderReceipt(transaction);
+        }
+        
+        // Setup print button
+        const btnPrintReceipt = document.getElementById('btn-print-receipt');
+        if(btnPrintReceipt) {
+          btnPrintReceipt.onclick = () => {
+            if (window.API && typeof window.API.cetakNota === 'function') {
+              window.API.cetakNota(transaction);
+            } else {
+              window.print();
+            }
+          };
+        }
+        
+        // Setup WhatsApp button
+        const btnShareWa = document.getElementById('btn-share-wa');
+        if(btnShareWa) {
+          btnShareWa.onclick = () => {
+            const pesan = encodeURIComponent(
+              `Halo UD. Alam Makmur Jaya,\n\n` +
+              `Saya baru saja membuat pesanan via Website.\n` +
+              `No. Pesanan: *${noOrder}*\n` +
+              `Metode Pembayaran: *${metodeBayar.toUpperCase()}*\n` +
+              `Total: *Rp${transaction.total ? transaction.total.toLocaleString('id-ID') : 0}*\n\n` +
+              `Mohon segera diproses. Terima kasih!`
+            );
+            window.open(`https://wa.me/6281234567890?text=${pesan}`, '_blank');
+          };
+        }
+        
+        // Setup track button
+        const btnTrackReceipt = document.getElementById('btn-track-receipt');
+        if(btnTrackReceipt) {
+          btnTrackReceipt.href = `track.html?noOrder=${encodeURIComponent(noOrder)}`;
+        }
 
       } catch (err) {
-        showToast('✗ ' + err.message);
+        restoreBtn();
+        
+        // Show error screen instead of just toast
+        document.getElementById('cart-content').style.display = 'none';
+        document.getElementById('success-screen').style.display = 'none';
+        document.getElementById('error-screen').style.display = 'block';
+        
+        const errorMsg = err.message || 'Terjadi kesalahan saat memproses pesanan';
+        document.getElementById('error-message').textContent = errorMsg;
+        
+        console.error('Checkout error:', err);
       }
     }
 

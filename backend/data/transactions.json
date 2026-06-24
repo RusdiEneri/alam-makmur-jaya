@@ -1,1 +1,224 @@
-[]
+[
+  {
+    "id": "trx-e7e45809",
+    "noOrder": "AMJ-20260619-001",
+    "namaPelanggan": "alok",
+    "alamat": "asli gresik",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 0,
+        "qty": 3,
+        "subtotal": 216000
+      }
+    ],
+    "total": 216000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1781841167164-f8e2c5cb.jpg",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "bawean",
+    "checkoutToken": null,
+    "tanggal": "2026-06-19T03:52:47.148Z",
+    "createdAt": "2026-06-19T03:52:47.148Z",
+    "updatedAt": "2026-06-19T03:52:47.168Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-06-19T03:52:47.148Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-06-19T03:52:47.148Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-5e74f293",
+    "noOrder": "AMJ-20260619-002",
+    "namaPelanggan": "alok",
+    "alamat": "gresik",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 0,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "bawean",
+    "checkoutToken": null,
+    "tanggal": "2026-06-19T04:09:01.415Z",
+    "createdAt": "2026-06-19T04:09:01.415Z",
+    "updatedAt": "2026-06-19T04:09:01.415Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-06-19T04:09:01.415Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-06-19T04:09:01.415Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-172231f2",
+    "noOrder": "AMJ-20260619-003",
+    "namaPelanggan": "alok",
+    "alamat": "gresik",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 0,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1781844919229-79f59784.jpg",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "bawean",
+    "checkoutToken": null,
+    "tanggal": "2026-06-19T04:55:19.214Z",
+    "createdAt": "2026-06-19T04:55:19.214Z",
+    "updatedAt": "2026-06-19T04:55:19.233Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-06-19T04:55:19.214Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-06-19T04:55:19.214Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-3a275018",
+    "noOrder": "AMJ-20260620-001",
+    "namaPelanggan": "alok",
+    "alamat": "gresik",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "bawean",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-06-20T06:39:21.181Z",
+    "createdAt": "2026-06-20T06:39:21.181Z",
+    "updatedAt": "2026-06-20T06:39:21.181Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-06-20T06:39:21.181Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-06-20T06:39:21.181Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-97a343ed",
+    "noOrder": "AMJ-20260621-001",
+    "namaPelanggan": "alok",
+    "alamat": "yes",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-06-20T23:07:53.593Z",
+    "createdAt": "2026-06-20T23:07:53.593Z",
+    "updatedAt": "2026-06-20T23:07:53.593Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-06-20T23:07:53.593Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-06-20T23:07:53.593Z",
+        "oleh": "sistem"
+      }
+    ]
+  }
+]

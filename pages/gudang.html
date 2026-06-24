@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Gudang — UD. Alam Makmur Jaya</title>
+  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-dark: #121212;
+      --panel-dark: #1E1E1E;
+      --text-main: #FFFFFF;
+      --text-muted: #A0A0A0;
+      --accent: #E85D26;
+      --danger: #EF4444;
+      --warning: #F59E0B;
+      --success: #10B981;
+      --border: #333333;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .header h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 2.5rem;
+      color: var(--text-main);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .last-update {
+      font-size: 1rem;
+      color: var(--text-muted);
+      background: var(--panel-dark);
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .search-box {
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: var(--panel-dark);
+      color: var(--text-main);
+      width: 350px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-box:focus {
+      border-color: var(--accent);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--panel-dark);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    th, td {
+      padding: 1.25rem 1.5rem;
+      text-align: left;
+    }
+
+    th {
+      background: #181818;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      font-size: 1.25rem;
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #252525;
+    }
+
+    .prod-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .stok-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .stok-aman { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .stok-kritis { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+    .stok-habis { background: rgba(239, 68, 68, 0.15); color: var(--danger); animation: pulse 2s infinite; }
+
+    .btn-refresh {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-refresh:hover {
+      background: #D04D1B;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    #loading-overlay {
+      position: fixed; inset: 0;
+      background: var(--bg-dark);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 1000; font-size: 1.5rem; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-overlay">Memuat Data Gudang...</div>
+
+  <div class="header">
+    <h1>📦 Monitor Gudang</h1>
+    <div class="header-actions">
+      <div class="last-update" id="last-update-text">Terakhir Diperbarui: -</div>
+      <input type="text" id="search-input" class="search-box" placeholder="Cari nama barang..." onkeyup="filterGudang()">
+      <button class="btn-refresh" onclick="fetchGudangData()">🔄 Segarkan</button>
+    </div>
+  </div>
+
+  <table id="gudang-table">
+    <thead>
+      <tr>
+        <th>ID Produk</th>
+        <th>Nama Barang</th>
+        <th>Kategori</th>
+        <th>Stok Aktual</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="gudang-tbody">
+      <!-- Data dinamis -->
+    </tbody>
+  </table>
+
+  <!-- Panggil api.js untuk koneksi backend -->
+  <script src="../js/api.js"></script>
+  <script>
+    let allProducts = [];
+    let refreshInterval = null;
+
+    async function fetchGudangData() {
+      try {
+        const btn = document.querySelector('.btn-refresh');
+        if(btn) btn.innerHTML = '⏳ Memuat...';
+        
+        // Panggil getProducts yang sudah dibuat di api.js
+        allProducts = await API.getProducts();
+        renderGudangTable(allProducts);
+        
+        document.getElementById('last-update-text').innerText = 'Terakhir Diperbarui: ' + new Date().toLocaleTimeString('id-ID');
+        document.getElementById('loading-overlay').style.display = 'none';
+
+        if(btn) btn.innerHTML = '🔄 Segarkan';
+      } catch (err) {
+        console.error("Gagal memuat data gudang:", err);
+        document.getElementById('gudang-tbody').innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--danger); padding: 3rem;">Gagal memuat data: ${err.message}</td></tr>`;
+        document.getElementById('loading-overlay').style.display = 'none';
+      }
+    }
+
+    function renderGudangTable(products) {
+      const tbody = document.getElementById('gudang-tbody');
+      
+      if (products.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 3rem; color: var(--text-muted);">Tidak ada produk ditemukan.</td></tr>`;
+        return;
+      }
+
+      // Sort by stock priority (Empty first, then Critical, then Normal)
+      products.sort((a, b) => {
+        const getPriority = (p) => {
+          if (p.stok <= 0) return 3;
+          if (p.stok <= (p.stokMinimum || 5)) return 2;
+          return 1;
+        };
+        const pA = getPriority(a);
+        const pB = getPriority(b);
+        if (pA !== pB) return pB - pA;
+        return a.nama.localeCompare(b.nama);
+      });
+
+      tbody.innerHTML = products.map(p => {
+        let statusClass = 'stok-aman';
+        let statusText = 'Aman';
+        
+        if (p.stok <= 0) {
+          statusClass = 'stok-habis';
+          statusText = 'HABIS';
+        } else if (p.stok <= (p.stokMinimum || 5)) {
+          statusClass = 'stok-kritis';
+          statusText = 'MENIPIS';
+        }
+
+        return `
+          <tr>
+            <td style="color:var(--text-muted); font-family:monospace; font-size:1.1rem">${p.id}</td>
+            <td>
+              <div class="prod-name">
+                <span style="font-size:1.5rem">${p.emoji || '📦'}</span>
+                ${p.nama}
+              </div>
+            </td>
+            <td style="color:var(--text-muted); font-size:1.1rem">${p.kategori || '-'}</td>
+            <td>
+              <span class="stok-badge ${statusClass}">
+                ${p.stok} <span style="font-size:0.9rem;font-weight:600">${p.satuan || 'pcs'}</span>
+              </span>
+            </td>
+            <td style="font-weight:700" class="${statusClass.replace('stok-', 'text-')}">${statusText}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterGudang() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const filtered = allProducts.filter(p => 
+        p.nama.toLowerCase().includes(query) || 
+        p.id.toLowerCase().includes(query) || 
+        (p.kategori && p.kategori.toLowerCase().includes(query))
+      );
+      renderGudangTable(filtered);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchGudangData();
+      
+      // Auto-refresh setiap 30 detik
+      refreshInterval = setInterval(() => {
+        // Jangan auto-refresh jika user sedang mengetik pencarian (agar tidak mengganggu)
+        const query = document.getElementById('search-input').value;
+        if (!query) {
+          fetchGudangData();
+        }
+      }, 30000);
+    });
+  </script>
+</body>
+</html>

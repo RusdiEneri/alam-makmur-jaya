@@ -60,6 +60,7 @@ router.post('/', authenticate, staffOnly, (req, res) => {
     sisaTagihan:     Number(total),
     jatuhTempo,
     status:          'belumLunas',   // belumLunas | sebagian | lunas | jatuhTempo
+    status_nota:     'sementara',
     riwayatPembayaran: [],
     catatan:         catatan || '',
     createdAt:       new Date().toISOString(),
@@ -106,6 +107,7 @@ router.put('/:id/bayar', authenticate, staffOnly, (req, res) => {
   if (receivables[idx].sisaTagihan <= 0) {
     receivables[idx].sisaTagihan = 0;
     receivables[idx].status      = 'lunas';
+    receivables[idx].status_nota = 'lunas';
     receivables[idx].tanggalLunas = new Date().toISOString();
   } else {
     receivables[idx].status = 'sebagian';

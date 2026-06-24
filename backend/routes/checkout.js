@@ -95,9 +95,38 @@ function getBolehDesimal(satuan) {
   return ['meter', 'kubik', 'kg', 'liter'].includes(satuan.toLowerCase());
 }
 
+// FIX BUG-06: /track dipindah ke atas agar tidak terhalang oleh /:id routes
+// GET /api/checkout/track?noOrder=AMJ-...&noWa=08... (FEAT-01)
+router.get('/track', (req, res) => {
+  const { noOrder, noWa } = req.query;
+  if (!noOrder || !noWa) {
+    return res.status(400).json({ message: 'Nomor Order dan Nomor WhatsApp wajib diisi' });
+  }
+
+  const normalizedWa = normalizeWhatsApp(noWa);
+  const transactions = db.read('transactions');
+  const trx = transactions.find(
+    t => t.noOrder === noOrder && t.noWhatsapp === normalizedWa
+  );
+  
+  if (!trx) return res.status(404).json({ message: 'Pesanan tidak ditemukan' });
+  
+  res.json({
+    noOrder:          trx.noOrder,
+    namaPelanggan:    trx.namaPelanggan,
+    tanggal:          trx.tanggal,
+    items:            trx.items.map(i => ({ nama: i.namaProduk, qty: i.qty, satuan: i.satuan, harga: i.hargaSatuan, subtotal: i.subtotal })),
+    total:            trx.total,
+    metodeBayar:      trx.metodeBayar,
+    statusPembayaran: trx.statusPembayaran,
+    statusPesanan:    trx.statusPesanan,
+    riwayatStatus:    trx.statusHistory || []
+  });
+});
+
 // POST /api/checkout  (Publik/Tamu)
 router.post('/', (req, res) => {
-  const { nama, alamat, noWhatsapp, items, metodeBayar, catatanPengiriman, checkoutToken } = req.body;
+  const { nama, alamat, noWhatsapp, items, metodeBayar, catatanPengiriman, checkoutToken, needsDelivery } = req.body;
 
   const transactions = db.read('transactions');
   
@@ -120,17 +149,17 @@ router.post('/', (req, res) => {
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ message: 'Items transaksi tidak boleh kosong' });
   }
-  if (!['cod', 'transfer'].includes(metodeBayar)) {
-    return res.status(400).json({ message: 'Metode bayar tidak valid. Gunakan cod atau transfer' });
+  if (!['cod', 'transfer', 'piutang'].includes(metodeBayar)) {
+    return res.status(400).json({ message: 'Metode bayar tidak valid. Gunakan cod, transfer, atau piutang' });
   }
 
   // Gabungkan qty untuk item yang sama
   const groupedItems = {};
   for (const item of items) {
     if (!item.productId) return res.status(400).json({ message: 'productId wajib diisi' });
-    const qty = Number(item.qty);
+    const qty = parseFloat(item.qty);
     if (!Number.isFinite(qty) || qty <= 0) {
-      return res.status(400).json({ message: 'Quantity harus angka valid lebih dari 0' });
+      return res.status(400).json({ message: 'Quantity harus angka valid (bisa desimal) lebih dari 0' });
     }
     groupedItems[item.productId] = (groupedItems[item.productId] || 0) + qty;
   }
@@ -164,7 +193,7 @@ router.post('/', (req, res) => {
       hargaSatuan: product.harga,
       hargaPokokSatuan: product.hargaPokok || 0,
       qty:        qty,
-      subtotal:   product.harga * qty
+      subtotal:   Math.round(product.harga * qty)
     });
   }
 
@@ -194,6 +223,7 @@ router.post('/', (req, res) => {
     catatanPembayaran: null,
     catatanPengiriman: catatanPengiriman || null,
     checkoutToken:     checkoutToken || null,
+    needsDelivery:     !!needsDelivery,
     tanggal:           new Date().toISOString(),
     createdAt:         new Date().toISOString(),
     updatedAt:         new Date().toISOString(),
@@ -205,11 +235,54 @@ router.post('/', (req, res) => {
 
   try {
     transactions.push(newTrx);
-    // atomic write multiple files
-    db.writeManyAtomic([
+    
+    let atomicOps = [
       { name: 'transactions', data: transactions },
       { name: 'products', data: products }
-    ]);
+    ];
+
+    if (metodeBayar === 'piutang') {
+      const receivables = db.read('receivables');
+      const jatuhTempo = new Date();
+      jatuhTempo.setDate(jatuhTempo.getDate() + 7); // Default 7 hari
+      receivables.push({
+        id: 'rec-' + uuidv4().slice(0, 8),
+        transaksiId: newTrx.id,
+        namaPelanggan: nama,
+        noWhatsapp: normalizedWa,
+        total: total,
+        batasKredit: null,
+        sisaTagihan: total,
+        jatuhTempo: jatuhTempo.toISOString().split('T')[0],
+        status: 'belumLunas',
+        status_nota: 'sementara',
+        riwayatPembayaran: [],
+        catatan: 'Otomatis dari checkout publik',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+      atomicOps.push({ name: 'receivables', data: receivables });
+    }
+
+    if (needsDelivery) {
+      const deliveries = db.read('deliveries');
+      const estDate = new Date();
+      estDate.setDate(estDate.getDate() + 1);
+      deliveries.push({
+        id: 'dlv-' + uuidv4().slice(0, 8),
+        noOrder: newTrx.noOrder,
+        alamatTujuan: alamat,
+        status: 'dijadwalkan',
+        jadwalPengiriman: estDate.toISOString(),
+        catatan: catatanPengiriman || 'Menunggu alokasi armada',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+      atomicOps.push({ name: 'deliveries', data: deliveries });
+    }
+
+    // atomic write multiple files
+    db.writeManyAtomic(atomicOps);
   } catch (err) {
     console.error('Failed to save transaction: ', err);
     return res.status(500).json({ message: 'Gagal menyimpan transaksi, silakan coba lagi' });
@@ -273,34 +346,6 @@ router.post('/:id/upload-bukti', upload.single('bukti'), (req, res) => {
   db.write('transactions', transactions);
 
   res.json({ message: 'Bukti transfer berhasil diupload', buktiTransfer: trx.buktiTransfer });
-});
-
-// GET /api/checkout/track?noOrder=AMJ-...&noWa=08... (FEAT-01)
-router.get('/track', (req, res) => {
-  const { noOrder, noWa } = req.query;
-  if (!noOrder || !noWa) {
-    return res.status(400).json({ message: 'Nomor Order dan Nomor WhatsApp wajib diisi' });
-  }
-
-  const normalizedWa = normalizeWhatsApp(noWa);
-  const transactions = db.read('transactions');
-  const trx = transactions.find(
-    t => t.noOrder === noOrder && t.noWhatsapp === normalizedWa
-  );
-  
-  if (!trx) return res.status(404).json({ message: 'Pesanan tidak ditemukan' });
-  
-  res.json({
-    noOrder:          trx.noOrder,
-    namaPelanggan:    trx.namaPelanggan,
-    tanggal:          trx.tanggal,
-    items:            trx.items.map(i => ({ nama: i.namaProduk, qty: i.qty, satuan: i.satuan, harga: i.hargaSatuan, subtotal: i.subtotal })),
-    total:            trx.total,
-    metodeBayar:      trx.metodeBayar,
-    statusPembayaran: trx.statusPembayaran,
-    statusPesanan:    trx.statusPesanan,
-    riwayatStatus:    trx.statusHistory || []
-  });
 });
 
 module.exports = router;

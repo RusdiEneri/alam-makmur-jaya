@@ -1,17 +1,27 @@
-const express  = require('express');
-const bcrypt   = require('bcryptjs');
-const jwt      = require('jsonwebtoken');
+const express   = require('express');
+const bcrypt    = require('bcryptjs');
+const jwt       = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
 const { v4: uuidv4 } = require('uuid');
-const db       = require('../data/db');
+const db        = require('../data/db');
 const { authenticate, SECRET } = require('../middleware/auth');
 
 const router = express.Router();
+
+// Rate limiter — maks 10 percobaan login per IP per 15 menit (NFR-01)
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 menit
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Terlalu banyak percobaan login. Coba lagi dalam 15 menit.' }
+});
 
 // ────────────────────────────────────────────
 // POST /api/auth/login
 // Body: { email, password }
 // ────────────────────────────────────────────
-router.post('/login', async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {

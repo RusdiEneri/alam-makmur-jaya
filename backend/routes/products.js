@@ -5,6 +5,9 @@ const { authenticate, adminOnly } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Forward /api/products/returns ke routes/returns.js (CR-06)
+router.use('/returns', require('./returns'));
+
 // ────────────────────────────────────────────
 // GET /api/products
 // Publik — semua bisa lihat katalog
@@ -58,14 +61,14 @@ router.get('/expiring', authenticate, (req, res) => {
   thirtyDaysLater.setDate(now.getDate() + 30);
   
   const expiring = products.filter(p => {
-    if (!p.tanggalKadaluarsa) return false;
-    const expiryDate = new Date(p.tanggalKadaluarsa);
+    if (!p.masa_simpan) return false;
+    const expiryDate = new Date(p.masa_simpan);
     return expiryDate > now && expiryDate <= thirtyDaysLater;
   });
   
   const expired = products.filter(p => {
-    if (!p.tanggalKadaluarsa) return false;
-    return new Date(p.tanggalKadaluarsa) <= now;
+    if (!p.masa_simpan) return false;
+    return new Date(p.masa_simpan) <= now;
   });
 
   res.json({
@@ -97,7 +100,7 @@ router.get('/:id', (req, res) => {
 // POST /api/products  (admin only)
 // ────────────────────────────────────────────
 router.post('/', authenticate, adminOnly, (req, res) => {
-  const { nama, kategori, harga, hargaPokok, stok, satuan, stokMinimum, tanggalKadaluarsa, aktif } = req.body;
+  const { nama, kategori, harga, hargaPokok, stok, satuan, stokMinimum, masa_simpan, aktif } = req.body;
 
   if (!nama || harga === undefined || stok === undefined || !satuan) {
     return res.status(400).json({ message: 'nama, harga, stok, satuan wajib diisi' });
@@ -127,7 +130,7 @@ router.post('/', authenticate, adminOnly, (req, res) => {
     stokMinimum:  Number(stokMinimum) || 0,
     satuan:       satuan.toLowerCase(),
     bolehDesimal: isDesimal,
-    tanggalKadaluarsa: tanggalKadaluarsa || null,
+    masa_simpan:  masa_simpan || null,
     aktif:        aktif !== false, // default true
     createdAt:    new Date().toISOString(),
     updatedAt:    new Date().toISOString()
@@ -149,7 +152,7 @@ router.put('/:id', authenticate, adminOnly, (req, res) => {
 
   if (idx === -1) return res.status(404).json({ message: 'Produk tidak ditemukan' });
 
-  const { nama, kategori, harga, hargaPokok, stok, satuan, stokMinimum, tanggalKadaluarsa, aktif } = req.body;
+  const { nama, kategori, harga, hargaPokok, stok, satuan, stokMinimum, masa_simpan, aktif } = req.body;
   const oldProduct = products[idx];
 
   // Validation if provided
@@ -188,7 +191,7 @@ router.put('/:id', authenticate, adminOnly, (req, res) => {
     ...(satuan !== undefined && { satuan: newSatuan }),
     ...(stokMinimum !== undefined && { stokMinimum: Number(stokMinimum) }),
     bolehDesimal: isDesimal,
-    ...(tanggalKadaluarsa !== undefined && { tanggalKadaluarsa }),
+    ...(masa_simpan !== undefined && { masa_simpan }),
     ...(aktif !== undefined && { aktif: aktif !== false }),
     updatedAt: new Date().toISOString()
   };

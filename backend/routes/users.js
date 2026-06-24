@@ -40,7 +40,7 @@ router.post('/', authenticate, adminOnly, async (req, res) => {
     nama,
     email: email.trim().toLowerCase(),
     password: hashedPassword,
-    role: 'kasir', // Hanya kasir yang bisa dibuat
+    role: (role === 'admin' || role === 'kasir') ? role : 'kasir',
     aktif: true,
     createdAt: new Date().toISOString()
   };
@@ -51,6 +51,47 @@ router.post('/', authenticate, adminOnly, async (req, res) => {
   res.status(201).json({
     message: 'Staff berhasil ditambahkan',
     user: { id: newUser.id, nama: newUser.nama, email: newUser.email, role: newUser.role }
+  });
+});
+
+// FIX BUG-07: PUT /api/users/:id (admin) — update data user (nama/email/password)
+router.put('/:id', authenticate, adminOnly, async (req, res) => {
+  const users = db.read('users');
+  const idx = users.findIndex(u => u.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ message: 'User tidak ditemukan' });
+
+  const { nama, email, password, role } = req.body;
+
+  if (role && (role === 'admin' || role === 'kasir')) {
+    if (users[idx].role === 'admin' && role !== 'admin') {
+      const adminCount = users.filter(u => u.role === 'admin' && u.aktif !== false).length;
+      if (adminCount <= 1) {
+        return res.status(403).json({ message: 'Tidak bisa mengubah role satu-satunya admin' });
+      }
+    }
+    users[idx].role = role;
+  }
+
+  // Cek email unik jika diubah
+  if (email) {
+    const normalizedEmail = email.trim().toLowerCase();
+    const duplicate = users.find(u => u.email.trim().toLowerCase() === normalizedEmail && u.id !== req.params.id);
+    if (duplicate) {
+      return res.status(409).json({ message: 'Email sudah digunakan oleh user lain' });
+    }
+    users[idx].email = normalizedEmail;
+  }
+
+  if (nama) users[idx].nama = nama;
+  if (password) {
+    users[idx].password = await bcrypt.hash(password, 10);
+  }
+  users[idx].updatedAt = new Date().toISOString();
+  db.write('users', users);
+
+  res.json({
+    message: 'User berhasil diupdate',
+    user: { id: users[idx].id, nama: users[idx].nama, email: users[idx].email, role: users[idx].role }
   });
 });
 
