@@ -40,6 +40,14 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
     @media (max-width: 768px) { .cart-layout { grid-template-columns: 1fr; } }
+
+    @media print {
+      body > *:not(#nota-section) { display: none !important; }
+      #nota-section { display: block !important; }
+      .nota-paper { 
+        width: 80mm; margin: 0 auto; font-family: monospace; font-size: 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -112,31 +120,31 @@
 
             <div class="payment-options">
               <p style="font-size:13px;font-weight:600;color:#6B6B6B;margin-bottom:8px">Metode Pembayaran</p>
-              <div class="payment-opt selected" onclick="selectPay(this,'cod')">
-                <input type="radio" name="pay" checked/><label>🚚 COD (Bayar di Tempat)</label>
+              <div class="payment-opt selected" onclick="document.getElementById('method-cod').click()" id="opt-cod">
+                <input type="radio" id="method-cod" name="pay" value="cod" checked onchange="updatePaymentMethod()"/>
+                <label for="method-cod">🚚 COD (Bayar di Tempat)</label>
               </div>
-              <div class="payment-opt" onclick="selectPay(this,'transfer')">
-                <input type="radio" name="pay"/><label>🏦 Transfer Bank (BRI / BCA)</label>
+              <div class="payment-opt" onclick="document.getElementById('method-transfer').click()" id="opt-transfer">
+                <input type="radio" id="method-transfer" name="pay" value="transfer" onchange="updatePaymentMethod()"/>
+                <label for="method-transfer">🏦 Transfer Bank (BRI / BCA)</label>
               </div>
 
-              <!-- BUG-03: Upload section -->
-              <div id="upload-section" style="display:none; margin-top: 1rem;">
+              <div id="transfer-upload-section" style="display:none; margin-top:16px;">
                 <div style="background:#FFF;border:1px solid #E5E5E5;border-radius:8px;padding:12px;margin-bottom:12px;text-align:center;">
                   <p style="font-size:12px;font-weight:600;margin-bottom:8px">Silakan transfer ke rekening berikut atau scan QRIS:</p>
                   <p style="font-size:14px;font-weight:700;color:#1C1C1E;margin-bottom:4px">BCA: 1234567890</p>
                   <p style="font-size:13px;color:#6B6B6B;margin-bottom:12px">a.n. UD. Alam Makmur Jaya</p>
                   <div style="background:#F9F8F6;border-radius:8px;padding:10px;display:inline-block;border:1px dashed #CCC">
-                    <!-- Dummy QRIS Placeholder -->
-                    <!-- <div style="width:120px;height:120px;background:#E5E5E5;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto">📱</div> -->
-                     <!-- <img src="../assets/mieayam.jpg" alt="QRIS Placeholder" style="width:120px;height:120px;object-fit:contain;margin:0 auto;display:block"/> -->
-                      <a href="../assets/mieayam.jpg" target="_blank" rel="noopener noreferrer" style="display:block; width:fit-content; margin:0 auto;">
-  <img src="../assets/mieayam.jpg" alt="QRIS Placeholder" style="width:120px; height:120px; object-fit:contain; display:block;"/>
-</a>
-                    <!-- <p style="font-size:10px;font-weight:700;margin-top:6px;color:#1C1C1E">QRIS DUMMY</p> -->
+                    <a href="../assets/mieayam.jpg" target="_blank" rel="noopener noreferrer" style="display:block; width:fit-content; margin:0 auto;">
+                      <img src="../assets/mieayam.jpg" alt="QRIS Placeholder" loading="lazy" style="width:120px; height:120px; object-fit:contain; display:block;"/>
+                    </a>
                   </div>
                 </div>
-                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Upload Bukti Transfer (JPG/PNG/PDF, max 5MB)</label>
-                <input type="file" id="bukti-transfer" accept="image/*,.pdf" style="width:100%; border:1px solid #E5E5E5; padding:8px; border-radius:6px; font-size:13px;"/>
+                <label style="font-size:13px;font-weight:600;display:block;margin-bottom:4px;">Upload Bukti Transfer (JPG/PNG, max 2MB)</label>
+                <input type="file" id="bukti-transfer" accept="image/jpeg,image/png,image/jpg"
+                  style="display:block; margin:8px 0; width:100%; border:1px solid #E5E5E5; padding:8px; border-radius:6px; font-size:13px;">
+                <img id="transfer-preview" style="display:none; max-width:100%; max-height:200px;
+                  border-radius:8px; margin-top:8px; object-fit:contain; border:1px solid #e5e7eb">
               </div>
             </div>
 
@@ -228,26 +236,69 @@
       <p style="color:#6B6B6B;margin:0.5rem 0 2rem;font-size:16px" id="error-message"></p>
       <a href="cart.html" class="btn-primary" style="background:#E85D26">← Kembali ke Keranjang</a>
     </div>
+
+    <div id="nota-section" style="display:none; max-width:600px; margin:0 auto; padding:20px;"></div>
   </div>
 
   <script src="../js/api.js"></script>
   <script src="../js/data.js"></script>
   <script>
-    let selectedPayment = 'cod';
-
-    function selectPay(el, method) {
-      selectedPayment = method;
-      document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
-      el.classList.add('selected');
-      el.querySelector('input').checked = true;
+    function updatePaymentMethod() {
+      const methodTransfer = document.getElementById('method-transfer');
+      const isTransfer = methodTransfer && methodTransfer.checked;
       
-      const uploadSec = document.getElementById('upload-section');
-      if (method === 'transfer') {
-        uploadSec.style.display = 'block';
+      document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+      if (isTransfer) {
+        document.getElementById('opt-transfer').classList.add('selected');
       } else {
-        uploadSec.style.display = 'none';
+        document.getElementById('opt-cod').classList.add('selected');
+      }
+
+      const transferSection = document.getElementById('transfer-upload-section');
+      if (transferSection) {
+        transferSection.style.display = isTransfer ? 'block' : 'none';
+        if (isTransfer) {
+          transferSection.style.opacity = '0';
+          transferSection.style.transform = 'translateY(-8px)';
+          requestAnimationFrame(() => {
+            transferSection.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            transferSection.style.opacity = '1';
+            transferSection.style.transform = 'translateY(0)';
+          });
+        }
       }
     }
+
+    const fileInput = document.getElementById('bukti-transfer');
+    const preview = document.getElementById('transfer-preview');
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) {
+          if (preview) preview.style.display = 'none';
+          return;
+        }
+        if (file.size > 2 * 1024 * 1024) {
+          alert('Ukuran file maksimal 2MB');
+          fileInput.value = '';
+          return;
+        }
+        if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+          alert('Format file harus JPG atau PNG');
+          fileInput.value = '';
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          if (preview) {
+            preview.src = ev.target.result;
+            preview.style.display = 'block';
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+    updatePaymentMethod();
 
     function renderCart() {
       // FIX: getCart() membaca key 'cart' (unified dengan catalog.html)
@@ -299,118 +350,160 @@
       renderCart();
     }
     
-    // Render Receipt Details
-    function renderReceipt(transaction) {
-      if (!transaction || !transaction.items) return;
+    function showNota(orderData, cartItems, buyerInfo) {
+      const formSection = document.getElementById('cart-content');
+      if (formSection) formSection.style.display = 'none';
       
-      const fmt = (n) => new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0
-      }).format(n);
+      const ss = document.getElementById('success-screen');
+      if (ss) ss.style.display = 'none';
+
+      const notaSection = document.getElementById('nota-section');
+      if (!notaSection) {
+        console.error('Element #nota-section not found in DOM!');
+        alert('Pesanan berhasil! No. Pesanan: ' + (orderData.orderId || orderData.noOrder || orderData.id));
+        return;
+      }
       
-      // Render items
-      const itemsHtml = transaction.items.map(item => `
-        <div class="receipt-item">
-          <div>
-            <div style="font-weight:700">${item.namaProduk}</div>
-            <div style="color:#6B6B6B;font-size:12px">${item.qty} ${item.satuan} @ ${fmt(item.hargaSatuan)}</div>
-          </div>
-          <div style="font-weight:600">${fmt(item.subtotal)}</div>
-        </div>
+      const now = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+      const itemsHTML = cartItems.map(item => `
+        <tr>
+          <td>${item.name || item.nama_produk || item.nama}</td>
+          <td style="text-align:right">${item.qty} ${item.satuan || ''}</td>
+          <td style="text-align:right">Rp ${formatRupiah(item.price || item.harga).replace('Rp ', '')}</td>
+          <td style="text-align:right">Rp ${formatRupiah((item.price || item.harga) * item.qty).replace('Rp ', '')}</td>
+        </tr>
       `).join('');
       
-      document.getElementById('receipt-items').innerHTML = itemsHtml;
-      document.getElementById('receipt-subtotal').textContent = fmt(transaction.total);
-      document.getElementById('receipt-total').textContent = fmt(transaction.total);
-      document.getElementById('receipt-payment-method').textContent = 
-        transaction.metodeBayar === 'cod' ? '🚚 COD (Bayar di Tempat)' : '🏦 Transfer Bank';
-      document.getElementById('receipt-address').textContent = transaction.alamat;
+      const total = cartItems.reduce((sum, item) => sum + (item.price || item.harga) * item.qty, 0);
       
-      // Capitalize first letter
-      let st = transaction.statusPesanan || 'diproses';
-      st = st.charAt(0).toUpperCase() + st.slice(1);
-      document.getElementById('receipt-status').textContent = st;
+      notaSection.innerHTML = `
+        <div class="nota-paper" id="printable-nota">
+          <div class="nota-header">
+            <h2>UD. Alam Makmur Jaya</h2>
+            <p>Jl. Mayjen Sungkono No.56, Kebomas, Gresik</p>
+            <hr>
+            <p><strong>No. Pesanan:</strong> ${orderData.orderId || orderData.noOrder || orderData.id || '-'}</p>
+            <p><strong>Tanggal:</strong> ${now}</p>
+            <p><strong>Nama:</strong> ${buyerInfo.name}</p>
+            <p><strong>Alamat:</strong> ${buyerInfo.address}</p>
+            <p><strong>WhatsApp:</strong> ${buyerInfo.whatsapp}</p>
+            <p><strong>Metode Bayar:</strong> ${buyerInfo.paymentMethod === 'transfer' ? 'Transfer Bank' : 'COD'}</p>
+          </div>
+          <hr>
+          <table style="width:100%; border-collapse:collapse; margin:12px 0">
+            <thead>
+              <tr style="border-bottom:1px solid #ccc">
+                <th style="text-align:left">Produk</th>
+                <th style="text-align:right">Qty</th>
+                <th style="text-align:right">Harga</th>
+                <th style="text-align:right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>${itemsHTML}</tbody>
+          </table>
+          <hr>
+          <div style="text-align:right; font-size:1.1rem; font-weight:bold">
+            TOTAL: Rp ${formatRupiah(total).replace('Rp ', '')}
+          </div>
+          ${buyerInfo.paymentMethod === 'transfer' ? 
+            '<p style="margin-top:12px; color:#d97706">⏳ Pembayaran transfer menunggu verifikasi admin.</p>' : 
+            '<p style="margin-top:12px; color:#16a34a">✅ Pembayaran COD akan dilakukan saat barang tiba.</p>'
+          }
+          <p style="text-align:center; margin-top:16px; color:#6b7280; font-size:0.85rem">
+            Terima kasih telah berbelanja di UD. Alam Makmur Jaya!
+          </p>
+        </div>
+        <div style="display:flex; gap:12px; margin-top:16px; justify-content:center; flex-wrap:wrap">
+          <button onclick="window.print()" class="btn-secondary" style="padding:10px 16px;border-radius:8px;font-weight:600;border:1px solid #ccc">🖨️ Cetak Nota</button>
+          <button onclick="window.open('https://wa.me/6281234567890?text=' + encodeURIComponent('Halo UD. Alam Makmur Jaya,\\n\\nSaya baru saja membuat pesanan via Website.\\nNo. Pesanan: *${orderData.orderId || orderData.noOrder || '-'}*\\nMetode Pembayaran: *${buyerInfo.paymentMethod.toUpperCase()}*\\nTotal: *Rp ${formatRupiah(total).replace('Rp ', '')}*\\n\\nMohon segera diproses. Terima kasih!'), '_blank')" class="btn-primary" style="background:#25D366;padding:10px 16px;border-radius:8px;font-weight:600">📱 WhatsApp Admin</button>
+          <button onclick="window.location.href='../index.html'" class="btn-primary" style="padding:10px 16px;border-radius:8px;font-weight:600">🏠 Kembali ke Toko</button>
+        </div>
+      `;
+      
+      notaSection.style.display = 'block';
+      notaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     async function doCheckout(event) {
-      if (event) event.preventDefault();
+      if (event) { event.preventDefault(); event.stopPropagation(); }
       
-      const btnConf = document.getElementById('btn-checkout');
-      if (btnConf) {
-        if (btnConf.disabled) return;
-        btnConf.disabled = true;
-        btnConf.innerHTML = 'Memproses...';
-      }
-
-      const restoreBtn = () => {
-        if (btnConf) {
-           btnConf.disabled = false;
-           btnConf.innerHTML = 'Konfirmasi Pesanan →';
-        }
-      };
-
-      if (!navigator.onLine) {
-        restoreBtn();
-        showToast('✗ Checkout tidak dapat dilakukan saat offline.');
-        return;
-      }
-
-      const name = document.getElementById('buyer-name').value.trim();
-      const phone = document.getElementById('buyer-phone').value.trim();
-      const addr = document.getElementById('buyer-addr').value.trim(); 
-      const notes = document.getElementById('buyer-notes').value.trim();
-
-      if (!name) { restoreBtn(); showToast('✗ Nama pembeli wajib diisi'); return; }
-      if (!phone) { restoreBtn(); showToast('✗ Nomor WhatsApp wajib diisi'); return; }
-      
-      const cleanedPhone = phone.replace(/\D/g, '');
-      if (cleanedPhone.length < 9 || cleanedPhone.length > 15) {
-        restoreBtn(); showToast('✗ Nomor WhatsApp tidak valid'); return;
-      }
-      
-      if (!addr) { restoreBtn(); showToast('✗ Alamat pengiriman wajib diisi'); return; }
-
-      const cart = getCart(); 
-
-      if (cart.length === 0) {
-        restoreBtn(); showToast('✗ Keranjang masih kosong');
-        return;
-      }
-
-      if (selectedPayment === 'transfer') {
-        const fileInput = document.getElementById('bukti-transfer');
-        if (!fileInput.files || fileInput.files.length === 0) {
-          restoreBtn(); showToast('✗ Bukti transfer wajib diupload');
-          return;
-        }
-        if (fileInput.files[0].size > 5 * 1024 * 1024) {
-          restoreBtn(); showToast('✗ Bukti pembayaran maksimal 5 MB');
-          return;
-        }
-      }
-
-      // Payload sesuai backend: { productId, qty }
-      const items = cart.map(item => ({
-        productId: item.productId || item.id,
-        qty: item.qty
-      }));
-
       try {
-        const metodeBayar = selectedPayment; // 'cod' atau 'transfer'
+        const btnConf = document.getElementById('btn-checkout');
+        if (btnConf) {
+          if (btnConf.disabled) return;
+          btnConf.disabled = true;
+          btnConf.innerHTML = 'Memproses...';
+        }
+
+        const restoreBtn = () => {
+          if (btnConf) {
+             btnConf.disabled = false;
+             btnConf.innerHTML = 'Konfirmasi Pesanan →';
+          }
+        };
+
+        if (!navigator.onLine) {
+          restoreBtn();
+          showToast('✗ Checkout tidak dapat dilakukan saat offline.');
+          return;
+        }
+        
+        const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+        if (!cart || cart.length === 0) {
+          restoreBtn();
+          alert('Keranjang belanja kosong!');
+          return;
+        }
+
+        const name = document.getElementById('buyer-name').value.trim();
+        const phone = document.getElementById('buyer-phone').value.trim();
+        const addr = document.getElementById('buyer-addr').value.trim(); 
+        const notes = document.getElementById('buyer-notes').value.trim();
+
+        if (!name) { restoreBtn(); showToast('✗ Nama pembeli wajib diisi'); return; }
+        if (!phone) { restoreBtn(); showToast('✗ Nomor WhatsApp wajib diisi'); return; }
+        
+        const cleanedPhone = phone.replace(/\D/g, '');
+        if (cleanedPhone.length < 9 || cleanedPhone.length > 15) {
+          restoreBtn(); showToast('✗ Nomor WhatsApp tidak valid'); return;
+        }
+        
+        if (!addr) { restoreBtn(); showToast('✗ Alamat pengiriman wajib diisi'); return; }
+
+        const isTransfer = document.getElementById('method-transfer')?.checked;
+        const selectedPayment = isTransfer ? 'transfer' : 'cod';
+        
+        if (isTransfer) {
+          const fileInput = document.getElementById('bukti-transfer');
+          if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            restoreBtn(); showToast('✗ Bukti transfer wajib diupload');
+            return;
+          }
+          if (fileInput.files[0].size > 2 * 1024 * 1024) {
+            restoreBtn(); showToast('✗ Bukti pembayaran maksimal 2 MB');
+            return;
+          }
+        }
+
+        // Payload sesuai backend: { productId, qty }
+        const items = cart.map(item => ({
+          productId: item.productId || item.id,
+          qty: item.qty
+        }));
+
         const result = await API.checkout({
           nama: name,
           alamat: addr,
           noWhatsapp: phone,
           items,
-          metodeBayar,
+          metodeBayar: selectedPayment,
           catatanPengiriman: notes || null
         });
 
         // Jika transfer dan ada file, upload bukti
-        if (selectedPayment === 'transfer' && result.transaction) {
+        if (isTransfer && result.transaction) {
           const fileInput = document.getElementById('bukti-transfer');
-          if (fileInput.files && fileInput.files.length > 0) {
+          if (fileInput && fileInput.files && fileInput.files.length > 0) {
             try {
               await API.uploadBuktiTransfer(result.transaction.id, fileInput.files[0], phone);
             } catch (upErr) {
@@ -419,69 +512,27 @@
           }
         }
 
+        document.getElementById('error-screen').style.display = 'none';
+
+        const transaction = result.transaction || {};
+        
+        // Show the nota FIRST (before clearing cart, so it can read items from it)
+        if (typeof showNota === 'function') {
+          showNota(transaction, cart, {
+            name: name,
+            address: addr,
+            whatsapp: phone,
+            paymentMethod: selectedPayment
+          });
+        }
+        
+        // CLEAR CART AFTER SHOWING NOTA
         clearCart();
         
-        // Show success screen
-        document.getElementById('cart-content').style.display = 'none';
-        document.getElementById('error-screen').style.display = 'none';
-        const ss = document.getElementById('success-screen');
-        ss.style.display = 'block';
-        
-        // Get transaction data
-        const transaction = result.transaction;
-        const noOrder = (transaction && transaction.noOrder) || '-';
-        
-        // Display order number
-        document.getElementById('order-id-display').innerHTML =
-          `No. Pesanan: <strong style="color:#E85D26;font-size:18px">${noOrder}</strong><br>` +
-          `<small style="color:#6B6B6B">Simpan nomor ini untuk cek status pesanan</small>`;
-        
-        // Simpan noWa ke sessionStorage untuk auto-fill di track.html (FR-18)
         sessionStorage.setItem('lastOrderWa', phone);
-        
-        // Render receipt details
-        if (typeof renderReceipt === 'function') {
-          renderReceipt(transaction);
-        }
-        
-        // Setup print button
-        const btnPrintReceipt = document.getElementById('btn-print-receipt');
-        if(btnPrintReceipt) {
-          btnPrintReceipt.onclick = () => {
-            if (window.API && typeof window.API.cetakNota === 'function') {
-              window.API.cetakNota(transaction);
-            } else {
-              window.print();
-            }
-          };
-        }
-        
-        // Setup WhatsApp button
-        const btnShareWa = document.getElementById('btn-share-wa');
-        if(btnShareWa) {
-          btnShareWa.onclick = () => {
-            const pesan = encodeURIComponent(
-              `Halo UD. Alam Makmur Jaya,\n\n` +
-              `Saya baru saja membuat pesanan via Website.\n` +
-              `No. Pesanan: *${noOrder}*\n` +
-              `Metode Pembayaran: *${metodeBayar.toUpperCase()}*\n` +
-              `Total: *Rp${transaction.total ? transaction.total.toLocaleString('id-ID') : 0}*\n\n` +
-              `Mohon segera diproses. Terima kasih!`
-            );
-            window.open(`https://wa.me/6281234567890?text=${pesan}`, '_blank');
-          };
-        }
-        
-        // Setup track button
-        const btnTrackReceipt = document.getElementById('btn-track-receipt');
-        if(btnTrackReceipt) {
-          btnTrackReceipt.href = `track.html?noOrder=${encodeURIComponent(noOrder)}`;
-        }
 
       } catch (err) {
-        restoreBtn();
-        
-        // Show error screen instead of just toast
+        // Show error screen instead of redirecting or falling through
         document.getElementById('cart-content').style.display = 'none';
         document.getElementById('success-screen').style.display = 'none';
         document.getElementById('error-screen').style.display = 'block';
@@ -490,6 +541,7 @@
         document.getElementById('error-message').textContent = errorMsg;
         
         console.error('Checkout error:', err);
+        alert('Terjadi kesalahan: ' + errorMsg);
       }
     }
 

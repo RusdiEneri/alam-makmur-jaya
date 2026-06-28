@@ -217,4 +217,50 @@ router.get("/export/csv", authenticate, adminOnly, (req, res) => {
   return res.send(csv);
 });
 
+router.get("/export/pdf", authenticate, adminOnly, (req, res) => {
+  const PDFDocument = require('pdfkit');
+  const transactions = db.read("transactions");
+  const validTrx = transactions.filter(isTransaksiValid);
+
+  const doc = new PDFDocument({ margin: 30, size: 'A4' });
+  res.header('Content-Type', 'application/pdf');
+  res.attachment('laporan_penjualan.pdf');
+  doc.pipe(res);
+
+  doc.fontSize(18).text('UD. Alam Makmur Jaya', { align: 'center' });
+  doc.fontSize(12).text('Laporan Penjualan', { align: 'center' });
+  doc.moveDown(2);
+
+  doc.fontSize(10).font('Helvetica-Bold');
+  doc.text('No Order', 30, doc.y, { width: 100, continued: true });
+  doc.text('Tanggal', 130, doc.y, { width: 100, continued: true });
+  doc.text('Pelanggan', 230, doc.y, { width: 150, continued: true });
+  doc.text('Metode', 380, doc.y, { width: 70, continued: true });
+  doc.text('Total', 450, doc.y, { width: 110 });
+  doc.moveDown(0.5);
+
+  doc.font('Helvetica');
+  let y = doc.y;
+  doc.moveTo(30, y).lineTo(565, y).stroke();
+  doc.moveDown(0.5);
+
+  for (const t of validTrx) {
+    const d = t.tanggal ? t.tanggal.split('T')[0] : '-';
+    
+    if (doc.y > 750) {
+      doc.addPage();
+      doc.y = 30;
+    }
+    
+    doc.text(t.noOrder || '-', 30, doc.y, { width: 100, continued: true });
+    doc.text(d, 130, doc.y, { width: 100, continued: true });
+    doc.text((t.namaPelanggan || '-').substring(0, 25), 230, doc.y, { width: 150, continued: true });
+    doc.text(t.metodeBayar || '-', 380, doc.y, { width: 70, continued: true });
+    doc.text((t.total || 0).toLocaleString('id-ID'), 450, doc.y, { width: 110 });
+    doc.moveDown(0.5);
+  }
+
+  doc.end();
+});
+
 module.exports = router;

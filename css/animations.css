@@ -1,0 +1,503 @@
+/* ============================================================
+   UD. ALAM MAKMUR JAYA — Animations & Micro-interactions
+   ============================================================ */
+
+/* ── KEYFRAMES ──────────────────────────────────────────────── */
+
+/* Fade + slide up from 20px below */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade + slide in from left */
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale from 0.95 + fade in */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Skeleton shimmer — moves a gradient left-to-right */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+/* Gentle pulse for status badges */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.97);
+  }
+}
+
+/* Animated counter — used in dashboard stat numbers */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gentle floating for hero cards */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* Spin for loading indicators */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Page entrance slide from right */
+@keyframes pageEnterFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Page exit to left */
+@keyframes pageExitToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+/* Slide down for dropdowns / toasts */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Shake — for form validation errors */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+
+/* ── REDUCED MOTION OVERRIDE ─────────────────────────────────
+   All animations & transitions are suppressed for users who
+   prefer reduced motion. Always keep this block at the top
+   of the keyframes section so it wins specificity.
+   ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+
+/* ── BODY ENTRANCE ANIMATION ─────────────────────────────────
+   Applied by js/animations.js once DOM is ready.
+   Prevents flash-of-unstyled-content (FOUC) and triggers
+   the first-paint entrance animation.
+   ──────────────────────────────────────────────────────────── */
+body:not(.loaded) {
+  opacity: 0;
+}
+
+body.loaded {
+  opacity: 1;
+  transition: opacity 300ms var(--ease-out, ease-out);
+}
+
+
+/* ── SCROLL-TRIGGERED ANIMATION UTILITY ─────────────────────
+   Elements get `.animate-on-scroll` in HTML.
+   JS adds `.is-visible` via IntersectionObserver.
+   ──────────────────────────────────────────────────────────── */
+
+/* Initial hidden state */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 500ms var(--ease-out, ease-out),
+    transform 500ms var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+  will-change: opacity, transform;
+}
+
+/* When JS adds this class */
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Variant: slide from left */
+.animate-on-scroll.from-left {
+  transform: translateX(-24px);
+}
+.animate-on-scroll.from-left.is-visible {
+  transform: translateX(0);
+}
+
+/* Variant: scale in */
+.animate-on-scroll.scale-in {
+  transform: scale(0.95);
+}
+.animate-on-scroll.scale-in.is-visible {
+  transform: scale(1);
+}
+
+
+/* ── STAGGERED CHILDREN ──────────────────────────────────────
+   Add `.stagger-children` to a container. Each direct child
+   gets an incremental animation-delay.
+   ──────────────────────────────────────────────────────────── */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 400ms var(--ease-out, ease-out),
+    transform 400ms var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+}
+
+.stagger-children.is-visible > *,
+body.loaded .stagger-children > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Generate delays for up to 12 children */
+.stagger-children > *:nth-child(1)  { transition-delay:  40ms; }
+.stagger-children > *:nth-child(2)  { transition-delay:  80ms; }
+.stagger-children > *:nth-child(3)  { transition-delay: 120ms; }
+.stagger-children > *:nth-child(4)  { transition-delay: 160ms; }
+.stagger-children > *:nth-child(5)  { transition-delay: 200ms; }
+.stagger-children > *:nth-child(6)  { transition-delay: 240ms; }
+.stagger-children > *:nth-child(7)  { transition-delay: 280ms; }
+.stagger-children > *:nth-child(8)  { transition-delay: 320ms; }
+.stagger-children > *:nth-child(9)  { transition-delay: 360ms; }
+.stagger-children > *:nth-child(10) { transition-delay: 400ms; }
+.stagger-children > *:nth-child(11) { transition-delay: 440ms; }
+.stagger-children > *:nth-child(12) { transition-delay: 480ms; }
+
+
+/* ── PAGE TRANSITIONS ────────────────────────────────────────
+   Use `.page-enter` / `.page-exit` on <main> or wrapper
+   during route changes via JS.
+   ──────────────────────────────────────────────────────────── */
+.page-enter {
+  animation: pageEnterFromRight 350ms var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) forwards;
+}
+
+.page-exit {
+  animation: pageExitToLeft 250ms var(--ease-in, cubic-bezier(0.4, 0, 1, 1)) forwards;
+  pointer-events: none;
+}
+
+
+/* ── SKELETON LOADING ────────────────────────────────────────
+   Apply `.skeleton` to placeholder elements. Shimmer is an
+   animated gradient moving left → right.
+   ──────────────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 37%,
+    #f0f0f0 63%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-md, 0.5rem);
+  color: transparent !important;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Dark-mode variant */
+.dark .skeleton,
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(
+    90deg,
+    #2a2a2a 25%,
+    #333333 37%,
+    #2a2a2a 63%
+  );
+  background-size: 400px 100%;
+}
+
+
+/* ── MICRO-INTERACTIONS ──────────────────────────────────────
+   Button, card, input, and sidebar link hover / focus states.
+   ──────────────────────────────────────────────────────────── */
+
+/* ----- Buttons ----- */
+.btn,
+button.btn,
+a.btn,
+[class*="btn-"] {
+  /* Base transition — applied to ALL button-like elements */
+  transition:
+    background-color var(--duration-base, 200ms) var(--ease-default, ease),
+    box-shadow       var(--duration-base, 200ms) var(--ease-default, ease),
+    transform        var(--duration-base, 200ms) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    color            var(--duration-base, 200ms) var(--ease-default, ease),
+    border-color     var(--duration-base, 200ms) var(--ease-default, ease);
+  will-change: transform;
+  cursor: pointer;
+}
+
+/* Lift effect on hover — spring feel */
+.btn:hover,
+button.btn:hover,
+a.btn:hover,
+.btn-primary:hover,
+.btn-ghost:hover,
+.btn-login:hover,
+.btn-add:hover,
+.btn-refresh:hover {
+  transform: translateY(-2px);
+}
+
+/* Press feedback */
+.btn:active,
+button.btn:active,
+a.btn:active,
+.btn-primary:active,
+.btn-add:active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: var(--duration-fast, 100ms);
+}
+
+/* ----- Cards ----- */
+.card,
+.cat-card,
+.product-card,
+.feat-card,
+.hero-card,
+.stat-card,
+.dashboard-card {
+  transition:
+    box-shadow var(--duration-slow, 300ms) var(--ease-out, ease),
+    transform  var(--duration-slow, 300ms) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    border-color var(--duration-base, 200ms) var(--ease-default, ease),
+    background-color var(--duration-base, 200ms) var(--ease-default, ease);
+  will-change: transform, box-shadow;
+}
+
+.card:hover,
+.cat-card:hover,
+.product-card:hover,
+.stat-card:hover,
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 28px -4px rgba(0, 0, 0, 0.12),
+    0 6px 10px -4px rgba(0, 0, 0, 0.06);
+}
+
+/* ----- Input Focus Glow ----- */
+input,
+textarea,
+select,
+.form-input,
+.search-box {
+  transition:
+    border-color var(--duration-base, 200ms) var(--ease-out, ease),
+    box-shadow   var(--duration-base, 200ms) var(--ease-out, ease),
+    background   var(--duration-base, 200ms) var(--ease-out, ease);
+  outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.form-input:focus,
+.search-box:focus {
+  border-color: var(--color-primary, #16A34A) !important;
+  box-shadow:
+    0 0 0 3px rgba(22, 163, 74, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Danger / error state */
+input.input-error:focus,
+.form-input.input-error:focus {
+  border-color: var(--color-danger, #DC2626) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+/* ----- Sidebar Navigation Links ----- */
+.sidebar-link,
+.nav-sidebar a,
+.sidebar nav a {
+  position: relative;
+  transition:
+    color            var(--duration-base, 200ms) var(--ease-out, ease),
+    background-color var(--duration-base, 200ms) var(--ease-out, ease),
+    padding-left     var(--duration-slow, 300ms) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+  overflow: hidden;
+}
+
+/* Left-border slide-in indicator */
+.sidebar-link::before,
+.nav-sidebar a::before,
+.sidebar nav a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px;
+  height: 70%;
+  background: var(--color-primary, #16A34A);
+  border-radius: 0 var(--radius-sm, 4px) var(--radius-sm, 4px) 0;
+  transition: transform var(--duration-slow, 300ms) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+  will-change: transform;
+}
+
+.sidebar-link:hover::before,
+.nav-sidebar a:hover::before,
+.sidebar nav a:hover::before,
+.sidebar-link.active::before,
+.nav-sidebar a.active::before,
+.sidebar nav a.active::before {
+  transform: translateY(-50%) scaleY(1);
+}
+
+/* ----- Navbar links hover underline slide-in ----- */
+.nav-links a {
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary, #16A34A);
+  border-radius: var(--radius-full, 9999px);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-slow, 300ms) var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+
+/* ----- Status / pulsing badges ----- */
+.status-badge,
+.pulse-badge {
+  animation: pulse 2s var(--ease-default, ease) infinite;
+}
+
+/* ----- Floating hero cards ----- */
+.floating  { animation: float 3.5s ease-in-out infinite; }
+.floating-2 { animation: float 3.5s ease-in-out infinite 1.75s; }
+
+/* ----- Loading spinner ----- */
+.spinner {
+  display: inline-block;
+  width: 1.25em;
+  height: 1.25em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 600ms linear infinite;
+}
+
+/* ----- Shake for validation errors ----- */
+.shake {
+  animation: shake 400ms var(--ease-out, ease-out);
+}
+
+
+/* ── COUNTER ANIMATION CLASS ─────────────────────────────────
+   Applied by JS to stat number elements when they enter view.
+   ──────────────────────────────────────────────────────────── */
+.counter-animated {
+  animation: countUp 600ms var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) forwards;
+  display: inline-block;
+}
+
+
+/* ── UTILITY ANIMATION CLASSES ───────────────────────────────
+   One-shot helpers you can drop on any element.
+   ──────────────────────────────────────────────────────────── */
+.anim-fade-up   { animation: fadeInUp  500ms var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) both; }
+.anim-fade-left { animation: fadeInLeft 500ms var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) both; }
+.anim-scale-in  { animation: scaleIn   400ms var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) both; }
+.anim-slide-down { animation: slideDown 350ms var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) both; }
+
+/* Delay helpers */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* Duration helpers */
+.duration-fast   { animation-duration: var(--duration-fast, 100ms) !important; }
+.duration-slow   { animation-duration: var(--duration-slow, 300ms) !important; }
+.duration-slower { animation-duration: var(--duration-slower, 500ms) !important; }

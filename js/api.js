@@ -62,10 +62,10 @@ function logout() {
 // ═══════════════════════════════════════════
 // P0: AUTENTIKASI
 // ═══════════════════════════════════════════
-async function login(email, password) {
+async function login(username, password) {
   const data = await apiFetch('/auth/login', {
     method: 'POST',
-    body: JSON.stringify({ email, password })
+    body: JSON.stringify({ username, password })
   });
   sessionStorage.setItem('token', data.token);
   sessionStorage.setItem('user', JSON.stringify(data.user));
@@ -75,10 +75,13 @@ async function login(email, password) {
 // ═══════════════════════════════════════════
 // A: PRODUK & STOK
 // ═══════════════════════════════════════════
-async function getProducts(search = '', kategori = '') {
+async function getProducts(search = '', kategori = '', stok = '', page = null, limit = null) {
   const params = new URLSearchParams();
   if (search)   params.set('search', search);
   if (kategori) params.set('kategori', kategori);
+  if (stok)     params.set('stok', stok);
+  if (page)     params.set('page', page);
+  if (limit)    params.set('limit', limit);
   const qs = params.toString() ? '?' + params.toString() : '';
   return apiFetch(`/products${qs}`);
 }
@@ -97,6 +100,22 @@ async function updateProduct(id, data) {
 
 async function deleteProduct(id) {
   return apiFetch(`/products/${id}`, { method: 'DELETE' });
+}
+
+async function getSatuan() {
+  return apiFetch('/satuan');
+}
+
+async function createSatuan(data) {
+  return apiFetch('/satuan', { method: 'POST', body: JSON.stringify(data) });
+}
+
+async function updateSatuan(id, data) {
+  return apiFetch(`/satuan/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+}
+
+async function deleteSatuan(id) {
+  return apiFetch(`/satuan/${id}`, { method: 'DELETE' });
 }
 
 async function getStokAlerts() {
@@ -132,8 +151,18 @@ async function trackOrder(noOrder, noWa) {
   return apiFetch(`/checkout/track?${params.toString()}`);
 }
 
-async function getTransactions(search = '') {
-  const qs = search ? '?search=' + encodeURIComponent(search) : '';
+async function getTransactions(filters = {}) {
+  const params = new URLSearchParams();
+  if (filters.search)    params.set('q', filters.search);
+  if (filters.dateStart) params.set('dateStart', filters.dateStart);
+  if (filters.dateEnd)   params.set('dateEnd', filters.dateEnd);
+  if (filters.method)    params.set('method', filters.method);
+  if (filters.payStat)   params.set('payStat', filters.payStat);
+  if (filters.ordStat)   params.set('ordStat', filters.ordStat);
+  if (filters.page)      params.set('page', filters.page);
+  if (filters.limit)     params.set('limit', filters.limit);
+  
+  const qs = params.toString() ? '?' + params.toString() : '';
   return apiFetch(`/transactions${qs}`);
 }
 
@@ -280,16 +309,65 @@ async function deleteUser(id) {
 function cetakNota(trx) {
   if (!trx) return alert('Data transaksi tidak ada');
   
-  // FIX: Simpan ke session storage sesuai saran user
-  // "kenapa ga dibbikin session aja tiap client browser"
-  sessionStorage.setItem('print_nota', JSON.stringify(trx));
+  let printArea = document.getElementById('nota-print-area');
+  if (!printArea) {
+    printArea = document.createElement('div');
+    printArea.id = 'nota-print-area';
+    document.body.appendChild(printArea);
+    
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @media print {
+        body > *:not(#nota-print-area) { display: none !important; }
+        #nota-print-area { display: block !important; width: 100%; }
+        @page { margin: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
   
-  // Buka tab nota khusus yang akan mengambil dari session
-  // window.open dipakai supaya nota tidak sekejap hilang (bug iframe)
-  const isPagesDir = window.location.pathname.includes('/pages/');
-  const notaUrl = isPagesDir ? 'nota.html?print=1' : 'pages/nota.html?print=1';
+  const itemsHTML = (trx.items || []).map(item => `
+    <tr>
+      <td style="padding:4px 0">${item.namaProduk || item.name || '-'}</td>
+      <td style="text-align:right;padding:4px 0">${item.qty} ${item.satuan || ''}</td>
+      <td style="text-align:right;padding:4px 0">${Number(item.hargaSatuan || item.price || 0).toLocaleString('id-ID')}</td>
+      <td style="text-align:right;padding:4px 0">${Number(item.subtotal || 0).toLocaleString('id-ID')}</td>
+    </tr>
+  `).join('');
   
-  window.open(notaUrl, '_blank');
+  const now = new Date(trx.createdAt || trx.tanggal || Date.now()).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+  const total = Number(trx.total || 0).toLocaleString('id-ID');
+  
+  printArea.innerHTML = `
+    <div style="font-family: monospace; font-size: 12px; max-width: 80mm; margin: 0 auto; color: black; background: white; padding: 20px;">
+      <h2 style="text-align:center; margin-bottom: 5px; font-size: 16px;">UD. Alam Makmur Jaya</h2>
+      <p style="text-align:center; margin-top: 0; font-size: 11px;">Jl. Mayjen Sungkono No.56, Gresik</p>
+      <hr style="border:1px dashed #000; margin:10px 0;">
+      <p style="margin:2px 0"><strong>No:</strong> ${trx.noOrder || trx.id || '-'}</p>
+      <p style="margin:2px 0"><strong>Tgl:</strong> ${now}</p>
+      <p style="margin:2px 0"><strong>Plg:</strong> ${trx.namaPelanggan || '-'}</p>
+      <p style="margin:2px 0"><strong>Mtd:</strong> ${trx.metodeBayar || '-'}</p>
+      <hr style="border:1px dashed #000; margin:10px 0;">
+      <table style="width:100%; border-collapse:collapse; margin:12px 0">
+        <thead>
+          <tr style="border-bottom:1px solid #000">
+            <th style="text-align:left;padding-bottom:4px">Item</th>
+            <th style="text-align:right;padding-bottom:4px">Qty</th>
+            <th style="text-align:right;padding-bottom:4px">Harga</th>
+            <th style="text-align:right;padding-bottom:4px">Total</th>
+          </tr>
+        </thead>
+        <tbody>${itemsHTML}</tbody>
+      </table>
+      <hr style="border:1px dashed #000; margin:10px 0;">
+      <div style="text-align:right; font-size:1.1rem; font-weight:bold; margin-top:8px">
+        TOTAL: Rp ${total}
+      </div>
+      <p style="text-align:center; margin-top:16px; font-size:11px;">Terima kasih telah berbelanja!</p>
+    </div>
+  `;
+  
+  setTimeout(() => { window.print(); }, 200);
 }
 
 // ═══════════════════════════════════════════
@@ -324,5 +402,62 @@ window.API = {
   getTargetHarian, setTargetHarian,
 
   // Users
-  getUsers, createUser, updateUser, deleteUser
+  getUsers, createUser, updateUser, deleteUser, toggleUserStatus,
+
+  // Laporan
+  exportPDF
 };
+
+// ═══════════════════════════════════════════
+// EXPORT PDF STUB
+// ═══════════════════════════════════════════
+async function exportPDF() {
+  console.log("exportPDF stub called");
+  window.print();
+}
+
+// ═══════════════════════════════════════════
+// STAFF & USERS API
+// ═══════════════════════════════════════════
+async function getUsers() {
+  return apiFetch('/users');
+}
+async function createUser(data) {
+  return apiFetch('/users', { method: 'POST', body: JSON.stringify(data) });
+}
+async function updateUser(id, data) {
+  return apiFetch(`/users/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+}
+async function deleteUser(id) {
+  return apiFetch(`/users/${id}`, { method: 'DELETE' });
+}
+async function toggleUserStatus(id, aktif) {
+  return apiFetch(`/users/${id}/status`, { method: 'PUT', body: JSON.stringify({ aktif }) });
+}
+
+// ═══════════════════════════════════════════
+// IDLE TIMEOUT (Auto-logout 30 Menit)
+// ═══════════════════════════════════════════
+(function setupIdleTimeout() {
+  const IDLE_TIMEOUT = 30 * 60 * 1000; // 30 menit
+  let idleTimer;
+
+  function resetTimer() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => {
+      const u = getCurrentUser();
+      if (u) {
+        alert('Sesi Anda telah berakhir karena tidak ada aktivitas selama 30 menit.');
+        logout();
+      }
+    }, IDLE_TIMEOUT);
+  }
+
+  // Bind events if we are in browser
+  if (typeof window !== 'undefined') {
+    ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'].forEach(evt => {
+      window.addEventListener(evt, resetTimer, { passive: true });
+    });
+    resetTimer(); // Init
+  }
+})();

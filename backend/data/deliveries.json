@@ -8,9 +8,10 @@
     "tanggalKirim": "2026-06-21",
     "kurir": null,
     "kendaraan": null,
-    "status": "diproses",
+    "status": "dikirim",
     "catatan": "",
     "createdAt": "2026-06-21T07:09:48.767Z",
-    "updatedAt": "2026-06-21T07:10:03.996Z"
+    "updatedAt": "2026-06-28T07:22:47.119Z",
+    "waktuKirim": "2026-06-28T07:22:47.119Z"
   }
 ]

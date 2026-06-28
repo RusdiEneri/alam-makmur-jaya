@@ -692,3 +692,27 @@ async function eksporPDF() {
     showToast('✗ Gagal ekspor PDF: ' + err.message);
   }
 }
+
+// ─────────────────────────────────────────────────
+// PUSH NOTIFICATION / POLLING TRANSFER (SD-09)
+// ─────────────────────────────────────────────────
+let lastPendingCount = 0;
+setInterval(async () => {
+  try {
+    const trx = await API.getTransactions();
+    const pending = trx.filter(t => t.metodeBayar === 'transfer' && t.statusPembayaran === 'pending');
+    if (pending.length > lastPendingCount) {
+      showToast('🔔 Pesanan Baru: Ada transfer menunggu verifikasi!', 5000);
+      
+      // Auto refresh if currently on pembayaran tab
+      const tabPembayaran = document.getElementById('tab-pembayaran');
+      if (tabPembayaran && tabPembayaran.classList.contains('active')) {
+        renderPembayaran();
+      }
+    }
+    lastPendingCount = pending.length;
+  } catch (e) {
+    // Silent background poll
+  }
+}, 15000); // Cek tiap 15 detik
+

@@ -13,7 +13,8 @@
         "hargaSatuan": 72000,
         "hargaPokokSatuan": 0,
         "qty": 3,
-        "subtotal": 216000
+        "subtotal": 216000,
+        "id_detail": "det-4nt5pmme"
       }
     ],
     "total": 216000,
@@ -41,7 +42,8 @@
         "timestamp": "2026-06-19T03:52:47.148Z",
         "oleh": "sistem"
       }
-    ]
+    ],
+    "id_pembayaran": "pay-egrbawf1"
   },
   {
     "id": "trx-5e74f293",
@@ -57,7 +59,8 @@
         "hargaSatuan": 72000,
         "hargaPokokSatuan": 0,
         "qty": 1,
-        "subtotal": 72000
+        "subtotal": 72000,
+        "id_detail": "det-al1qresv"
       }
     ],
     "total": 72000,
@@ -85,7 +88,8 @@
         "timestamp": "2026-06-19T04:09:01.415Z",
         "oleh": "sistem"
       }
-    ]
+    ],
+    "id_pembayaran": "pay-pmbgrnf6"
   },
   {
     "id": "trx-172231f2",
@@ -101,13 +105,14 @@
         "hargaSatuan": 72000,
         "hargaPokokSatuan": 0,
         "qty": 1,
-        "subtotal": 72000
+        "subtotal": 72000,
+        "id_detail": "det-lmdb83ae"
       }
     ],
     "total": 72000,
     "metodeBayar": "transfer",
     "statusPembayaran": "pending",
-    "statusPesanan": "diproses",
+    "statusPesanan": "dikirim",
     "stokDireservasi": true,
     "buktiTransfer": "payment-proofs/bukti-1781844919229-79f59784.jpg",
     "catatanPembayaran": null,
@@ -115,7 +120,7 @@
     "checkoutToken": null,
     "tanggal": "2026-06-19T04:55:19.214Z",
     "createdAt": "2026-06-19T04:55:19.214Z",
-    "updatedAt": "2026-06-19T04:55:19.233Z",
+    "updatedAt": "2026-06-26T03:53:39.251Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
@@ -128,8 +133,15 @@
         "status": "pending",
         "timestamp": "2026-06-19T04:55:19.214Z",
         "oleh": "sistem"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-06-26T03:53:39.251Z",
+        "oleh": "Admin Toko"
       }
-    ]
+    ],
+    "id_pembayaran": "pay-mbji1cuw"
   },
   {
     "id": "trx-3a275018",
@@ -145,7 +157,8 @@
         "hargaSatuan": 72000,
         "hargaPokokSatuan": 57600,
         "qty": 1,
-        "subtotal": 72000
+        "subtotal": 72000,
+        "id_detail": "det-9zn2ldck"
       }
     ],
     "total": 72000,
@@ -174,7 +187,8 @@
         "timestamp": "2026-06-20T06:39:21.181Z",
         "oleh": "sistem"
       }
-    ]
+    ],
+    "id_pembayaran": "pay-n9xvdam1"
   },
   {
     "id": "trx-97a343ed",
@@ -190,7 +204,8 @@
         "hargaSatuan": 72000,
         "hargaPokokSatuan": 57600,
         "qty": 1,
-        "subtotal": 72000
+        "subtotal": 72000,
+        "id_detail": "det-wtiy8mw1"
       }
     ],
     "total": 72000,
@@ -219,6 +234,101 @@
         "timestamp": "2026-06-20T23:07:53.593Z",
         "oleh": "sistem"
       }
-    ]
+    ],
+    "id_pembayaran": "pay-gpuauf7i"
+  },
+  {
+    "id": "trx-92a5634b",
+    "noOrder": "AMJ-20260626-001",
+    "namaPelanggan": "kelly",
+    "alamat": "semen",
+    "noWhatsapp": "6281111111111",
+    "items": [
+      {
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000,
+        "id_detail": "det-vcmvdl5c"
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "deket bawean",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-06-26T04:00:23.462Z",
+    "createdAt": "2026-06-26T04:00:23.462Z",
+    "updatedAt": "2026-06-26T04:00:23.462Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-06-26T04:00:23.462Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-06-26T04:00:23.462Z",
+        "oleh": "sistem"
+      }
+    ],
+    "id_pembayaran": "pay-6qo622f6"
+  },
+  {
+    "id": "trx-cac79581",
+    "noOrder": "AMJ-20260626-002",
+    "namaPelanggan": "maxim",
+    "alamat": "merdeka",
+    "noWhatsapp": "6281111111111",
+    "items": [
+      {
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000,
+        "id_detail": "det-euatsfun"
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "samping bawean",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-06-26T04:24:47.596Z",
+    "createdAt": "2026-06-26T04:24:47.596Z",
+    "updatedAt": "2026-06-26T04:24:47.596Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-06-26T04:24:47.596Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-06-26T04:24:47.596Z",
+        "oleh": "sistem"
+      }
+    ],
+    "id_pembayaran": "pay-cgieqfl5"
   }
 ]

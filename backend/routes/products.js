@@ -8,15 +8,20 @@ const router = express.Router();
 // Forward /api/products/returns ke routes/returns.js (CR-06)
 router.use('/returns', require('./returns'));
 
+// Helper to append satuan string
+function populateSatuan(product, satuanList) {
+  const s = satuanList.find(sat => sat.id_satuan === product.id_satuan);
+  return { ...product, satuan: s ? s.nama_satuan : 'unknown' };
+}
+
 // ────────────────────────────────────────────
 // GET /api/products
-// Publik — semua bisa lihat katalog
-// Query: ?search=semen  ?kategori=Listrik
 // ────────────────────────────────────────────
 router.get('/', (req, res) => {
   let products = db.read('products');
+  const satuanList = db.read('satuan');
 
-  const { search, kategori } = req.query;
+  const { search, kategori, stok, page, limit, sortBy, sortDir } = req.query;
 
   if (search) {
     products = products.filter(p =>
@@ -26,6 +31,11 @@ router.get('/', (req, res) => {
   if (kategori) {
     products = products.filter(p => p.kategori === kategori);
   }
+  if (stok === 'ada') {
+    products = products.filter(p => p.stok > 0);
+  } else if (stok === 'habis') {
+    products = products.filter(p => p.stok <= 0);
+  }
 
   const result = products.map(p => {
     let statusStok = 'Tersedia';
@@ -34,27 +44,54 @@ router.get('/', (req, res) => {
     } else if (p.stok <= (p.stokMinimum || 0)) {
       statusStok = 'Stok Menipis';
     }
-    return { ...p, statusStok };
+    return populateSatuan({ ...p, statusStok }, satuanList);
   });
+
+  if (sortBy) {
+    result.sort((a, b) => {
+      let valA = a[sortBy] || '';
+      let valB = b[sortBy] || '';
+      if (typeof valA === 'string') valA = valA.toLowerCase();
+      if (typeof valB === 'string') valB = valB.toLowerCase();
+      
+      if (valA < valB) return sortDir === 'desc' ? 1 : -1;
+      if (valA > valB) return sortDir === 'desc' ? -1 : 1;
+      return 0;
+    });
+  }
+
+  if (page) {
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 12;
+    const total = result.length;
+    const totalPages = Math.ceil(total / limitNum);
+    const startIndex = (pageNum - 1) * limitNum;
+    const endIndex = pageNum * limitNum;
+    const paginatedData = result.slice(startIndex, endIndex);
+
+    return res.json({
+      data: paginatedData,
+      total,
+      page: pageNum,
+      totalPages
+    });
+  }
 
   res.json(result);
 });
 
-// Helper to check valid units
-const validSatuan = ['sak', 'meter', 'biji', 'kubik', 'roll', 'kg', 'batang', 'liter', 'unit'];
-
-function getBolehDesimal(satuan) {
-  return ['meter', 'kubik', 'kg', 'liter'].includes(satuan.toLowerCase());
+function getBolehDesimal(nama_satuan) {
+  if (!nama_satuan) return false;
+  return ['meter', 'kubik', 'kg', 'liter'].includes(nama_satuan.toLowerCase());
 }
 
 // ────────────────────────────────────────────
 // GET /api/products/expiring  (staff)
-// Peringatan H-30 kadaluarsa
 // ────────────────────────────────────────────
 router.get('/expiring', authenticate, (req, res) => {
   const products = db.read('products');
+  const satuanList = db.read('satuan');
   const now = new Date();
-  // Set to end of day today to ignore time differences
   now.setHours(0,0,0,0);
   
   const thirtyDaysLater = new Date(now);
@@ -64,12 +101,12 @@ router.get('/expiring', authenticate, (req, res) => {
     if (!p.masa_simpan) return false;
     const expiryDate = new Date(p.masa_simpan);
     return expiryDate > now && expiryDate <= thirtyDaysLater;
-  });
+  }).map(p => populateSatuan(p, satuanList));
   
   const expired = products.filter(p => {
     if (!p.masa_simpan) return false;
     return new Date(p.masa_simpan) <= now;
-  });
+  }).map(p => populateSatuan(p, satuanList));
 
   res.json({
     expiring,
@@ -84,6 +121,7 @@ router.get('/expiring', authenticate, (req, res) => {
 // ────────────────────────────────────────────
 router.get('/:id', (req, res) => {
   const products = db.read('products');
+  const satuanList = db.read('satuan');
   const product  = products.find(p => p.id === req.params.id);
   if (!product) return res.status(404).json({ message: 'Produk tidak ditemukan' });
   let statusStok = 'Tersedia';
@@ -93,30 +131,32 @@ router.get('/:id', (req, res) => {
     statusStok = 'Stok Menipis';
   }
   
-  res.json({ ...product, statusStok });
+  res.json(populateSatuan({ ...product, statusStok }, satuanList));
 });
 
 // ────────────────────────────────────────────
 // POST /api/products  (admin only)
 // ────────────────────────────────────────────
 router.post('/', authenticate, adminOnly, (req, res) => {
-  const { nama, kategori, harga, hargaPokok, stok, satuan, stokMinimum, masa_simpan, aktif } = req.body;
+  const { nama, kategori, harga, hargaPokok, stok, id_satuan, stokMinimum, masa_simpan, aktif } = req.body;
 
-  if (!nama || harga === undefined || stok === undefined || !satuan) {
-    return res.status(400).json({ message: 'nama, harga, stok, satuan wajib diisi' });
+  if (!nama || harga === undefined || stok === undefined || !id_satuan) {
+    return res.status(400).json({ message: 'nama, harga, stok, id_satuan wajib diisi' });
   }
 
   if (Number(harga) < 0 || Number(stok) < 0 || Number(hargaPokok || 0) < 0 || Number(stokMinimum || 0) < 0) {
     return res.status(400).json({ message: 'Nilai harga, stok, harga pokok, dan stok minimum tidak boleh negatif' });
   }
 
-  if (!validSatuan.includes(satuan.toLowerCase())) {
-    return res.status(400).json({ message: `Satuan tidak valid. Pilihan: ${validSatuan.join(', ')}` });
+  const satuanList = db.read('satuan');
+  const satuan = satuanList.find(s => s.id_satuan === parseInt(id_satuan));
+  if (!satuan) {
+    return res.status(400).json({ message: `Satuan dengan ID ${id_satuan} tidak valid.` });
   }
 
-  const isDesimal = getBolehDesimal(satuan);
+  const isDesimal = getBolehDesimal(satuan.nama_satuan);
   if (!isDesimal && (Number(stok) % 1 !== 0)) {
-    return res.status(400).json({ message: `Stok untuk satuan ${satuan} tidak boleh desimal` });
+    return res.status(400).json({ message: `Stok untuk satuan ${satuan.nama_satuan} tidak boleh desimal` });
   }
 
   const products = db.read('products');
@@ -128,7 +168,7 @@ router.post('/', authenticate, adminOnly, (req, res) => {
     hargaPokok:   Number(hargaPokok) || 0,
     stok:         Number(stok),
     stokMinimum:  Number(stokMinimum) || 0,
-    satuan:       satuan.toLowerCase(),
+    id_satuan:    parseInt(id_satuan),
     bolehDesimal: isDesimal,
     masa_simpan:  masa_simpan || null,
     aktif:        aktif !== false, // default true
@@ -139,20 +179,20 @@ router.post('/', authenticate, adminOnly, (req, res) => {
   products.push(newProduct);
   db.write('products', products);
 
-  res.status(201).json({ message: 'Produk berhasil ditambahkan', product: newProduct });
+  res.status(201).json({ message: 'Produk berhasil ditambahkan', product: populateSatuan(newProduct, satuanList) });
 });
 
 // ────────────────────────────────────────────
 // PUT /api/products/:id  (admin only)
-// Update data produk (bisa partial)
 // ────────────────────────────────────────────
 router.put('/:id', authenticate, adminOnly, (req, res) => {
   const products = db.read('products');
+  const satuanList = db.read('satuan');
   const idx      = products.findIndex(p => p.id === req.params.id);
 
   if (idx === -1) return res.status(404).json({ message: 'Produk tidak ditemukan' });
 
-  const { nama, kategori, harga, hargaPokok, stok, satuan, stokMinimum, masa_simpan, aktif } = req.body;
+  const { nama, kategori, harga, hargaPokok, stok, id_satuan, stokMinimum, masa_simpan, aktif } = req.body;
   const oldProduct = products[idx];
 
   // Validation if provided
@@ -169,15 +209,25 @@ router.put('/:id', authenticate, adminOnly, (req, res) => {
     return res.status(400).json({ message: 'Stok minimum tidak boleh negatif' });
   }
 
-  const newSatuan = satuan ? satuan.toLowerCase() : oldProduct.satuan;
-  if (satuan && !validSatuan.includes(newSatuan)) {
-    return res.status(400).json({ message: `Satuan tidak valid. Pilihan: ${validSatuan.join(', ')}` });
+  let finalSatuanId = oldProduct.id_satuan;
+  let finalSatuanName = '';
+  
+  if (id_satuan !== undefined) {
+    const satuan = satuanList.find(s => s.id_satuan === parseInt(id_satuan));
+    if (!satuan) {
+      return res.status(400).json({ message: `Satuan dengan ID ${id_satuan} tidak valid.` });
+    }
+    finalSatuanId = parseInt(id_satuan);
+    finalSatuanName = satuan.nama_satuan;
+  } else {
+    const satuan = satuanList.find(s => s.id_satuan === finalSatuanId);
+    finalSatuanName = satuan ? satuan.nama_satuan : '';
   }
 
-  const isDesimal = getBolehDesimal(newSatuan);
+  const isDesimal = getBolehDesimal(finalSatuanName);
   const newStok = stok !== undefined ? Number(stok) : oldProduct.stok;
   if (!isDesimal && (newStok % 1 !== 0)) {
-    return res.status(400).json({ message: `Stok untuk satuan ${newSatuan} tidak boleh desimal` });
+    return res.status(400).json({ message: `Stok untuk satuan ${finalSatuanName} tidak boleh desimal` });
   }
 
   // Gabung data lama dengan data baru
@@ -188,7 +238,7 @@ router.put('/:id', authenticate, adminOnly, (req, res) => {
     ...(harga !== undefined && { harga: Number(harga) }),
     ...(hargaPokok !== undefined && { hargaPokok: Number(hargaPokok) }),
     ...(stok !== undefined && { stok: newStok }),
-    ...(satuan !== undefined && { satuan: newSatuan }),
+    ...(id_satuan !== undefined && { id_satuan: finalSatuanId }),
     ...(stokMinimum !== undefined && { stokMinimum: Number(stokMinimum) }),
     bolehDesimal: isDesimal,
     ...(masa_simpan !== undefined && { masa_simpan }),
@@ -198,7 +248,7 @@ router.put('/:id', authenticate, adminOnly, (req, res) => {
   
   db.write('products', products);
 
-  res.json({ message: 'Produk berhasil diupdate', product: products[idx] });
+  res.json({ message: 'Produk berhasil diupdate', product: populateSatuan(products[idx], satuanList) });
 });
 
 // ────────────────────────────────────────────

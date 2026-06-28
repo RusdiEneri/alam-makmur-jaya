@@ -4,14 +4,14 @@
     "nama": "Semen Tiga Roda 40kg",
     "kategori": "Bahan Bangunan",
     "harga": 72000,
-    "stok": 78,
-    "satuan": "sak",
+    "stok": 76,
     "stokMinimum": 10,
     "createdAt": "2025-01-01T00:00:00.000Z",
     "hargaPokok": 57600,
     "aktif": true,
     "bolehDesimal": false,
-    "masa_simpan": null
+    "masa_simpan": null,
+    "id_satuan": 1
   },
   {
     "id": "prod-002",
@@ -19,13 +19,13 @@
     "kategori": "Pipa & Selang",
     "harga": 38000,
     "stok": 42,
-    "satuan": "batang",
     "stokMinimum": 8,
     "createdAt": "2025-01-01T00:00:00.000Z",
     "hargaPokok": 30400,
     "aktif": true,
     "bolehDesimal": false,
-    "masa_simpan": null
+    "masa_simpan": null,
+    "id_satuan": 2
   },
   {
     "id": "prod-003",
@@ -33,13 +33,13 @@
     "kategori": "Paku & Baut",
     "harga": 18000,
     "stok": 3,
-    "satuan": "kg",
     "stokMinimum": 5,
     "createdAt": "2025-01-01T00:00:00.000Z",
     "hargaPokok": 14400,
     "aktif": true,
     "bolehDesimal": true,
-    "masa_simpan": null
+    "masa_simpan": null,
+    "id_satuan": 3
   },
   {
     "id": "prod-004",
@@ -47,13 +47,13 @@
     "kategori": "Listrik",
     "harga": 6500,
     "stok": 200,
-    "satuan": "meter",
     "stokMinimum": 30,
     "createdAt": "2025-01-01T00:00:00.000Z",
     "hargaPokok": 5200,
     "aktif": true,
     "bolehDesimal": true,
-    "masa_simpan": null
+    "masa_simpan": null,
+    "id_satuan": 4
   },
   {
     "id": "prod-005",
@@ -61,13 +61,13 @@
     "kategori": "Kayu",
     "harga": 28000,
     "stok": 60,
-    "satuan": "batang",
     "stokMinimum": 10,
     "createdAt": "2025-01-01T00:00:00.000Z",
     "hargaPokok": 22400,
     "aktif": true,
     "bolehDesimal": false,
-    "masa_simpan": null
+    "masa_simpan": null,
+    "id_satuan": 2
   },
   {
     "id": "prod-006",
@@ -75,13 +75,13 @@
     "kategori": "Material",
     "harga": 280000,
     "stok": 15,
-    "satuan": "kubik",
     "stokMinimum": 3,
     "createdAt": "2025-01-01T00:00:00.000Z",
     "hargaPokok": 224000,
     "aktif": true,
     "bolehDesimal": true,
-    "masa_simpan": null
+    "masa_simpan": null,
+    "id_satuan": 5
   },
   {
     "id": "prod-007",
@@ -89,13 +89,13 @@
     "kategori": "Sanitasi",
     "harga": 45000,
     "stok": 20,
-    "satuan": "biji",
     "stokMinimum": 5,
     "createdAt": "2025-01-01T00:00:00.000Z",
     "hargaPokok": 36000,
     "aktif": true,
     "bolehDesimal": false,
-    "masa_simpan": null
+    "masa_simpan": null,
+    "id_satuan": 6
   },
   {
     "id": "prod-008",
@@ -103,13 +103,13 @@
     "kategori": "Listrik",
     "harga": 32000,
     "stok": 35,
-    "satuan": "biji",
     "stokMinimum": 10,
     "createdAt": "2025-01-01T00:00:00.000Z",
     "hargaPokok": 25600,
     "aktif": true,
     "bolehDesimal": false,
-    "masa_simpan": null
+    "masa_simpan": null,
+    "id_satuan": 6
   },
   {
     "id": "prod-0ada13b6",
@@ -117,12 +117,12 @@
     "kategori": "Bahan Bangunan",
     "harga": 68000,
     "stok": 100,
-    "satuan": "sak",
     "stokMinimum": 5,
     "createdAt": "2026-05-21T03:55:35.416Z",
     "hargaPokok": 54400,
     "aktif": true,
     "bolehDesimal": false,
-    "masa_simpan": null
+    "masa_simpan": null,
+    "id_satuan": 1
   }
 ]

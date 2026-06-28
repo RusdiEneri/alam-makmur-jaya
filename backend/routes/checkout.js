@@ -149,8 +149,8 @@ router.post('/', (req, res) => {
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ message: 'Items transaksi tidak boleh kosong' });
   }
-  if (!['cod', 'transfer', 'piutang'].includes(metodeBayar)) {
-    return res.status(400).json({ message: 'Metode bayar tidak valid. Gunakan cod, transfer, atau piutang' });
+  if (!['cod', 'transfer', 'piutang', 'tunai'].includes(metodeBayar)) {
+    return res.status(400).json({ message: 'Metode bayar tidak valid. Gunakan cod, transfer, piutang, atau tunai' });
   }
 
   // Gabungkan qty untuk item yang sama
@@ -186,10 +186,14 @@ router.post('/', (req, res) => {
       });
     }
 
+    const satuanList = db.read('satuan');
+    const satuanName = (satuanList.find(s => s.id_satuan === product.id_satuan) || {}).nama_satuan || 'unknown';
+
     itemDetails.push({
+      id_detail:  'det-' + uuidv4().slice(0, 8),
       productId:  product.id,
       namaProduk: product.nama,
-      satuan:     product.satuan,
+      satuan:     satuanName,
       hargaSatuan: product.harga,
       hargaPokokSatuan: product.hargaPokok || 0,
       qty:        qty,
@@ -207,17 +211,20 @@ router.post('/', (req, res) => {
   
   const noOrder = generateNomorPesanan();
 
+  const isTunai = metodeBayar === 'tunai';
+  
   const newTrx = {
     id:                'trx-' + uuidv4().slice(0, 8),
+    id_pembayaran:     'pay-' + uuidv4().slice(0, 8),
     noOrder,
     namaPelanggan:     nama,
-    alamat:            alamat,
+    alamat:            alamat || (isTunai ? 'Walk-in' : ''),
     noWhatsapp:        normalizedWa,
     items:             itemDetails,
     total,
     metodeBayar,
-    statusPembayaran:  'pending',
-    statusPesanan:     'diproses',
+    statusPembayaran:  (isTunai || metodeBayar === 'cod') ? 'lunas' : 'pending',
+    statusPesanan:     isTunai ? 'selesai' : 'diproses',
     stokDireservasi:   true,
     buktiTransfer:     null,
     catatanPembayaran: null,
@@ -228,8 +235,8 @@ router.post('/', (req, res) => {
     createdAt:         new Date().toISOString(),
     updatedAt:         new Date().toISOString(),
     statusHistory: [
-      { tipe: 'pesanan', status: 'diproses', timestamp: new Date().toISOString(), oleh: 'sistem' },
-      { tipe: 'pembayaran', status: 'pending', timestamp: new Date().toISOString(), oleh: 'sistem' }
+      { tipe: 'pesanan', status: isTunai ? 'selesai' : 'diproses', timestamp: new Date().toISOString(), oleh: 'sistem' },
+      { tipe: 'pembayaran', status: isTunai ? 'lunas' : 'pending', timestamp: new Date().toISOString(), oleh: 'sistem' }
     ]
   };
 

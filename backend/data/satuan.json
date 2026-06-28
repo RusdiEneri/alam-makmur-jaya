@@ -1,0 +1,26 @@
+[
+  {
+    "id_satuan": 1,
+    "nama_satuan": "sak"
+  },
+  {
+    "id_satuan": 2,
+    "nama_satuan": "batang"
+  },
+  {
+    "id_satuan": 3,
+    "nama_satuan": "kg"
+  },
+  {
+    "id_satuan": 4,
+    "nama_satuan": "meter"
+  },
+  {
+    "id_satuan": 5,
+    "nama_satuan": "kubik"
+  },
+  {
+    "id_satuan": 6,
+    "nama_satuan": "biji"
+  }
+]

@@ -42,6 +42,7 @@ app.use(express.json());
 // ── Routes ────────────────────────────────────────────────────
 app.use('/api/auth',         require('./routes/auth'));
 app.use('/api/users',        require('./routes/users'));
+app.use('/api/satuan',       require('./routes/satuan'));
 app.use('/api/products',     require('./routes/products'));
 app.use('/api/checkout',     require('./routes/checkout'));
 app.use('/api/transactions', require('./routes/transactions'));
@@ -54,8 +55,11 @@ app.use('/api/expiry',       require('./routes/expiry'));
 app.use('/api/reports/target', require('./routes/targets'));
 
 // ── Static serving ────────────────────────────────────────────
-// Bukti transfer tidak lagi diserve secara publik
-// app.use('/uploads', express.static('uploads'));
+// Serve frontend files langsung dari Express (eliminasi CORS)
+const path = require('path');
+app.use(express.static(path.join(__dirname, '..')));
+// Serve uploads untuk bukti transfer (jika ada)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ── Health check ──────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
@@ -117,8 +121,8 @@ app.use((err, req, res, next) => {
 
 // ── Start server ──────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => {
-  console.log(`Server berjalan di http://localhost:${PORT}`);
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server berjalan di http://localhost:${PORT} (bind 0.0.0.0)`);
 });
 
 // ── Graceful Shutdown ─────────────────────────────────────────

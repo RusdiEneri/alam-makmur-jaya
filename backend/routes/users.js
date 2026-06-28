@@ -12,7 +12,7 @@ router.get('/', authenticate, adminOnly, (req, res) => {
   const safeUsers = users.map(u => ({
     id: u.id,
     nama: u.nama,
-    email: u.email,
+    username: u.username,
     role: u.role,
     aktif: u.aktif !== false,
     createdAt: u.createdAt
@@ -22,23 +22,23 @@ router.get('/', authenticate, adminOnly, (req, res) => {
 
 // POST /api/users (admin) — tambah kasir baru
 router.post('/', authenticate, adminOnly, async (req, res) => {
-  const { nama, email, password, role } = req.body;
+  const { nama, username, password, role } = req.body;
 
-  if (!nama || !email || !password) {
-    return res.status(400).json({ message: 'Nama, email, dan password wajib diisi' });
+  if (!nama || !username || !password) {
+    return res.status(400).json({ message: 'Nama, username, dan password wajib diisi' });
   }
 
   const users = db.read('users');
-  const sudahAda = users.find(u => u.email === email);
+  const sudahAda = users.find(u => u.username === username);
   if (sudahAda) {
-    return res.status(409).json({ message: 'Email sudah terdaftar' });
+    return res.status(409).json({ message: 'Username sudah terdaftar' });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = {
     id: 'user-' + uuidv4().slice(0, 8),
     nama,
-    email: email.trim().toLowerCase(),
+    username: username.trim().toLowerCase(),
     password: hashedPassword,
     role: (role === 'admin' || role === 'kasir') ? role : 'kasir',
     aktif: true,
@@ -50,17 +50,17 @@ router.post('/', authenticate, adminOnly, async (req, res) => {
 
   res.status(201).json({
     message: 'Staff berhasil ditambahkan',
-    user: { id: newUser.id, nama: newUser.nama, email: newUser.email, role: newUser.role }
+    user: { id: newUser.id, nama: newUser.nama, username: newUser.username, role: newUser.role }
   });
 });
 
-// FIX BUG-07: PUT /api/users/:id (admin) — update data user (nama/email/password)
+// FIX BUG-07: PUT /api/users/:id (admin) — update data user (nama/username/password)
 router.put('/:id', authenticate, adminOnly, async (req, res) => {
   const users = db.read('users');
   const idx = users.findIndex(u => u.id === req.params.id);
   if (idx === -1) return res.status(404).json({ message: 'User tidak ditemukan' });
 
-  const { nama, email, password, role } = req.body;
+  const { nama, username, password, role } = req.body;
 
   if (role && (role === 'admin' || role === 'kasir')) {
     if (users[idx].role === 'admin' && role !== 'admin') {
@@ -72,14 +72,14 @@ router.put('/:id', authenticate, adminOnly, async (req, res) => {
     users[idx].role = role;
   }
 
-  // Cek email unik jika diubah
-  if (email) {
-    const normalizedEmail = email.trim().toLowerCase();
-    const duplicate = users.find(u => u.email.trim().toLowerCase() === normalizedEmail && u.id !== req.params.id);
+  // Cek username unik jika diubah
+  if (username) {
+    const normalizedUsername = username.trim().toLowerCase();
+    const duplicate = users.find(u => u.username.trim().toLowerCase() === normalizedUsername && u.id !== req.params.id);
     if (duplicate) {
-      return res.status(409).json({ message: 'Email sudah digunakan oleh user lain' });
+      return res.status(409).json({ message: 'Username sudah digunakan oleh user lain' });
     }
-    users[idx].email = normalizedEmail;
+    users[idx].username = normalizedUsername;
   }
 
   if (nama) users[idx].nama = nama;
@@ -91,7 +91,7 @@ router.put('/:id', authenticate, adminOnly, async (req, res) => {
 
   res.json({
     message: 'User berhasil diupdate',
-    user: { id: users[idx].id, nama: users[idx].nama, email: users[idx].email, role: users[idx].role }
+    user: { id: users[idx].id, nama: users[idx].nama, username: users[idx].username, role: users[idx].role }
   });
 });
 

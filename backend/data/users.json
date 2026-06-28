@@ -2,19 +2,19 @@
   {
     "id": "user-001",
     "nama": "Admin Toko",
-    "email": "admin@amj.com",
-    "password": "$2a$10$3XSWdw7DUX8Qn2TCS9MpPOMeBgOb2qUQ3t9e0PjItR3q1ct4tLijC",
+    "password": "$2a$10$FkD0e7ru.yIiYSn14hgRpurnBYnCpkDGZkWnJteQSLi.0s.7V9Aq6",
     "role": "admin",
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "aktif": true
+    "aktif": true,
+    "username": "admin@amj.com"
   },
   {
     "id": "user-002",
     "nama": "Kasir Satu",
-    "email": "kasir@amj.com",
-    "password": "$2a$10$3XSWdw7DUX8Qn2TCS9MpPOMeBgOb2qUQ3t9e0PjItR3q1ct4tLijC",
+    "password": "$2a$10$FkD0e7ru.yIiYSn14hgRpurnBYnCpkDGZkWnJteQSLi.0s.7V9Aq6",
     "role": "kasir",
     "createdAt": "2025-01-01T00:00:00.000Z",
-    "aktif": true
+    "aktif": true,
+    "username": "kasir@amj.com"
   }
 ]

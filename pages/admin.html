@@ -393,10 +393,11 @@ function toggleSidebar() {
   }
 }
 
-// Security: Hide tabs for kasir
+// Security: Hide tabs for kasir (FR-01 / NFR-01)
 if (user.role === 'kasir') {
   document.querySelectorAll('.sidebar-nav a').forEach(a => {
-    if (a.textContent.includes('Laporan') || a.textContent.includes('Staff')) {
+    const text = a.textContent.toLowerCase();
+    if (text.includes('laporan') || text.includes('staff') || text.includes('target') || text.includes('masa simpan') || text.includes('piutang')) {
       a.style.display = 'none';
     }
   });
@@ -910,19 +911,31 @@ async function renderDashboardAlerts() {
       if (!el) return;
       try {
         const users = await API.getUsers();
-        el.innerHTML = `<table><thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
+        el.innerHTML = `<table><thead><tr><th>Nama</th><th>Username (Email)</th><th>Role</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
           ${users.map(u => `<tr>
-            <td>${u.nama}</td>
-            <td>${u.email}</td>
-            <td><span style="background:#F0EDE8;padding:3px 8px;border-radius:99px;font-size:12px">${u.role}</span></td>
+            <td>${escapeHtml(u.nama)}</td>
+            <td>${escapeHtml(u.username)}</td>
+            <td><span style="background:#F0EDE8;padding:3px 8px;border-radius:99px;font-size:12px;text-transform:capitalize">${escapeHtml(u.role)}</span></td>
             <td>${u.aktif ? '<span class="status-badge status-selesai">Aktif</span>' : '<span class="status-badge status-batal">Nonaktif</span>'}</td>
             <td>
-              <button class="btn-sm danger" onclick="delStaff('${u.id}')">Hapus</button>
+              <button class="btn-sm secondary" onclick="toggleStaffStatus('${u.id}', ${!u.aktif})">${u.aktif ? 'Nonaktifkan' : 'Aktifkan'}</button>
+              <button class="btn-sm danger" onclick="delStaff('${u.id}')" style="margin-left:4px">Hapus</button>
             </td>
           </tr>`).join('')}
         </tbody></table>`;
       } catch (err) {
-        el.innerHTML = `<p style="padding:1rem;color:#DC2626;font-size:14px">Gagal memuat staff.</p>`;
+        el.innerHTML = `<p style="padding:1rem;color:#DC2626;font-size:14px">Gagal memuat staff: ${err.message}</p>`;
+      }
+    }
+    
+    async function toggleStaffStatus(id, aktif) {
+      if(!confirm(`Yakin ingin ${aktif ? 'mengaktifkan' : 'menonaktifkan'} staff ini?`)) return;
+      try {
+        await API.toggleUserStatus(id, aktif);
+        showToast(`✓ Status staff diperbarui`);
+        renderStaffTable();
+      } catch(err) {
+        showToast('✗ ' + err.message);
       }
     }
     
@@ -942,7 +955,7 @@ async function renderDashboardAlerts() {
       if (!nama || !email || !password || !role) return showToast('✗ Lengkapi semua form');
       
       try {
-        await API.createUser({ nama, email, password, role });
+        await API.createUser({ nama, username: email, password, role });
         showToast('✓ Staff ditambahkan');
         closeModal();
         renderStaffTable();

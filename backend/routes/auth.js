@@ -19,38 +19,38 @@ const loginLimiter = rateLimit({
 
 // ────────────────────────────────────────────
 // POST /api/auth/login
-// Body: { email, password }
+// Body: { username, password }
 // ────────────────────────────────────────────
 router.post('/login', loginLimiter, async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email dan password wajib diisi' });
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username dan password wajib diisi' });
   }
 
   const users = db.read('users');
-  const normalizedEmail = email.trim().toLowerCase();
-  const user  = users.find(u => u.email.trim().toLowerCase() === normalizedEmail);
+  const normalizedUsername = username.trim().toLowerCase();
+  const user  = users.find(u => u.username.trim().toLowerCase() === normalizedUsername);
 
   if (!user) {
-    return res.status(401).json({ message: 'Email atau password salah' });
+    return res.status(401).json({ message: 'Username atau password salah' });
   }
 
   if (user.aktif === false) {
-    return res.status(401).json({ message: 'Email atau password salah' }); // Generic message for disabled user
+    return res.status(401).json({ message: 'Username atau password salah' }); // Generic message for disabled user
   }
 
   if (user.role !== 'admin' && user.role !== 'kasir') {
-    return res.status(401).json({ message: 'Email atau password salah' }); // Prevent buyers
+    return res.status(401).json({ message: 'Username atau password salah' }); // Prevent buyers
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return res.status(401).json({ message: 'Email atau password salah' });
+    return res.status(401).json({ message: 'Username atau password salah' });
   }
 
   const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role, nama: user.nama },
+    { id: user.id, username: user.username, role: user.role, nama: user.nama },
     SECRET,
     { expiresIn: '8h' } // token berlaku 8 jam
   );
@@ -58,7 +58,7 @@ router.post('/login', loginLimiter, async (req, res) => {
   res.json({
     message: 'Login berhasil',
     token,
-    user: { id: user.id, nama: user.nama, email: user.email, role: user.role }
+    user: { id: user.id, nama: user.nama, username: user.username, role: user.role }
   });
 });
 
@@ -73,7 +73,7 @@ router.get('/me', authenticate, (req, res) => {
   const user  = users.find(u => u.id === req.user.id);
   if (!user) return res.status(404).json({ message: 'User tidak ditemukan' });
 
-  res.json({ id: user.id, nama: user.nama, email: user.email, role: user.role });
+  res.json({ id: user.id, nama: user.nama, username: user.username, role: user.role });
 });
 
 module.exports = router;

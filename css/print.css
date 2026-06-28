@@ -1,0 +1,183 @@
+/* ─── PRINT STYLESHEET ─────────────────────────────────────────────────── */
+/* css/print.css — UD. Alam Makmur Jaya Admin Reports print view            */
+
+@media print {
+  /* Reset everything not needed */
+  .sidebar,
+  .top-header,
+  .tab-bar,
+  .period-controls,
+  .export-bar,
+  .chart-section,
+  .no-print {
+    display: none !important;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body {
+    background: white !important;
+    color: #000 !important;
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 11pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  .app-layout {
+    display: block !important;
+    width: 100%;
+  }
+
+  .content-wrapper {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .main-content {
+    padding: 0 !important;
+  }
+
+  /* Print Header */
+  .print-header {
+    display: block !important;
+    text-align: center;
+    border-bottom: 2px solid black;
+    padding-bottom: 12pt;
+    margin-bottom: 16pt;
+  }
+
+  .print-header h1 {
+    font-size: 18pt;
+    font-weight: bold;
+    margin: 0 0 4pt;
+  }
+
+  .print-header p {
+    font-size: 10pt;
+    margin: 2pt 0;
+  }
+
+  .print-period-label {
+    display: block !important;
+    font-size: 13pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 16pt;
+    border: 1px solid #ccc;
+    padding: 6pt;
+    background: #f5f5f5;
+  }
+
+  /* Summary Section */
+  .report-content {
+    display: block !important;
+    opacity: 1 !important;
+  }
+
+  .summary-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8pt !important;
+    margin-bottom: 20pt;
+    page-break-inside: avoid;
+  }
+
+  .summary-card {
+    border: 1px solid #ccc !important;
+    padding: 8pt !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .summary-card .sc-icon {
+    display: none !important;
+  }
+
+  .summary-card .sc-label {
+    font-size: 8pt !important;
+    color: #555 !important;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+  }
+
+  .summary-card .sc-val {
+    font-size: 14pt !important;
+    font-weight: bold;
+    color: black !important;
+    font-family: 'Times New Roman', serif;
+  }
+
+  /* Print Table */
+  .print-data-table {
+    display: table !important;
+    width: 100% !important;
+    border-collapse: collapse;
+    margin-top: 12pt;
+    font-size: 9pt;
+    page-break-inside: auto;
+  }
+
+  .print-data-table th {
+    background: #e0e0e0 !important;
+    border: 1px solid #999;
+    padding: 5pt 6pt;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .print-data-table td {
+    border: 1px solid #ccc;
+    padding: 4pt 6pt;
+    vertical-align: top;
+  }
+
+  .print-data-table tr:nth-child(even) td {
+    background: #f9f9f9 !important;
+  }
+
+  .print-data-table tr { page-break-inside: avoid; }
+
+  /* Section headings */
+  .print-section-title {
+    display: block !important;
+    font-size: 13pt;
+    font-weight: bold;
+    border-bottom: 1px solid black;
+    margin: 20pt 0 10pt;
+    padding-bottom: 4pt;
+  }
+
+  /* Page breaks */
+  .print-page-break {
+    page-break-after: always;
+  }
+
+  /* Chart fallback table */
+  .chart-print-table {
+    display: table !important;
+  }
+
+  /* Footer */
+  .print-footer {
+    display: block !important;
+    margin-top: 20pt;
+    text-align: center;
+    font-size: 9pt;
+    color: #555;
+    border-top: 1px solid #ccc;
+    padding-top: 8pt;
+  }
+
+  /* A4 layout */
+  @page {
+    size: A4 portrait;
+    margin: 15mm 20mm;
+  }
+}

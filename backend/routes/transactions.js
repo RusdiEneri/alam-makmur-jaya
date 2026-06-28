@@ -8,7 +8,7 @@ const router = express.Router();
 // ── GET /api/transactions ─────────────────────────────────────
 router.get('/', authenticate, (req, res) => {
   let transactions = db.read('transactions');
-  const { tanggal, userId } = req.query;
+  const { tanggal, userId, q, dateStart, dateEnd, method, payStat, ordStat, page, limit } = req.query;
 
   if (tanggal) {
     transactions = transactions.filter(t => t.tanggal && t.tanggal.startsWith(tanggal));
@@ -16,8 +16,56 @@ router.get('/', authenticate, (req, res) => {
   if (userId) {
     transactions = transactions.filter(t => t.userId === userId);
   }
+  if (q) {
+    const qLower = q.toLowerCase();
+    transactions = transactions.filter(t => 
+      (t.noOrder && t.noOrder.toLowerCase().includes(qLower)) || 
+      (t.namaPelanggan && t.namaPelanggan.toLowerCase().includes(qLower))
+    );
+  }
+  if (dateStart || dateEnd) {
+    transactions = transactions.filter(t => {
+      const d = t.createdAt ? new Date(t.createdAt).toISOString().split('T')[0] : '';
+      if (!d) return false;
+      if (dateStart && d < dateStart) return false;
+      if (dateEnd && d > dateEnd) return false;
+      return true;
+    });
+  }
+  if (method) {
+    transactions = transactions.filter(t => t.metodeBayar === method);
+  }
+  if (payStat) {
+    transactions = transactions.filter(t => {
+      const ps = t.statusPembayaran;
+      if (payStat === 'berhasil' && !['berhasil', 'lunas'].includes(ps)) return false;
+      if (payStat !== 'berhasil' && ps !== payStat) return false;
+      return true;
+    });
+  }
+  if (ordStat) {
+    transactions = transactions.filter(t => t.statusPesanan === ordStat);
+  }
 
   transactions.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  if (page) {
+    const pageNum = parseInt(page) || 1;
+    const limitNum = parseInt(limit) || 20;
+    const total = transactions.length;
+    const totalPages = Math.ceil(total / limitNum);
+    const startIndex = (pageNum - 1) * limitNum;
+    const endIndex = pageNum * limitNum;
+    const paginatedData = transactions.slice(startIndex, endIndex);
+
+    return res.json({
+      data: paginatedData,
+      total,
+      page: pageNum,
+      totalPages
+    });
+  }
+
   res.json(transactions);
 });
 
