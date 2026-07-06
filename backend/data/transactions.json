@@ -330,5 +330,174 @@
       }
     ],
     "id_pembayaran": "pay-cgieqfl5"
+  },
+  {
+    "id": "trx-611cda7d",
+    "id_pembayaran": "pay-c57aa912",
+    "noOrder": "AMJ-20260629-001",
+    "namaPelanggan": "alok",
+    "alamat": "Tuban",
+    "noWhatsapp": "62811111111",
+    "items": [
+      {
+        "id_detail": "det-6834d5b1",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "Semoga Lancar",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-06-28T17:05:53.471Z",
+    "createdAt": "2026-06-28T17:05:53.471Z",
+    "updatedAt": "2026-06-28T17:05:53.471Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-06-28T17:05:53.471Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-06-28T17:05:53.471Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-e9b1ed8d",
+    "id_pembayaran": "pay-907e0aca",
+    "noOrder": "AMJ-20260702-001",
+    "namaPelanggan": "Test Cancel",
+    "alamat": "Jl Test Cancel",
+    "noWhatsapp": "6281234567890",
+    "items": [
+      {
+        "id_detail": "det-31e7556d",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "dibatalkan",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-01T17:55:31.967Z",
+    "createdAt": "2026-07-01T17:55:31.967Z",
+    "updatedAt": "2026-07-01T17:55:31.977Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-01T17:55:31.968Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-01T17:55:31.968Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dibatalkan",
+        "timestamp": "2026-07-01T17:55:31.977Z",
+        "oleh": "Admin Toko"
+      }
+    ],
+    "stokDikembalikan": true,
+    "catatanPembatalan": "Uji cancel"
+  },
+  {
+    "id": "trx-fdf79184",
+    "id_pembayaran": "pay-23db3020",
+    "noOrder": "AMJ-20260703-001",
+    "namaPelanggan": "alok",
+    "alamat": "test",
+    "noWhatsapp": "6281111111111",
+    "items": [
+      {
+        "id_detail": "det-573f477a",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      },
+      {
+        "id_detail": "det-95df90c9",
+        "productId": "prod-002",
+        "namaProduk": "Pipa PVC AW 1/2 inch",
+        "satuan": "batang",
+        "hargaSatuan": 38000,
+        "hargaPokokSatuan": 30400,
+        "qty": 1,
+        "subtotal": 38000
+      },
+      {
+        "id_detail": "det-2e1d4207",
+        "productId": "prod-003",
+        "namaProduk": "Paku Biasa 5cm",
+        "satuan": "kg",
+        "hargaSatuan": 18000,
+        "hargaPokokSatuan": 14400,
+        "qty": 1,
+        "subtotal": 18000
+      }
+    ],
+    "total": 128000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "gresik",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-03T00:08:03.152Z",
+    "createdAt": "2026-07-03T00:08:03.152Z",
+    "updatedAt": "2026-07-03T00:08:03.152Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-03T00:08:03.152Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-03T00:08:03.152Z",
+        "oleh": "sistem"
+      }
+    ]
   }
 ]

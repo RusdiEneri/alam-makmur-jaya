@@ -394,9 +394,9 @@ async function renderMasaSimpan() {
     let products = [];
 
     allProducts.forEach(p => {
-      // Backend: field tanggalKadaluarsa
-      if (!p.tanggalKadaluarsa) return;
-      const exp = new Date(p.tanggalKadaluarsa);
+      // Backend: field masa_simpan
+      if (!p.masa_simpan) return;
+      const exp = new Date(p.masa_simpan);
       const daysLeft = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
       if (filterValue !== 'all' && daysLeft > Number(filterValue)) return;
       products.push({ ...p, daysLeft });
@@ -426,7 +426,7 @@ async function renderMasaSimpan() {
       html += `<tr>
         <td>${escapeHtml(p.emoji || '📦')} <strong>${escapeHtml(p.nama)}</strong></td>
         <td>${p.stok} ${escapeHtml(p.satuan || 'pcs')}</td>
-        <td>${new Date(p.tanggalKadaluarsa).toLocaleDateString('id-ID')}</td>
+        <td>${new Date(p.masa_simpan).toLocaleDateString('id-ID')}</td>
         <td>${p.daysLeft >= 0 ? p.daysLeft : 0} hari</td>
         <td>${statusHtml}</td>
       </tr>`;

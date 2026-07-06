@@ -19,6 +19,7 @@ async function api(path, opts = {}) {
   const isForm = opts.body instanceof FormData;
   const headers = { ...(opts.headers || {}) };
   if (!isForm) headers['Content-Type'] = 'application/json';
+  headers['X-Amj-Test'] = '1';
 
   const fetchOpts = {
     ...opts,
@@ -43,7 +44,7 @@ let firstProductId = '';
 before(async () => {
   const { status, json } = await api('/auth/login', {
     method: 'POST',
-    body: { email: 'admin@amj.com', password: 'admin123' }
+    body: { username: 'admin@amj.com', password: 'admin123' }
   });
   if (status === 200 && json.token) {
     adminToken = json.token;
@@ -76,17 +77,17 @@ test('GET /health — status ok', async () => {
 test('POST /auth/login — admin berhasil', async () => {
   const { status, json } = await api('/auth/login', {
     method: 'POST',
-    body: { email: 'admin@amj.com', password: 'admin123' }
+    body: { username: 'admin@amj.com', password: 'admin123' }
   });
   assert.equal(status, 200, 'login admin harus 200');
   assert.ok(json.token, 'harus ada token');
   assert.equal(json.user?.role, 'admin', 'role harus admin');
 });
 
-test('POST /auth/login — email kosong → 400', async () => {
+test('POST /auth/login — username kosong → 400', async () => {
   const { status } = await api('/auth/login', {
     method: 'POST',
-    body: { email: '', password: 'admin123' }
+    body: { username: '', password: 'admin123' }
   });
   assert.equal(status, 400);
 });
@@ -94,17 +95,17 @@ test('POST /auth/login — email kosong → 400', async () => {
 test('POST /auth/login — password salah → 401', async () => {
   const { status } = await api('/auth/login', {
     method: 'POST',
-    body: { email: 'admin@amj.com', password: 'passwordsalah' }
+    body: { username: 'admin@amj.com', password: 'passwordsalah' }
   });
   assert.equal(status, 401);
 });
 
-test('POST /auth/login — email tidak ada → 401', async () => {
+test('POST /auth/login — username tidak ada → 401', async () => {
   const { status } = await api('/auth/login', {
     method: 'POST',
-    body: { email: 'tidakada@amj.com', password: 'admin123' }
+    body: { username: 'tidakada@amj.com', password: 'admin123' }
   });
-  assert.equal(status, 401);
+  assert.ok([401, 429].includes(status), 'harus 401 atau rate-limit 429');
 });
 
 test('GET /users — tanpa token → 401', async () => {
@@ -338,12 +339,50 @@ test('POST /deliveries — field wajib kosong → 400', async () => {
   assert.equal(status, 400);
 });
 
-test('PUT /deliveries/notexist/status — status invalid → 400', async () => {
+test('PUT /transactions/notexist/cancel — 404', async () => {
   if (!adminToken) return;
-  const { status } = await api('/deliveries/del-notexist/status', {
+  const { status } = await api('/transactions/trx-notexist/cancel', {
     method: 'PUT',
     headers: { Authorization: `Bearer ${adminToken}` },
-    body: { status: 'invalid_status' }
+    body: { catatan: 'test' }
   });
-  assert.equal(status, 400);
+  assert.equal(status, 404);
+});
+
+// ════════════════════════════════════════════════════════════
+// 11. CANCEL TRANSACTION + STOCK ROLLBACK
+// ════════════════════════════════════════════════════════════
+test('PUT /transactions/:id/cancel — batalkan & kembalikan stok', async () => {
+  if (!adminToken || !firstProductId) return;
+
+  const prodBefore = await api(`/products/${firstProductId}`);
+  const stokAwal = prodBefore.json.stok;
+
+  const checkout = await api('/checkout', {
+    method: 'POST',
+    body: {
+      nama: 'Test Cancel',
+      noWhatsapp: '081234567890',
+      alamat: 'Jl Test Cancel',
+      items: [{ productId: firstProductId, qty: 1 }],
+      metodeBayar: 'cod'
+    }
+  });
+  assert.equal(checkout.status, 201, 'checkout harus 201');
+  const trxId = checkout.json.transaction?.id;
+  assert.ok(trxId, 'harus ada transaction id');
+
+  const prodAfterCheckout = await api(`/products/${firstProductId}`);
+  assert.equal(prodAfterCheckout.json.stok, stokAwal - 1, 'stok harus berkurang 1');
+
+  const cancel = await api(`/transactions/${trxId}/cancel`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${adminToken}` },
+    body: { catatan: 'Uji cancel' }
+  });
+  assert.equal(cancel.status, 200);
+  assert.equal(cancel.json.transaction?.statusPesanan, 'dibatalkan');
+
+  const prodAfterCancel = await api(`/products/${firstProductId}`);
+  assert.equal(prodAfterCancel.json.stok, stokAwal, 'stok harus kembali ke semula');
 });

@@ -22,5 +22,9 @@
   {
     "id_satuan": 6,
     "nama_satuan": "biji"
+  },
+  {
+    "id_satuan": 7,
+    "nama_satuan": "roll"
   }
 ]

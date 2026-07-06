@@ -52,7 +52,7 @@ Sistem Informasi Penjualan berbasis Web untuk mengelola transaksi, produk, staf,
    ```bash
    npm run dev
    ```
-6. Buka `index.html` (berada di root folder) menggunakan Live Server atau cukup double-click untuk melihat tampilan front-end. Pastikan API Base URL di `js/config.example.js` (atau `js/api.js`) menunjuk ke `http://localhost:3000/api`.
+6. Buka `pages/public/index.html` menggunakan Live Server atau cukup double-click untuk melihat tampilan front-end. Pastikan API Base URL di `js/config.example.js` (atau `js/api.js`) menunjuk ke `http://localhost:3000/api`.
 
 ## Menjalankan Pengujian
 

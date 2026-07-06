@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laporan Retur — UD. Alam Makmur Jaya</title>
+  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../css/admin-shared.css"/>
+  <style>
+    .app-layout { display: flex; min-height: 100vh; }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    .content-wrapper { margin-left: var(--sidebar-w); flex: 1; min-width: 0; }
+    .top-header { background: white; height: 64px; border-bottom: 1px solid var(--aborder); display: flex; align-items: center; padding: 0 24px; position: sticky; top: 0; z-index: 80; }
+    .header-title { font-size: 17px; font-weight: 700; }
+    .main-content { padding: 24px; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-box { background: white; border: 1px solid var(--aborder); border-radius: 12px; padding: 16px 20px; }
+    .stat-label { font-size: 12px; font-weight: 600; color: var(--atext-m); margin-bottom: 6px; }
+    .stat-val { font-size: 24px; font-weight: 800; }
+    .filter-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: flex-end; }
+    .section-card { background: white; border: 1px solid var(--aborder); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .section-card h2 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; padding: 10px 12px; font-size: 11px; text-transform: uppercase; color: var(--atext-m); border-bottom: 1px solid var(--aborder); background: #F9FAFB; }
+    td { padding: 12px; border-bottom: 1px solid #F3F4F6; vertical-align: middle; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; }
+    .badge-diajukan { background: #FEF3C7; color: #92400E; }
+    .badge-diterima, .badge-selesai { background: #D1FAE5; color: #065F46; }
+    .badge-ditolak { background: #FEE2E2; color: #991B1B; }
+    @media (max-width: 900px) {
+      
+      .content-wrapper { margin-left: 0; }
+      .stats-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="loaded">
+<div class="app-layout">
+  <!-- ═══════════════════════════════════════════
+       SIDEBAR
+       ═══════════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Menu admin">
+
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon">🏗</div>
+      <div class="sidebar-brand-text">
+        <span class="sidebar-brand-name">Alam Makmur Jaya</span>
+        <span class="sidebar-brand-sub">Panel Admin</span>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Menu Utama</div>
+
+      <a class="sidebar-link" id="nav-dashboard" href="../admin/dashboard.html">
+        <span class="sidebar-link-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+      <a class="sidebar-link" href="../admin/products.html">
+        <span class="sidebar-link-icon">📦</span>
+        <span>Produk &amp; Stok</span>
+      </a>
+      <a class="sidebar-link" href="../admin/transactions.html">
+        <span class="sidebar-link-icon">🧾</span>
+        <span>Transaksi</span>
+      </a>
+      <a class="sidebar-link" href="../admin/transactions.html">
+        <span class="sidebar-link-icon">💳</span>
+        <span>Pembayaran</span>
+        <span class="sidebar-link-badge" id="sidebar-pay-badge"></span>
+      </a>
+
+      <div class="sidebar-section-label">Operasional</div>
+
+      <a class="sidebar-link" href="../kasir/deliveries.html">
+        <span class="sidebar-link-icon">🚚</span>
+        <span>Pengiriman</span>
+      </a>
+      <a class="sidebar-link" href="../kasir/receivables.html">
+        <span class="sidebar-link-icon">📋</span>
+        <span>Piutang</span>
+      </a>
+      <a class="sidebar-link" href="../kasir/gudang.html">
+        <span class="sidebar-link-icon">🏭</span>
+        <span>Monitor Gudang</span>
+      </a>
+
+      <div class="sidebar-section-label">Analitik</div>
+
+      <a class="sidebar-link" href="../admin/reports.html">
+        <span class="sidebar-link-icon">📈</span>
+        <span>Laporan</span>
+      </a>
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-user-avatar" id="sidebar-avatar">A</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebar-username">Loading...</div>
+          <div class="sidebar-user-role" id="sidebar-role">—</div>
+        </div>
+      </div>
+      <a class="sidebar-link" style="margin-top:8px" href="#" onclick="handleLogout(); return false;">
+        <span class="sidebar-link-icon">🚪</span>
+        <span>Keluar</span>
+      </a>
+    </div>
+
+  </aside>
+
+  <div class="content-wrapper">
+    <header class="top-header">
+      <div class="header-title">Laporan Retur Barang</div>
+    </header>
+
+    <main class="main-content">
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-label">Produk pernah diretur</div>
+          <div class="stat-val" id="stat-produk">–</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Total qty retur (diterima/selesai)</div>
+          <div class="stat-val" id="stat-qty">–</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Estimasi kerugian (harga jual)</div>
+          <div class="stat-val" id="stat-loss">–</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h2>Filter Periode</h2>
+        <div class="filter-row">
+          <div>
+            <label class="stat-label">Dari</label>
+            <input type="date" class="form-input" id="filter-from" style="padding:8px 12px;border:1px solid var(--aborder);border-radius:8px"/>
+          </div>
+          <div>
+            <label class="stat-label">Sampai</label>
+            <input type="date" class="form-input" id="filter-to" style="padding:8px 12px;border:1px solid var(--aborder);border-radius:8px"/>
+          </div>
+          <button type="button" onclick="loadData()" style="padding:10px 18px;background:var(--ao);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer">Terapkan</button>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h2>Ringkasan per Produk</h2>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Produk</th>
+                <th>Jumlah Kejadian</th>
+                <th>Total Qty Retur</th>
+              </tr>
+            </thead>
+            <tbody id="summary-body">
+              <tr><td colspan="3" style="text-align:center;color:var(--atext-m);padding:24px">Memuat…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <h2>Daftar Retur</h2>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Produk</th>
+                <th>Qty</th>
+                <th>Alasan</th>
+                <th>Status</th>
+                <th>Oleh</th>
+              </tr>
+            </thead>
+            <tbody id="list-body">
+              <tr><td colspan="6" style="text-align:center;color:var(--atext-m);padding:24px">Memuat…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/admin-shared.js"></script>
+<script>
+AdminShared.initAdminPage({ requiredRole: 'admin' });
+function handleLogout() { API.logout(); }
+
+const priceMap = {};
+
+async function loadData() {
+  try {
+    const [summary, allReturns, products] = await Promise.all([
+      API.getReturnsSummary(),
+      API.getReturns(),
+      API.getProducts()
+    ]);
+
+    (Array.isArray(products) ? products : products.data || []).forEach(p => {
+      priceMap[p.id] = p.harga || 0;
+    });
+
+    const from = document.getElementById('filter-from').value;
+    const to = document.getElementById('filter-to').value;
+
+    let list = Array.isArray(allReturns) ? allReturns : [];
+    list = list.filter(r => {
+      const d = (r.createdAt || '').slice(0, 10);
+      if (from && d < from) return false;
+      if (to && d > to) return false;
+      return true;
+    });
+
+    const accepted = list.filter(r => r.status === 'diterima' || r.status === 'selesai');
+    let totalQty = 0;
+    let totalLoss = 0;
+    accepted.forEach(r => {
+      totalQty += r.qty || 0;
+      totalLoss += (r.qty || 0) * (priceMap[r.productId] || 0);
+    });
+
+    document.getElementById('stat-produk').textContent = summary.jumlahProdukRetur ?? (summary.data || []).length;
+    document.getElementById('stat-qty').textContent = totalQty.toLocaleString('id-ID');
+    document.getElementById('stat-loss').textContent = fmtRp(totalLoss);
+
+    const summaryRows = summary.data || [];
+    const tbodySum = document.getElementById('summary-body');
+    if (!summaryRows.length) {
+      tbodySum.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:24px;color:var(--atext-m)">Belum ada retur diterima/selesai.</td></tr>';
+    } else {
+      tbodySum.innerHTML = summaryRows.map(r => `
+        <tr>
+          <td><strong>${esc(r.namaProduk)}</strong></td>
+          <td>${r.kejadian}</td>
+          <td>${r.totalRetur}</td>
+        </tr>
+      `).join('');
+    }
+
+    const tbodyList = document.getElementById('list-body');
+    if (!list.length) {
+      tbodyList.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--atext-m)">Tidak ada data retur pada periode ini.</td></tr>';
+    } else {
+      tbodyList.innerHTML = list.map(r => `
+        <tr>
+          <td>${fmtDate(r.createdAt)}</td>
+          <td>${esc(r.namaProduk)}</td>
+          <td>${r.qty}</td>
+          <td>${esc(r.alasan || '–')}</td>
+          <td><span class="badge badge-${r.status}">${r.status}</span></td>
+          <td>${esc(r.dicatatOleh || '–')}</td>
+        </tr>
+      `).join('');
+    }
+  } catch (err) {
+    alert('Gagal memuat laporan retur: ' + err.message);
+  }
+}
+
+function fmtRp(n) { return 'Rp ' + Number(n || 0).toLocaleString('id-ID'); }
+function fmtDate(iso) {
+  if (!iso) return '–';
+  return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+  document.getElementById('filter-from').value = start.toISOString().slice(0, 10);
+  document.getElementById('filter-to').value = now.toISOString().slice(0, 10);
+  loadData();
+});
+</script>
+</body>
+</html>

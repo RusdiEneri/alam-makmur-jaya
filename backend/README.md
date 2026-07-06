@@ -51,14 +51,14 @@ Server akan berjalan di: **http://localhost:3000**
 
 ## Akun Demo
 
-| Role    | Email            | Password  |
-|---------|------------------|-----------|
-| Admin   | admin@amj.com    | password  |
-| Kasir   | kasir@amj.com    | password  |
-| Pembeli | budi@email.com   | password  |
+| Role    | Email          | Password |
+| ------- | -------------- | -------- |
+| Admin   | admin@amj.com  | admin123 |
+| Kasir   | kasir@amj.com  | admin123 |
+| Pembeli | budi@email.com | password |
 
 > Password di atas sudah di-hash dengan bcrypt.
-> Hash "password" = `$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi`
+> Akun admin/kasir memakai password demo `admin123`.
 
 ---
 
@@ -75,17 +75,17 @@ Server akan berjalan di: **http://localhost:3000**
 
 ```javascript
 // Sebelum (localStorage)
-const users = JSON.parse(localStorage.getItem('users'));
-const user = users.find(u => u.email === email && u.password === password);
+const users = JSON.parse(localStorage.getItem("users"));
+const user = users.find((u) => u.email === email && u.password === password);
 
 // Sesudah (API)
 try {
   const result = await API.login(email, password);
   // token & user otomatis disimpan ke sessionStorage
-  if (result.user.role === 'admin') {
-    window.location.href = 'admin.html';
+  if (result.user.role === "admin") {
+    window.location.href = "admin.html";
   } else {
-    window.location.href = '../index.html';
+    window.location.href = "../index.html";
   }
 } catch (err) {
   alert(err.message); // "Email atau password salah"
@@ -96,7 +96,7 @@ try {
 
 ```javascript
 // Sebelum (localStorage)
-const products = JSON.parse(localStorage.getItem('products')) || [];
+const products = JSON.parse(localStorage.getItem("products")) || [];
 renderProducts(products);
 
 // Sesudah (API)
@@ -108,16 +108,16 @@ renderProducts(products);
 
 ```javascript
 // Sebelum (localStorage)
-const cart = JSON.parse(sessionStorage.getItem('cart'));
+const cart = JSON.parse(sessionStorage.getItem("cart"));
 // ... simpan ke localStorage manually
 
 // Sesudah (API)
-const cart = JSON.parse(sessionStorage.getItem('cart'));
-const items = cart.map(c => ({ productId: c.id, qty: c.qty }));
+const cart = JSON.parse(sessionStorage.getItem("cart"));
+const items = cart.map((c) => ({ productId: c.id, qty: c.qty }));
 try {
   await API.checkout(items, metodeBayar);
-  sessionStorage.removeItem('cart');
-  alert('Transaksi berhasil!');
+  sessionStorage.removeItem("cart");
+  alert("Transaksi berhasil!");
 } catch (err) {
   alert(err.message);
 }
@@ -128,56 +128,63 @@ try {
 ## Semua Endpoint API
 
 ### Auth
-| Method | URL                   | Akses    | Keterangan          |
-|--------|-----------------------|----------|---------------------|
-| POST   | /api/auth/login       | Publik   | Login               |
-| POST   | /api/auth/register    | Publik   | Daftar (pembeli)    |
-| GET    | /api/auth/me          | Login    | Data user aktif     |
+
+| Method | URL                | Akses  | Keterangan       |
+| ------ | ------------------ | ------ | ---------------- |
+| POST   | /api/auth/login    | Publik | Login            |
+| POST   | /api/auth/register | Publik | Daftar (pembeli) |
+| GET    | /api/auth/me       | Login  | Data user aktif  |
 
 ### Produk
-| Method | URL                   | Akses    | Keterangan          |
-|--------|-----------------------|----------|---------------------|
-| GET    | /api/products         | Publik   | Katalog + filter    |
-| GET    | /api/products/:id     | Publik   | Detail produk       |
-| POST   | /api/products         | Admin    | Tambah produk       |
-| PUT    | /api/products/:id     | Admin    | Edit produk         |
-| DELETE | /api/products/:id     | Admin    | Hapus produk        |
+
+| Method | URL               | Akses  | Keterangan       |
+| ------ | ----------------- | ------ | ---------------- |
+| GET    | /api/products     | Publik | Katalog + filter |
+| GET    | /api/products/:id | Publik | Detail produk    |
+| POST   | /api/products     | Admin  | Tambah produk    |
+| PUT    | /api/products/:id | Admin  | Edit produk      |
+| DELETE | /api/products/:id | Admin  | Hapus produk     |
 
 ### Transaksi
-| Method | URL                           | Akses    | Keterangan          |
-|--------|-------------------------------|----------|---------------------|
-| GET    | /api/transactions             | Login    | Riwayat transaksi   |
-| GET    | /api/transactions/:id         | Login    | Detail transaksi    |
-| POST   | /api/transactions             | Login    | Buat transaksi baru |
-| PUT    | /api/transactions/:id/status  | Staff    | Update status       |
+
+| Method | URL                          | Akses | Keterangan          |
+| ------ | ---------------------------- | ----- | ------------------- |
+| GET    | /api/transactions            | Login | Riwayat transaksi   |
+| GET    | /api/transactions/:id        | Login | Detail transaksi    |
+| POST   | /api/transactions            | Login | Buat transaksi baru |
+| PUT    | /api/transactions/:id/status | Staff | Update status       |
 
 ### Laporan (Admin)
-| Method | URL                     | Keterangan             |
-|--------|-------------------------|------------------------|
-| GET    | /api/reports/daily      | ?tanggal=2025-06-15    |
-| GET    | /api/reports/monthly    | ?bulan=6&tahun=2025    |
-| GET    | /api/reports/annual     | ?tahun=2025            |
+
+| Method | URL                        | Keterangan          |
+| ------ | -------------------------- | ------------------- |
+| GET    | /api/reports/daily         | ?tanggal=2025-06-15 |
+| GET    | /api/reports/monthly       | ?bulan=6&tahun=2025 |
+| GET    | /api/reports/annual        | ?tahun=2025         |
 | GET    | /api/reports/best-products | ?limit=5            |
 
 ### Stok
-| Method | URL                              | Akses | Keterangan       |
-|--------|----------------------------------|-------|------------------|
-| GET    | /api/stock/alerts                | Staff | Stok kritis      |
-| PUT    | /api/stock/:productId/restock    | Staff | Tambah stok      |
+
+| Method | URL                           | Akses | Keterangan  |
+| ------ | ----------------------------- | ----- | ----------- |
+| GET    | /api/stock/alerts             | Staff | Stok kritis |
+| PUT    | /api/stock/:productId/restock | Staff | Tambah stok |
 
 ### Pengiriman
-| Method | URL                            | Akses | Keterangan          |
-|--------|--------------------------------|-------|---------------------|
-| GET    | /api/deliveries                | Login | Daftar pengiriman   |
-| POST   | /api/deliveries                | Staff | Buat jadwal kirim   |
-| PUT    | /api/deliveries/:id/status     | Staff | Update status kirim |
+
+| Method | URL                        | Akses | Keterangan          |
+| ------ | -------------------------- | ----- | ------------------- |
+| GET    | /api/deliveries            | Login | Daftar pengiriman   |
+| POST   | /api/deliveries            | Staff | Buat jadwal kirim   |
+| PUT    | /api/deliveries/:id/status | Staff | Update status kirim |
 
 ### Piutang
-| Method | URL                          | Akses | Keterangan         |
-|--------|------------------------------|-------|--------------------|
-| GET    | /api/receivables             | Staff | Daftar piutang     |
-| POST   | /api/receivables             | Staff | Catat piutang baru |
-| PUT    | /api/receivables/:id/bayar   | Staff | Catat pembayaran   |
+
+| Method | URL                        | Akses | Keterangan         |
+| ------ | -------------------------- | ----- | ------------------ |
+| GET    | /api/receivables           | Staff | Daftar piutang     |
+| POST   | /api/receivables           | Staff | Catat piutang baru |
+| PUT    | /api/receivables/:id/bayar | Staff | Catat pembayaran   |
 
 ---
 

@@ -2,7 +2,7 @@
   {
     "id": "user-001",
     "nama": "Admin Toko",
-    "password": "$2a$10$FkD0e7ru.yIiYSn14hgRpurnBYnCpkDGZkWnJteQSLi.0s.7V9Aq6",
+    "password": "$2a$10$Hj1VRyCnRUgd7WQAEwZP..j8TwlOcsnrw68cadfo8K2XGQvYf3wmO",
     "role": "admin",
     "createdAt": "2025-01-01T00:00:00.000Z",
     "aktif": true,
@@ -11,7 +11,7 @@
   {
     "id": "user-002",
     "nama": "Kasir Satu",
-    "password": "$2a$10$FkD0e7ru.yIiYSn14hgRpurnBYnCpkDGZkWnJteQSLi.0s.7V9Aq6",
+    "password": "$2a$10$Hj1VRyCnRUgd7WQAEwZP..j8TwlOcsnrw68cadfo8K2XGQvYf3wmO",
     "role": "kasir",
     "createdAt": "2025-01-01T00:00:00.000Z",
     "aktif": true,

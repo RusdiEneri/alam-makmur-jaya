@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 
+// Role guard API: adminOnly / staffOnly — sinkronkan daftar halaman dengan
+// backend/config/page-access.js dan js/admin-shared.js (ADMIN_PAGE_ROLES).
+
 // FIX Security: Baca secret dari environment variable.
 // Untuk production: buat file .env dengan JWT_SECRET=<string-acak-panjang>
 // Untuk development: fallback ke string hardcode (tapi ganti sebelum deploy!)

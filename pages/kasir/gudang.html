@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitor Gudang — UD. Alam Makmur Jaya</title>
+  <meta name="description" content="Pantau stok gudang secara real-time — UD. Alam Makmur Jaya">
+  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../../css/design-system.css"/>
+  <link rel="stylesheet" href="../../css/admin-shared.css"/>
+  <link rel="stylesheet" href="../../css/animations.css"/>
+  <style>
+    /* ── KPI STRIP ─────────────────────────────────────── */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--aborder);
+      padding: 20px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 14px 14px 0 0;
+    }
+    .kpi-card.orange::before { background: var(--ao); }
+    .kpi-card.green::before  { background: var(--ag); }
+    .kpi-card.amber::before  { background: #F59E0B; }
+    .kpi-card.red::before    { background: #EF4444; }
+
+    .kpi-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .kpi-label { font-size: 11px; font-weight: 700; color: var(--atext-m); text-transform: uppercase; letter-spacing: 0.08em; }
+    .kpi-icon {
+      width: 38px; height: 38px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .kpi-card.orange .kpi-icon { background: var(--ao-lt); }
+    .kpi-card.green  .kpi-icon { background: var(--ag-lt); }
+    .kpi-card.amber  .kpi-icon { background: #FEF3C7; }
+    .kpi-card.red    .kpi-icon { background: #FEE2E2; }
+    .kpi-value { font-size: 28px; font-weight: 800; color: var(--atext); line-height: 1; }
+
+    /* ── TOOLBAR ────────────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .toolbar-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .search-wrap {
+      position: relative;
+    }
+    .search-wrap input {
+      width: 280px;
+      padding: 10px 14px 10px 38px;
+      border: 1.5px solid var(--aborder);
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 13px;
+      background: white;
+      color: var(--atext);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-wrap input:focus {
+      outline: none;
+      border-color: var(--ao);
+      box-shadow: 0 0 0 3px rgba(232,93,38,0.12);
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      color: var(--atext-m);
+    }
+    .filter-select {
+      padding: 10px 34px 10px 12px;
+      border: 1.5px solid var(--aborder);
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 13px;
+      background: white;
+      color: var(--atext);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+      transition: border-color 0.2s;
+    }
+    .filter-select:focus { outline: none; border-color: var(--ao); }
+
+    /* ── TABLE CARD ─────────────────────────────────────── */
+    .table-card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--aborder);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+    .table-card table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .table-card thead th {
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--atext-m);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      background: #F9FAFB;
+      border-bottom: 1px solid var(--aborder);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .table-card thead th:hover { background: #F0F2F5; }
+    .table-card tbody td {
+      padding: 14px 18px;
+      border-bottom: 1px solid #F3F4F6;
+      vertical-align: middle;
+    }
+    .table-card tbody tr:last-child td { border-bottom: none; }
+    .table-card tbody tr { transition: background 0.15s; }
+    .table-card tbody tr:hover td { background: #FAFBFF; }
+
+    .prod-cell { display: flex; align-items: center; gap: 12px; }
+    .prod-emoji { font-size: 26px; flex-shrink: 0; }
+    .prod-name { font-weight: 700; font-size: 13px; color: var(--atext); }
+    .prod-id   { font-size: 11px; color: var(--atext-m); font-family: monospace; margin-top: 1px; }
+
+    .stok-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-weight: 800;
+      font-size: 13px;
+      min-width: 80px;
+      justify-content: center;
+    }
+    .stok-aman    { background: #ECFDF5; color: #065F46; }
+    .stok-menipis { background: #FEF3C7; color: #92400E; animation: slowPulse 2.5s ease-in-out infinite; }
+    .stok-habis   { background: #FEE2E2; color: #991B1B; animation: slowPulse 1.5s ease-in-out infinite; }
+
+    .cat-chip {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--ao-lt);
+      color: var(--ao-dk);
+    }
+
+    .progress-bar-wrap {
+      width: 80px;
+      height: 5px;
+      background: #E5E7EB;
+      border-radius: 99px;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    .progress-bar {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.8s ease;
+    }
+    .progress-bar.aman    { background: #10B981; }
+    .progress-bar.menipis { background: #F59E0B; }
+    .progress-bar.habis   { background: #EF4444; }
+
+    .timestamp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--atext-m);
+      background: #F3F4F6;
+      padding: 4px 10px;
+      border-radius: 99px;
+    }
+
+    @keyframes slowPulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.55; }
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--atext-m);
+    }
+    .empty-state-emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+    .empty-state-title { font-size: 16px; font-weight: 700; color: var(--atext); margin-bottom: 6px; }
+
+    @media (max-width: 900px) {
+      .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+      .search-wrap input { width: 200px; }
+    }
+    @media (max-width: 600px) {
+      .kpi-strip { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body class="loaded">
+
+  <!-- LOADING -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Memuat Data Gudang...</div>
+  </div>
+
+  <div class="admin-wrap">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Menu admin">
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">🏗</div>
+        <div class="sidebar-brand-text">
+          <span class="sidebar-brand-name">Alam Makmur Jaya</span>
+          <span class="sidebar-brand-sub">Panel Admin</span>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Menu Utama</div>
+
+        <a class="sidebar-link" href="../admin/dashboard.html">
+          <span class="sidebar-link-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="sidebar-link" href="../admin/products.html">
+          <span class="sidebar-link-icon">📦</span>
+          <span>Produk &amp; Stok</span>
+        </a>
+        <a class="sidebar-link" href="../admin/transactions.html">
+          <span class="sidebar-link-icon">🧾</span>
+          <span>Transaksi</span>
+        </a>
+        <a class="sidebar-link" href="../admin/transactions.html">
+          <span class="sidebar-link-icon">💳</span>
+          <span>Pembayaran</span>
+        </a>
+
+        <div class="sidebar-section-label">Operasional</div>
+
+        <a class="sidebar-link" href="../kasir/deliveries.html">
+          <span class="sidebar-link-icon">🚚</span>
+          <span>Pengiriman</span>
+        </a>
+        <a class="sidebar-link" href="../kasir/receivables.html">
+          <span class="sidebar-link-icon">📋</span>
+          <span>Piutang</span>
+        </a>
+        <a class="sidebar-link active" href="../kasir/gudang.html">
+          <span class="sidebar-link-icon">🏭</span>
+          <span>Monitor Gudang</span>
+        </a>
+
+        <div class="sidebar-section-label">Analitik</div>
+
+        <a class="sidebar-link" href="../admin/reports.html">
+          <span class="sidebar-link-icon">📈</span>
+          <span>Laporan</span>
+        </a>
+      </nav>
+
+      <!-- Footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-user-avatar" id="sidebar-avatar">A</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="sidebar-username">Loading...</div>
+            <div class="sidebar-user-role" id="sidebar-role">—</div>
+          </div>
+        </div>
+        <a class="sidebar-link" style="margin-top:8px" href="#" onclick="handleLogout(); return false;">
+          <span class="sidebar-link-icon">🚪</span>
+          <span>Keluar</span>
+        </a>
+      </div>
+    </aside>
+
+
+    <!-- OVERLAY (mobile) -->
+    <div class="admin-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <!-- BODY -->
+    <div class="admin-body">
+      <!-- TOPBAR -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="hamburger-btn" id="ham-btn" onclick="toggleSidebar()">☰</button>
+          <div>
+            <div class="topbar-title">📦 Monitor Gudang</div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="timestamp-badge" id="last-update-badge">
+            🕐 Belum dimuat
+          </div>
+          <button class="btn-orange" id="btn-refresh" onclick="fetchGudangData()" style="height:38px;padding:0 16px;font-size:12px;">
+            🔄 Segarkan
+          </button>
+        </div>
+      </header>
+
+      <!-- MAIN -->
+      <main class="admin-main">
+        <!-- PAGE INTRO -->
+        <div class="page-intro">
+          <div>
+            <h1>Stok Gudang</h1>
+            <div class="page-intro-sub">Data real-time · Auto-refresh setiap 30 detik</div>
+          </div>
+        </div>
+
+        <!-- KPI STRIP -->
+        <div class="kpi-strip">
+          <div class="kpi-card orange">
+            <div class="kpi-top">
+              <div class="kpi-label">Total Produk</div>
+              <div class="kpi-icon">📦</div>
+            </div>
+            <div class="kpi-value" id="kpi-total">—</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-top">
+              <div class="kpi-label">Stok Aman</div>
+              <div class="kpi-icon">✅</div>
+            </div>
+            <div class="kpi-value" id="kpi-aman">—</div>
+          </div>
+          <div class="kpi-card amber">
+            <div class="kpi-top">
+              <div class="kpi-label">Stok Menipis</div>
+              <div class="kpi-icon">⚠️</div>
+            </div>
+            <div class="kpi-value" id="kpi-menipis">—</div>
+          </div>
+          <div class="kpi-card red">
+            <div class="kpi-top">
+              <div class="kpi-label">Stok Habis</div>
+              <div class="kpi-icon">🚨</div>
+            </div>
+            <div class="kpi-value" id="kpi-habis">—</div>
+          </div>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="search-wrap">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="search-input" placeholder="Cari nama atau kategori..." oninput="filterGudang()">
+            </div>
+            <select class="filter-select" id="filter-status" onchange="filterGudang()">
+              <option value="">Semua Status</option>
+              <option value="aman">Aman</option>
+              <option value="menipis">Menipis</option>
+              <option value="habis">Habis</option>
+            </select>
+            <select class="filter-select" id="filter-cat" onchange="filterGudang()">
+              <option value="">Semua Kategori</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TABLE CARD -->
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th onclick="sortBy('nama')">Nama Barang ↕</th>
+                <th onclick="sortBy('kategori')">Kategori</th>
+                <th onclick="sortBy('stok')">Stok Aktual ↕</th>
+                <th>Grafik</th>
+                <th onclick="sortBy('status')">Status ↕</th>
+              </tr>
+            </thead>
+            <tbody id="gudang-tbody">
+              <!-- Data dinamis -->
+            </tbody>
+          </table>
+        </div>
+
+      </main>
+    </div><!-- /.admin-body -->
+  </div><!-- /.admin-wrap -->
+
+  <script src="../../js/animations.js"></script>
+  <script src="../../js/api.js"></script>
+  <script src="../../js/admin-shared.js"></script>
+  <script>
+    AdminShared.initAdminPage();
+    function handleLogout() { API.logout(); }
+    // Populate sidebar user info
+    (function() {
+      var u = API.getCurrentUser();
+      if (!u) return;
+      var name = u.namaLengkap || u.username || 'User';
+      var role = u.role || 'staff';
+      var initials = name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
+      document.addEventListener('DOMContentLoaded', function() {
+        var n = document.getElementById('sidebar-username'); if(n) n.textContent = name;
+        var r = document.getElementById('sidebar-role');    if(r) r.textContent = role.charAt(0).toUpperCase()+role.slice(1);
+        var a = document.getElementById('sidebar-avatar');  if(a) a.textContent = initials;
+      });
+    })();
+
+    let allProducts = [];
+    let refreshInterval = null;
+    let sortKey = '';
+    let sortAsc = true;
+
+    // ── INIT ───────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchGudangData();
+      refreshInterval = setInterval(() => {
+        if (!document.getElementById('search-input').value) fetchGudangData();
+      }, 30000);
+    });
+
+    // ── FETCH ──────────────────────────────────────────────────
+    async function fetchGudangData() {
+      const btn = document.getElementById('btn-refresh');
+      btn.textContent = '⏳ Memuat...';
+      btn.disabled = true;
+      try {
+        allProducts = await API.getProducts();
+        populateCategoryFilter();
+        updateKPIs();
+        renderTable(allProducts);
+        document.getElementById('last-update-badge').textContent = '🕐 ' + new Date().toLocaleTimeString('id-ID');
+        document.getElementById('loading-overlay').style.display = 'none';
+      } catch (err) {
+        console.error('Gagal memuat data gudang:', err);
+        document.getElementById('gudang-tbody').innerHTML = `
+          <tr><td colspan="5" class="empty-state">
+            <span class="empty-state-emoji">⚠️</span>
+            <div class="empty-state-title">Gagal Memuat Data</div>
+            <div>${err.message}</div>
+          </td></tr>`;
+        document.getElementById('loading-overlay').style.display = 'none';
+      } finally {
+        btn.textContent = '🔄 Segarkan';
+        btn.disabled = false;
+      }
+    }
+
+    // ── KPI ────────────────────────────────────────────────────
+    function updateKPIs() {
+      const aman    = allProducts.filter(p => p.stok > (p.stokMinimum || 5)).length;
+      const menipis = allProducts.filter(p => p.stok > 0 && p.stok <= (p.stokMinimum || 5)).length;
+      const habis   = allProducts.filter(p => p.stok <= 0).length;
+      document.getElementById('kpi-total').textContent   = allProducts.length;
+      document.getElementById('kpi-aman').textContent    = aman;
+      document.getElementById('kpi-menipis').textContent = menipis;
+      document.getElementById('kpi-habis').textContent   = habis;
+    }
+
+    // ── CATEGORY FILTER ────────────────────────────────────────
+    function populateCategoryFilter() {
+      const cats = [...new Set(allProducts.map(p => p.kategori).filter(Boolean))].sort();
+      const sel  = document.getElementById('filter-cat');
+      const current = sel.value;
+      sel.innerHTML = '<option value="">Semua Kategori</option>';
+      cats.forEach(c => {
+        const o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        sel.appendChild(o);
+      });
+      sel.value = current;
+    }
+
+    // ── SORT ───────────────────────────────────────────────────
+    function sortBy(key) {
+      if (sortKey === key) sortAsc = !sortAsc;
+      else { sortKey = key; sortAsc = true; }
+      filterGudang();
+    }
+
+    // ── FILTER & RENDER ────────────────────────────────────────
+    function filterGudang() {
+      const q      = document.getElementById('search-input').value.toLowerCase();
+      const status = document.getElementById('filter-status').value;
+      const cat    = document.getElementById('filter-cat').value;
+
+      let list = allProducts.filter(p => {
+        const matchQ   = p.nama.toLowerCase().includes(q) || (p.kategori || '').toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
+        const matchCat = !cat || p.kategori === cat;
+        const s        = getStatus(p);
+        const matchSt  = !status || s === status;
+        return matchQ && matchCat && matchSt;
+      });
+
+      if (sortKey) {
+        list.sort((a, b) => {
+          let va, vb;
+          if (sortKey === 'stok') { va = a.stok; vb = b.stok; }
+          else if (sortKey === 'status') { va = statusOrder(a); vb = statusOrder(b); }
+          else { va = (a[sortKey] || '').toLowerCase(); vb = (b[sortKey] || '').toLowerCase(); }
+          if (va < vb) return sortAsc ? -1 : 1;
+          if (va > vb) return sortAsc ? 1 : -1;
+          return 0;
+        });
+      } else {
+        // Default: habis dulu
+        list.sort((a, b) => statusOrder(b) - statusOrder(a));
+      }
+
+      renderTable(list);
+    }
+
+    function statusOrder(p) {
+      const s = getStatus(p);
+      if (s === 'habis') return 3;
+      if (s === 'menipis') return 2;
+      return 1;
+    }
+
+    function getStatus(p) {
+      if (p.stok <= 0) return 'habis';
+      if (p.stok <= (p.stokMinimum || 5)) return 'menipis';
+      return 'aman';
+    }
+
+    // ── RENDER TABLE ───────────────────────────────────────────
+    function renderTable(products) {
+      const tbody = document.getElementById('gudang-tbody');
+      if (!products.length) {
+        tbody.innerHTML = `<tr><td colspan="5">
+          <div class="empty-state">
+            <span class="empty-state-emoji">🔍</span>
+            <div class="empty-state-title">Tidak Ada Produk</div>
+            <div>Coba ubah filter atau kata kunci pencarian.</div>
+          </div>
+        </td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = products.map(p => {
+        const status = getStatus(p);
+        const pct    = p.stokMinimum ? Math.min(100, Math.round(p.stok / Math.max(p.stokMinimum, 1) * 50)) : Math.min(100, p.stok * 5);
+        const badgeClass = `stok-${status}`;
+        const barClass   = status;
+        const statusText = status === 'aman' ? '✅ Aman' : status === 'menipis' ? '⚠️ Menipis' : '🚨 Habis';
+
+        return `
+          <tr>
+            <td>
+              <div class="prod-cell">
+                <span class="prod-emoji">${p.emoji || '📦'}</span>
+                <div>
+                  <div class="prod-name">${p.nama}</div>
+                  <div class="prod-id">#${p.id}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="cat-chip">${p.kategori || '—'}</span>
+            </td>
+            <td>
+              <strong style="font-size:15px;font-weight:800;color:var(--atext)">${p.stok}</strong>
+              <span style="font-size:11px;color:var(--atext-m);margin-left:4px">${p.satuan || 'pcs'}</span>
+              ${p.stokMinimum ? `<div style="font-size:10px;color:var(--atext-m);margin-top:2px">Min: ${p.stokMinimum} ${p.satuan || 'pcs'}</div>` : ''}
+            </td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar ${barClass}" style="width:${pct}%"></div>
+              </div>
+              <span style="font-size:11px;color:var(--atext-m)">${pct}%</span>
+            </td>
+            <td>
+              <span class="stok-badge ${badgeClass}">${statusText}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ── SIDEBAR MOBILE ─────────────────────────────────────────
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('open');
+    }
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('overlay').classList.remove('open');
+    }
+  </script>
+</body>
+</html>

@@ -40,26 +40,46 @@ app.use(cors({
 app.use(express.json());
 
 // ── Routes ────────────────────────────────────────────────────
-app.use('/api/auth',         require('./routes/auth'));
-app.use('/api/users',        require('./routes/users'));
-app.use('/api/satuan',       require('./routes/satuan'));
-app.use('/api/products',     require('./routes/products'));
-app.use('/api/checkout',     require('./routes/checkout'));
-app.use('/api/transactions', require('./routes/transactions'));
-app.use('/api/reports',      require('./routes/reports'));
-app.use('/api/deliveries',   require('./routes/deliveries'));
-app.use('/api/receivables',  require('./routes/receivables'));
-app.use('/api/stock',        require('./routes/stock'));
-app.use('/api/returns',      require('./routes/returns'));
-app.use('/api/expiry',       require('./routes/expiry'));
-app.use('/api/reports/target', require('./routes/targets'));
+// ── Routes Baru Berbasis Role ───────────────────────────────────
+
+// Public Routes (Tidak perlu token)
+app.use('/api/public/auth',     require('./routes/public/auth'));
+app.use('/api/public/checkout', require('./routes/public/checkout'));
+
+// Admin Routes
+app.use('/api/admin/users',    require('./routes/admin/users'));
+app.use('/api/admin/satuan',   require('./routes/admin/satuan'));
+app.use('/api/admin/products', require('./routes/admin/products'));
+app.use('/api/admin/reports',  require('./routes/admin/reports'));
+app.use('/api/admin/targets',  require('./routes/admin/targets'));
+
+// Kasir Routes
+app.use('/api/kasir/transactions', require('./routes/kasir/transactions'));
+app.use('/api/kasir/deliveries',   require('./routes/kasir/deliveries'));
+app.use('/api/kasir/receivables',  require('./routes/kasir/receivables'));
+app.use('/api/kasir/stock',        require('./routes/kasir/stock'));
+app.use('/api/kasir/returns',      require('./routes/kasir/returns'));
 
 // ── Static serving ────────────────────────────────────────────
 // Serve frontend files langsung dari Express (eliminasi CORS)
 const path = require('path');
-app.use(express.static(path.join(__dirname, '..')));
+
+// Cache-Control untuk asset statis (NFR-04) — HTML tidak di-cache agar update langsung terlihat
+app.use(express.static(path.join(__dirname, '..'), {
+  setHeaders(res, filePath) {
+    if (/\.(css|js|ico|png|jpe?g|webp|gif|svg|woff2?)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=86400'); // 1 hari
+    } else if (/\.html?$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  }
+}));
 // Serve uploads untuk bukti transfer (jika ada)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  setHeaders(res) {
+    res.setHeader('Cache-Control', 'private, max-age=3600');
+  }
+}));
 
 // ── Health check ──────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
@@ -98,7 +118,34 @@ app.get('/', (req, res) => {
 
 // ── 404 handler ───────────────────────────────────────────────
 app.use((req, res, next) => {
-  res.status(404).json({ message: 'Endpoint tidak ditemukan' });
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ message: 'Endpoint tidak ditemukan' });
+  }
+  
+  res.status(404).send(`
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>404 - Halaman Tidak Ditemukan</title>
+      <style>
+        body { font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background-color: #F0F2F5; color: #1E293B; text-align: center; padding: 20px; }
+        h1 { font-size: 64px; margin: 0; color: #E85D26; }
+        h2 { font-size: 24px; margin: 10px 0 20px; font-weight: 600; }
+        p { font-size: 15px; color: #64748B; margin-bottom: 30px; max-width: 400px; line-height: 1.5; }
+        a { padding: 12px 24px; background-color: #1A6B3A; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background 0.2s; }
+        a:hover { background-color: #14532D; }
+      </style>
+    </head>
+    <body>
+      <h1>404</h1>
+      <h2>Halaman Tidak Ditemukan</h2>
+      <p>Maaf, halaman yang Anda tuju tidak ada atau telah dipindahkan.</p>
+      <a href="/pages/catalog.html">Kembali ke Katalog</a>
+    </body>
+    </html>
+  `);
 });
 
 // ── Global error handler ──────────────────────────────────────

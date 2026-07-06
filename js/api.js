@@ -32,9 +32,9 @@ async function apiFetch(path, options = {}) {
   if (res.status === 401 || res.status === 403) {
     // Token kedaluwarsa → paksa logout
     sessionStorage.clear();
-    const onLoginPage = window.location.pathname.includes('login.html');
+    const onLoginPage = window.location.pathname.includes('../public/login.html');
     if (!onLoginPage) {
-      window.location.replace(window.location.pathname.includes('/pages/') ? 'login.html' : 'pages/login.html');
+      window.location.replace(window.location.pathname.includes('/pages/') ? '../public/login.html' : 'pages/public/login.html');
     }
     const errData = await res.json().catch(() => ({}));
     throw new Error(errData.message || 'Akses ditolak');
@@ -56,14 +56,14 @@ function getCurrentUser() {
 function logout() {
   sessionStorage.clear();
   const p = window.location.pathname;
-  window.location.replace(p.includes('/pages/') ? 'login.html' : 'pages/login.html');
+  window.location.replace(p.includes('/pages/') ? '../public/login.html' : 'pages/public/login.html');
 }
 
 // ═══════════════════════════════════════════
 // P0: AUTENTIKASI
 // ═══════════════════════════════════════════
 async function login(username, password) {
-  const data = await apiFetch('/auth/login', {
+  const data = await apiFetch('/public/auth/login', {
     method: 'POST',
     body: JSON.stringify({ username, password })
   });
@@ -83,52 +83,52 @@ async function getProducts(search = '', kategori = '', stok = '', page = null, l
   if (page)     params.set('page', page);
   if (limit)    params.set('limit', limit);
   const qs = params.toString() ? '?' + params.toString() : '';
-  return apiFetch(`/products${qs}`);
+  return apiFetch(`/admin/products${qs}`);
 }
 
 async function getProduct(id) {
-  return apiFetch(`/products/${id}`);
+  return apiFetch(`/admin/products/${id}`);
 }
 
 async function createProduct(data) {
-  return apiFetch('/products', { method: 'POST', body: JSON.stringify(data) });
+  return apiFetch('/admin/products', { method: 'POST', body: JSON.stringify(data) });
 }
 
 async function updateProduct(id, data) {
-  return apiFetch(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  return apiFetch(`/admin/products/${id}`, { method: 'PUT', body: JSON.stringify(data) });
 }
 
 async function deleteProduct(id) {
-  return apiFetch(`/products/${id}`, { method: 'DELETE' });
+  return apiFetch(`/admin/products/${id}`, { method: 'DELETE' });
 }
 
 async function getSatuan() {
-  return apiFetch('/satuan');
+  return apiFetch('/admin/satuan');
 }
 
 async function createSatuan(data) {
-  return apiFetch('/satuan', { method: 'POST', body: JSON.stringify(data) });
+  return apiFetch('/admin/satuan', { method: 'POST', body: JSON.stringify(data) });
 }
 
 async function updateSatuan(id, data) {
-  return apiFetch(`/satuan/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  return apiFetch(`/admin/satuan/${id}`, { method: 'PUT', body: JSON.stringify(data) });
 }
 
 async function deleteSatuan(id) {
-  return apiFetch(`/satuan/${id}`, { method: 'DELETE' });
+  return apiFetch(`/admin/satuan/${id}`, { method: 'DELETE' });
 }
 
 async function getStokAlerts() {
-  return apiFetch('/stock/alerts'); // FIX BUG-03: endpoint /stock/low → /stock/alerts
+  return apiFetch('/kasir/stock/alerts'); // FIX BUG-03: endpoint /stock/low → /stock/alerts
 }
 
 async function getExpiringProducts() {
-  return apiFetch('/stock/expiring');
+  return apiFetch('/kasir/stock/expiring');
 }
 
 async function updateStok(id, tambahan) {
   // FIX BUG-EXTRA: backend endpoint is PUT /stock/:productId/restock with { tambahan }
-  return apiFetch(`/stock/${id}/restock`, { method: 'PUT', body: JSON.stringify({ tambahan }) });
+  return apiFetch(`/kasir/stock/${id}/restock`, { method: 'PUT', body: JSON.stringify({ tambahan }) });
 }
 
 // ═══════════════════════════════════════════
@@ -136,19 +136,19 @@ async function updateStok(id, tambahan) {
 // ═══════════════════════════════════════════
 async function checkout(payload) {
   // payload: { nama, alamat, noWhatsapp, items:[{productId, qty}], metodeBayar, catatanPengiriman }
-  return apiFetch('/checkout', { method: 'POST', body: JSON.stringify(payload) });
+  return apiFetch('/public/checkout', { method: 'POST', body: JSON.stringify(payload) });
 }
 
 async function uploadBuktiTransfer(trxId, file, noWhatsapp) {
   const form = new FormData();
   form.append('bukti', file);
   form.append('noWhatsapp', noWhatsapp);
-  return apiFetch(`/checkout/${trxId}/upload-bukti`, { method: 'POST', body: form });
+  return apiFetch(`/public/checkout/${trxId}/upload-bukti`, { method: 'POST', body: form });
 }
 
 async function trackOrder(noOrder, noWa) {
   const params = new URLSearchParams({ noOrder, noWa });
-  return apiFetch(`/checkout/track?${params.toString()}`);
+  return apiFetch(`/public/checkout/track?${params.toString()}`);
 }
 
 async function getTransactions(filters = {}) {
@@ -163,16 +163,16 @@ async function getTransactions(filters = {}) {
   if (filters.limit)     params.set('limit', filters.limit);
   
   const qs = params.toString() ? '?' + params.toString() : '';
-  return apiFetch(`/transactions${qs}`);
+  return apiFetch(`/kasir/transactions${qs}`);
 }
 
 async function getTransaction(noOrder) {
-  return apiFetch(`/transactions/${noOrder}`);
+  return apiFetch(`/kasir/transactions/${noOrder}`);
 }
 
 async function updateStatusBayar(id, status, catatan) {
   // FIX BUG-01: PATCH → PUT, parameter noOrder → id (backend uses t.id)
-  return apiFetch(`/transactions/${id}/status-bayar`, {
+  return apiFetch(`/kasir/transactions/${id}/status-bayar`, {
     method: 'PUT',
     body: JSON.stringify({ status, catatan })
   });
@@ -180,7 +180,7 @@ async function updateStatusBayar(id, status, catatan) {
 
 async function updateStatusPesanan(id, status, catatan) {
   // FIX BUG-01: PATCH → PUT, /status-pesan → /status-pesanan (typo fix)
-  return apiFetch(`/transactions/${id}/status-pesanan`, {
+  return apiFetch(`/kasir/transactions/${id}/status-pesanan`, {
     method: 'PUT',
     body: JSON.stringify({ status, catatan })
   });
@@ -203,16 +203,16 @@ async function viewBuktiTransfer(id) {
 // C: PIUTANG
 // ═══════════════════════════════════════════
 async function getReceivables() {
-  return apiFetch('/receivables');
+  return apiFetch('/kasir/receivables');
 }
 
 async function createReceivable(data) {
-  return apiFetch('/receivables', { method: 'POST', body: JSON.stringify(data) });
+  return apiFetch('/kasir/receivables', { method: 'POST', body: JSON.stringify(data) });
 }
 
 async function bayarPiutang(id, jumlahBayar) {
   // FIX BUG-04: PATCH /receivables/:id/lunas → PUT /receivables/:id/bayar, field jumlah → jumlahBayar
-  return apiFetch(`/receivables/${id}/bayar`, {
+  return apiFetch(`/kasir/receivables/${id}/bayar`, {
     method: 'PUT',
     body: JSON.stringify({ jumlahBayar })
   });
@@ -222,16 +222,16 @@ async function bayarPiutang(id, jumlahBayar) {
 // D: PENGIRIMAN
 // ═══════════════════════════════════════════
 async function getDeliveries() {
-  return apiFetch('/deliveries');
+  return apiFetch('/kasir/deliveries');
 }
 
 async function createDelivery(data) {
-  return apiFetch('/deliveries', { method: 'POST', body: JSON.stringify(data) });
+  return apiFetch('/kasir/deliveries', { method: 'POST', body: JSON.stringify(data) });
 }
 
 async function updateStatusPengiriman(id, status) {
   // FIX BUG-05: PATCH /deliveries/:id → PUT /deliveries/:id/status
-  return apiFetch(`/deliveries/${id}/status`, {
+  return apiFetch(`/kasir/deliveries/${id}/status`, {
     method: 'PUT',
     body: JSON.stringify({ status })
   });
@@ -241,12 +241,12 @@ async function updateStatusPengiriman(id, status) {
 // E: RETUR
 // ═══════════════════════════════════════════
 async function getReturns() {
-  return apiFetch('/returns');
+  return apiFetch('/kasir/returns');
 }
 
 async function createReturn(data) {
   // CR-06: Menggunakan endpoint POST /api/products/returns
-  return apiFetch('/products/returns', { method: 'POST', body: JSON.stringify(data) });
+  return apiFetch('/admin/products/returns', { method: 'POST', body: JSON.stringify(data) });
 }
 
 // ═══════════════════════════════════════════
@@ -255,30 +255,30 @@ async function createReturn(data) {
 async function getLaporanHarian(tanggal) {
   // tanggal: YYYY-MM-DD — opsional, default hari ini
   const qs = tanggal ? `?tanggal=${tanggal}` : '';
-  return apiFetch(`/reports/daily${qs}`);
+  return apiFetch(`/admin/reports/daily${qs}`);
 }
 
 async function getLaporanBulanan(bulan, tahun) {
-  return apiFetch(`/reports/monthly?bulan=${bulan}&tahun=${tahun}`);
+  return apiFetch(`/admin/reports/monthly?bulan=${bulan}&tahun=${tahun}`);
 }
 
 async function getLaporanTahunan(tahun) {
-  return apiFetch(`/reports/annual?tahun=${tahun}`);
+  return apiFetch(`/admin/reports/annual?tahun=${tahun}`);
 }
 
 async function getProdukTerlaris(limit = 5) {
-  return apiFetch(`/reports/best-products?limit=${limit}`);
+  return apiFetch(`/admin/reports/best-products?limit=${limit}`);
 }
 
 // ═══════════════════════════════════════════
 // G: TARGET PENJUALAN
 // ═══════════════════════════════════════════
 async function getTargetHarian() {
-  return apiFetch('/reports/target');
+  return apiFetch('/admin/targets');
 }
 
 async function setTargetHarian(nilaiTarget) {
-  return apiFetch('/reports/target', {
+  return apiFetch('/admin/targets', {
     method: 'POST',
     body: JSON.stringify({ target: Number(nilaiTarget) })
   });
@@ -288,19 +288,19 @@ async function setTargetHarian(nilaiTarget) {
 // H: MANAJEMEN PENGGUNA (Admin only)
 // ═══════════════════════════════════════════
 async function getUsers() {
-  return apiFetch('/users');
+  return apiFetch('/admin/users');
 }
 
 async function createUser(data) {
-  return apiFetch('/users', { method: 'POST', body: JSON.stringify(data) });
+  return apiFetch('/admin/users', { method: 'POST', body: JSON.stringify(data) });
 }
 
 async function updateUser(id, data) {
-  return apiFetch(`/users/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  return apiFetch(`/admin/users/${id}`, { method: 'PUT', body: JSON.stringify(data) });
 }
 
 async function deleteUser(id) {
-  return apiFetch(`/users/${id}`, { method: 'DELETE' });
+  return apiFetch(`/admin/users/${id}`, { method: 'DELETE' });
 }
 
 // ═══════════════════════════════════════════
@@ -379,6 +379,7 @@ window.API = {
 
   // Produk
   getProducts, getProduct, createProduct, updateProduct, deleteProduct,
+  getSatuan, createSatuan, updateSatuan, deleteSatuan,
   getStokAlerts, getExpiringProducts, updateStok,
 
   // Transaksi & Checkout
@@ -420,19 +421,19 @@ async function exportPDF() {
 // STAFF & USERS API
 // ═══════════════════════════════════════════
 async function getUsers() {
-  return apiFetch('/users');
+  return apiFetch('/admin/users');
 }
 async function createUser(data) {
-  return apiFetch('/users', { method: 'POST', body: JSON.stringify(data) });
+  return apiFetch('/admin/users', { method: 'POST', body: JSON.stringify(data) });
 }
 async function updateUser(id, data) {
-  return apiFetch(`/users/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  return apiFetch(`/admin/users/${id}`, { method: 'PUT', body: JSON.stringify(data) });
 }
 async function deleteUser(id) {
-  return apiFetch(`/users/${id}`, { method: 'DELETE' });
+  return apiFetch(`/admin/users/${id}`, { method: 'DELETE' });
 }
 async function toggleUserStatus(id, aktif) {
-  return apiFetch(`/users/${id}/status`, { method: 'PUT', body: JSON.stringify({ aktif }) });
+  return apiFetch(`/admin/users/${id}/status`, { method: 'PUT', body: JSON.stringify({ aktif }) });
 }
 
 // ═══════════════════════════════════════════

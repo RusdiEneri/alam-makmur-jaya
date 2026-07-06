@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nota Pesanan</title>
+  <style>
+    body { font-family: monospace; font-size: 14px; max-width: 300px; margin: 0 auto; padding: 10px; color: #000; }
+    h3 { text-align: center; margin: 0 0 4px; }
+    p { margin: 3px 0; }
+    hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
+    .total { font-weight: bold; font-size: 16px; }
+    @media print { .no-print { display: none; } }
+    .print-btn {
+      display: block; width: 100%; padding: 10px; margin-bottom: 20px;
+      background: #E85D26; color: white; border: none; border-radius: 4px;
+      font-weight: bold; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button class="no-print print-btn" onclick="window.print()">🖨️ Cetak Nota</button>
+  <div id="nota-content">Memuat data...</div>
+
+  <script src="../../js/data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const stored = sessionStorage.getItem('print_nota');
+      if (!stored) {
+        document.getElementById('nota-content').innerHTML = '<p>Data nota tidak ditemukan.</p>';
+        return;
+      }
+      
+      const trx = JSON.parse(stored);
+      const fmt = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
+      
+      const html = `
+        <h3>UD. ALAM MAKMUR JAYA</h3>
+        <p style="text-align:center;font-size:11px">Jl. Mayjen Sungkono No.56, Kebomas, Gresik</p>
+        <hr>
+        <p><b>No. Pesanan:</b> ${trx.noOrder}</p>
+        <p><b>Tgl:</b> ${new Date(trx.tanggal || trx.createdAt).toLocaleDateString('id-ID')} ${new Date(trx.tanggal || trx.createdAt).toLocaleTimeString('id-ID')}</p>
+        <p><b>Pembeli:</b> ${trx.namaPelanggan}</p>
+        <p><b>Metode:</b> ${(trx.metodeBayar || '').toUpperCase()}</p>
+        <hr>
+        ${(trx.items || []).map(i => `<p>${i.namaProduk || i.nama}<br>${i.qty} ${i.satuan} &times; ${fmt(i.hargaSatuan)} = ${fmt(i.subtotal)}</p>`).join('')}
+        <hr>
+        <p class="total">TOTAL: ${fmt(trx.total)}</p>
+        <p>Status: ${trx.statusPembayaran}</p>
+        <hr>
+        <p style="text-align:center;font-size:11px">Terima kasih telah berbelanja!</p>
+      `;
+      
+      document.getElementById('nota-content').innerHTML = html;
+      
+      if (new URLSearchParams(window.location.search).get('print') === '1') {
+        setTimeout(() => window.print(), 500);
+      }
+    });
+  </script>
+</body>
+</html>
