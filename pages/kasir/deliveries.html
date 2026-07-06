@@ -187,8 +187,6 @@
       <a class="sidebar-link" href="../kasir/receivables.html">💰 Piutang</a>
       <a class="sidebar-link active" href="../kasir/deliveries.html">🚚 Pengiriman</a>
       <a class="sidebar-link" href="../kasir/pos.html">💻 Kasir (POS)</a>
-      <div class="sidebar-section">Analitik</div>
-      <a class="sidebar-link" href="../admin/reports.html">📊 Laporan</a>
     </nav>
     <div class="sidebar-footer">
       <a class="sidebar-link" href="#" onclick="handleLogout()">🚪 Keluar</a>
@@ -340,12 +338,31 @@ let drawerDeliveryId = null;
 
 const STATUS_MAP = {
   menunggu: 'zone-menunggu',
-  dijadwalkan: 'zone-dikirim',
+  dijadwalkan: 'zone-menunggu',
+  diproses: 'zone-menunggu',
   dikirim: 'zone-dikirim',
-  diproses: 'zone-dikirim',
   terkirim: 'zone-selesai',
+  sampai: 'zone-selesai',
   selesai: 'zone-selesai'
 };
+
+function showToast(msg, type = 'error') {
+  if (window.AdminShared && typeof window.AdminShared.showToast === 'function') {
+    return window.AdminShared.showToast(msg);
+  }
+  const existing = document.getElementById('del-toast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'del-toast';
+  toast.className = `admin-toast ${type}`;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.animation = 'toastIn 0.3s ease reverse forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
 
 /* ═══════════════════════════════════════════════════
    INIT
@@ -365,7 +382,7 @@ async function loadDeliveries() {
     document.getElementById('last-updated').textContent = 'Terakhir diperbarui ' + new Date().toLocaleTimeString('id-ID');
     renderBoard();
   } catch (err) {
-    alert('Gagal memuat pengiriman: ' + err.message);
+    showToast('Gagal memuat pengiriman: ' + err.message, 'error');
   }
 }
 
@@ -529,7 +546,7 @@ async function doStatusUpdate(id, newStatus) {
     }
     renderBoard();
   } catch (err) {
-    alert('Gagal update status: ' + err.message);
+    showToast('Gagal memindah status: ' + (err.message || 'Error tidak diketahui'), 'error');
   }
 }
 
@@ -615,7 +632,7 @@ async function submitSchedule() {
     closeDrawer(null, true);
     renderBoard();
   } catch (err) {
-    alert('Gagal jadwalkan pengiriman: ' + err.message);
+    showToast('Gagal mengatur jadwal: ' + err.message, 'error');
   } finally {
     btn.innerHTML = orig; btn.disabled = false;
   }

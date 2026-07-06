@@ -32,7 +32,7 @@ async function apiFetch(path, options = {}) {
   if (res.status === 401 || res.status === 403) {
     // Token kedaluwarsa → paksa logout
     sessionStorage.clear();
-    const onLoginPage = window.location.pathname.includes('../public/login.html');
+    const onLoginPage = window.location.pathname.includes('/login.html');
     if (!onLoginPage) {
       window.location.replace(window.location.pathname.includes('/pages/') ? '../public/login.html' : 'pages/public/login.html');
     }

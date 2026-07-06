@@ -42,10 +42,39 @@
     @media (max-width: 768px) { .cart-layout { grid-template-columns: 1fr; } }
 
     @media print {
-      body > *:not(#nota-section) { display: none !important; }
-      #nota-section { display: block !important; }
-      .nota-paper { 
-        width: 80mm; margin: 0 auto; font-family: monospace; font-size: 12px;
+      /* Sembunyikan SEMUA elemen */
+      nav, .page-hero, #empty-state, #cart-content,
+      #success-screen, #error-screen, .toast,
+      .page-body > *:not(#nota-section) {
+        display: none !important;
+      }
+
+      /* Tampilkan wrapper page-body agar nota-section bisa terlihat */
+      .page-body {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      /* Tampilkan dan format nota */
+      #nota-section {
+        display: block !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .nota-paper {
+        width: 80mm;
+        margin: 0 auto;
+        font-family: monospace;
+        font-size: 12px;
+        color: #000 !important;
+      }
+
+      /* Sembunyikan tombol-tombol di nota saat cetak */
+      #nota-section button,
+      #nota-section a[onclick] {
+        display: none !important;
       }
     }
   </style>
@@ -415,7 +444,7 @@
         </div>
         <div style="display:flex; gap:12px; margin-top:16px; justify-content:center; flex-wrap:wrap">
           <button onclick="window.print()" class="btn-secondary" style="padding:10px 16px;border-radius:8px;font-weight:600;border:1px solid #ccc">🖨️ Cetak Nota</button>
-          <button onclick="window.open('https://wa.me/6281234567890?text=' + encodeURIComponent('Halo UD. Alam Makmur Jaya,\\n\\nSaya baru saja membuat pesanan via Website.\\nNo. Pesanan: *${orderData.orderId || orderData.noOrder || '-'}*\\nMetode Pembayaran: *${buyerInfo.paymentMethod.toUpperCase()}*\\nTotal: *Rp ${formatRupiah(total).replace('Rp ', '')}*\\n\\nMohon segera diproses. Terima kasih!'), '_blank')" class="btn-primary" style="background:#25D366;padding:10px 16px;border-radius:8px;font-weight:600">📱 WhatsApp Admin</button>
+          <button onclick="window.open('https://wa.me/6281233649676?text=' + encodeURIComponent('Halo UD. Alam Makmur Jaya,\\n\\nSaya baru saja membuat pesanan via Website.\\nNo. Pesanan: *${orderData.orderId || orderData.noOrder || '-'}*\\nMetode Pembayaran: *${buyerInfo.paymentMethod.toUpperCase()}*\\nTotal: *Rp ${formatRupiah(total).replace('Rp ', '')}*\\n\\nMohon segera diproses. Terima kasih!'), '_blank')" class="btn-primary" style="background:#25D366;padding:10px 16px;border-radius:8px;font-weight:600">📱 WhatsApp Admin</button>
           <button onclick="window.location.href='index.html'" class="btn-primary" style="padding:10px 16px;border-radius:8px;font-weight:600">🏠 Kembali ke Toko</button>
         </div>
       `;
