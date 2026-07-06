@@ -40,7 +40,7 @@ Sistem Informasi Penjualan berbasis Web untuk mengelola transaksi, produk, staf,
    ```bash
    npm install
    ```
-4. Jalankan script migrasi awal untuk merapikan struktur data yang ada:
+4. (Disarankan) Jalankan migrasi/rapikan struktur data yang ada:
    ```bash
    npm run migrate
    ```
@@ -52,11 +52,14 @@ Sistem Informasi Penjualan berbasis Web untuk mengelola transaksi, produk, staf,
    ```bash
    npm run dev
    ```
-6. Buka `pages/public/index.html` menggunakan Live Server atau cukup double-click untuk melihat tampilan front-end. Pastikan API Base URL di `js/config.example.js` (atau `js/api.js`) menunjuk ke `http://localhost:3000/api`.
+6. Jalankan frontend dengan **Live Server** (VS Code) agar browser tidak memblokir request.
+   - Frontend akan memanggil backend otomatis via `window.location.hostname` pada `js/api.js`.
+   - Pastikan backend bisa diakses dari browser di host yang sama (biasanya: `http://localhost:3000/api`).
 
 ## Menjalankan Pengujian
 
 Jalankan perintah berikut pada direktori `backend/` untuk melakukan test API:
+
 ```bash
 npm test
 ```
@@ -68,17 +71,20 @@ Gunakan kredensial berikut untuk masuk ke Panel Admin (`pages/login.html`):
 - **Email**: `admin@amj.com`
 - **Password**: `admin123`
 
-*(Sangat disarankan untuk mengubah password ini atau membuat akun staf baru setelah instalasi).*
+_(Sangat disarankan untuk mengubah password ini atau membuat akun staf baru setelah instalasi)._
 
 ## Daftar Endpoint API Penting
 
-- `POST /api/auth/login`: Autentikasi pengguna dan mengembalikan JWT.
-- `GET /api/health`: Health check, mengembalikan status `OK`.
-- `GET /api/transactions`: Mengambil semua data transaksi (Hanya Admin/Kasir).
-- `POST /api/checkout`: Memproses keranjang belanja dan membuat pesanan.
+- `POST /api/public/auth/login`: Autentikasi pengguna dan mengembalikan JWT.
+- `GET /api/health`: Health check, mengembalikan status `ok`.
+- `GET /api/kasir/transactions`: Riwayat transaksi (Kasir/Staff sesuai role).
+- `POST /api/public/checkout`: Memproses checkout (membuat pesanan/ transaksi).
 - `GET /api/transactions/:id/bukti-transfer`: Mengunduh / melihat bukti transfer yang sifatnya privat.
-- `GET /api/reports/daily`: Mendapatkan laporan transaksi harian dan estimasi laba.
-- `GET /api/products`: Mendapatkan semua produk dengan status aktif.
+- `GET /api/admin/reports/daily`: Laporan harian (Admin).
+- `GET /api/admin/products`: Data produk (Admin/Kasir sesuai role/endpoint).
+
+Catatan: pada repo ini, path backend memakai grouping seperti `/api/public/*`, `/api/admin/*`, dan `/api/kasir/*` (lihat `backend/server.js`).
 
 ---
+
 Dikembangkan untuk UD. Alam Makmur Jaya.
