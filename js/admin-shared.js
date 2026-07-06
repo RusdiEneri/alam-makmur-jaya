@@ -267,19 +267,20 @@
         .join("")
         .toUpperCase()
         .slice(0, 2);
-      
+
       const nameEl = document.getElementById("sidebar-username");
       if (nameEl) nameEl.textContent = name;
-      
+
       const roleEl = document.getElementById("sidebar-role");
-      if (roleEl) roleEl.textContent = role.charAt(0).toUpperCase() + role.slice(1);
-      
+      if (roleEl)
+        roleEl.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+
       const avatarEl = document.getElementById("sidebar-avatar");
       if (avatarEl) avatarEl.textContent = initials;
-      
+
       const headerNameEl = document.getElementById("header-username");
       if (headerNameEl) headerNameEl.textContent = name;
-      
+
       const headerAvatarEl = document.getElementById("header-avatar");
       if (headerAvatarEl) headerAvatarEl.textContent = initials;
     };
@@ -299,5 +300,115 @@
     initAdminPage,
     refreshStockAlerts,
     startStockPolling,
+  };
+
+  /* ── LOGOUT MODAL (shared across all admin & kasir pages) ── */
+  function injectLogoutModal() {
+    if (document.getElementById("logout-modal-overlay")) return;
+    const el = document.createElement("div");
+    el.id = "logout-modal-overlay";
+    el.innerHTML = `
+      <div id="logout-modal-box">
+        <div style="font-size:48px;margin-bottom:12px">🚪</div>
+        <div style="font-size:18px;font-weight:700;margin-bottom:6px">Keluar dari Akun?</div>
+        <div style="font-size:14px;color:#64748B;margin-bottom:24px">Sesi Anda akan diakhiri dan Anda akan diarahkan ke halaman login.</div>
+        <div style="display:flex;gap:10px;justify-content:center;">
+          <button id="logout-cancel-btn">Batal</button>
+          <button id="logout-confirm-btn">Ya, Keluar</button>
+        </div>
+      </div>
+    `;
+    el.style.cssText =
+      "display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:9999;align-items:center;justify-content:center;";
+    const box = el.querySelector("#logout-modal-box");
+    box.style.cssText =
+      "background:white;border-radius:16px;padding:32px 28px;max-width:340px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);animation:logoutPop .25s cubic-bezier(.34,1.56,.64,1)";
+    const cancelBtn = el.querySelector("#logout-cancel-btn");
+    cancelBtn.style.cssText =
+      "padding:10px 24px;border-radius:8px;border:1.5px solid #E2E8F0;background:white;font-size:14px;font-weight:600;cursor:pointer;color:#374151;transition:0.2s;";
+    cancelBtn.onmouseenter = () => (cancelBtn.style.background = "#F8FAFC");
+    cancelBtn.onmouseleave = () => (cancelBtn.style.background = "white");
+    const confirmBtn = el.querySelector("#logout-confirm-btn");
+    confirmBtn.style.cssText =
+      "padding:10px 24px;border-radius:8px;border:none;background:linear-gradient(135deg,#DC2626,#EF4444);color:white;font-size:14px;font-weight:600;cursor:pointer;transition:0.2s;";
+    confirmBtn.onmouseenter = () => (confirmBtn.style.opacity = "0.85");
+    confirmBtn.onmouseleave = () => (confirmBtn.style.opacity = "1");
+
+    // inject keyframe
+    if (!document.getElementById("logout-modal-style")) {
+      const style = document.createElement("style");
+      style.id = "logout-modal-style";
+      style.textContent =
+        "@keyframes logoutPop{from{transform:scale(0.88);opacity:0}to{transform:scale(1);opacity:1}}";
+      document.head.appendChild(style);
+    }
+
+    document.body.appendChild(el);
+
+    cancelBtn.addEventListener("click", closeLogoutModal);
+    confirmBtn.addEventListener("click", () => {
+      sessionStorage.clear();
+      localStorage.removeItem("amj_token");
+      localStorage.removeItem("amj_user");
+      if (typeof API !== "undefined" && API.logout) {
+        API.logout();
+      } else {
+        window.location.replace("../public/login.html");
+      }
+    });
+    el.addEventListener("click", (e) => {
+      if (e.target === el) closeLogoutModal();
+    });
+  }
+
+  function openLogoutModal() {
+    injectLogoutModal();
+    const overlay = document.getElementById("logout-modal-overlay");
+    overlay.style.display = "flex";
+  }
+
+  function closeLogoutModal() {
+    const overlay = document.getElementById("logout-modal-overlay");
+    if (overlay) overlay.style.display = "none";
+  }
+
+  // expose globally so any page inline onclick can call it
+  global.handleLogout = openLogoutModal;
+  global.closeLogoutModal = closeLogoutModal;
+
+  /* ── SIDEBAR TOGGLE (shared across all admin & kasir pages) ── */
+
+  // On mobile, physically move #sidebar to be a direct child of <body>
+  // so it shares the same stacking context as the overlay (also on body).
+  // This prevents any ancestor stacking context from trapping the sidebar
+  // underneath the overlay, which would make menu items unclickable.
+  function ensureSidebarOnBody() {
+    const sidebar = document.getElementById("sidebar");
+    if (!sidebar) return;
+    if (sidebar.parentElement === document.body) return;
+    if (window.innerWidth <= 768) {
+      document.body.appendChild(sidebar);
+    }
+  }
+
+  global.toggleSidebar = function () {
+    ensureSidebarOnBody();
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebar-overlay");
+    if (!sidebar) return;
+    const isOpen = sidebar.classList.contains("open");
+
+    // critical: keep stacking order correct on mobile
+    sidebar.style.zIndex = "10000";
+
+    sidebar.classList.toggle("open", !isOpen);
+    if (overlay) overlay.classList.toggle("open", !isOpen);
+  };
+
+  global.closeSidebar = function () {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("sidebar-overlay");
+    if (sidebar) sidebar.classList.remove("open");
+    if (overlay) overlay.classList.remove("open");
   };
 })(window);

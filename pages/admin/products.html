@@ -206,9 +206,12 @@
 </head>
 <body class="loaded">
 
+<!-- Sidebar overlay for mobile -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
 <div class="app-layout">
   <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <div class="sidebar-brand-icon">🏗</div>
       <div>UD. Alam Makmur Jaya</div>
@@ -233,7 +236,10 @@
   <!-- CONTENT -->
   <div class="content-wrapper">
     <header class="top-header">
-      <div class="header-title">Produk & Stok</div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+        <div class="header-title">Produk & Stok</div>
+      </div>
       <div style="font-size:12px; color:var(--color-text-muted)" id="last-updated"></div>
     </header>
 
@@ -512,6 +518,7 @@
 </div>
 
 <script src="../../js/api.js"></script>
+<script src="../../js/admin-shared.js"></script>
 <script>
   // KELOLA SATUAN LOGIC
   function openSatuanModal() {
@@ -604,10 +611,7 @@
     if (!u) window.location.href = '../public/login.html';
   }
   
-  function handleLogout() {
-    localStorage.removeItem('user');
-    window.location.href = '../public/login.html';
-  }
+  /* handleLogout — provided globally by admin-shared.js */
 
   function setupInputs() {
     // Format Rp on typing
@@ -742,6 +746,13 @@
     const val = document.getElementById(id).value.replace(/[^0-9]/g, '');
     return val ? parseInt(val, 10) : 0;
   }
+
+  function fNum(n) {
+    return Number(n || 0).toLocaleString('id-ID');
+  }
+
+  /* toggleSidebar/closeSidebar — provided globally by admin-shared.js */
+
   function fmtRp(num) {
     return 'Rp ' + (num || 0).toLocaleString('id-ID');
   }

@@ -1109,7 +1109,7 @@
   <!-- ═══════════════════════════════════════════
        SIDEBAR
        ═══════════════════════════════════════════ -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <div class="sidebar-brand-icon">🏗</div>
       <div>UD. Alam Makmur Jaya</div>
@@ -1390,6 +1390,7 @@
 <!-- ── SCRIPTS ────────────────────────────────────────────── -->
 <script src="../../js/api.js"></script>
 <script src="../../js/animations.js"></script>
+<script src="../../js/admin-shared.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════
    ADMIN DASHBOARD — Main Script
@@ -1426,19 +1427,7 @@
   if (elHeaderAvatar) elHeaderAvatar.textContent = initials;
 })();
 
-/* ── 1. SIDEBAR TOGGLE ─────────────────────────────────────── */
-function toggleSidebar() {
-  const sidebar  = document.getElementById('sidebar');
-  const overlay  = document.getElementById('sidebar-overlay');
-  const isOpen   = sidebar.classList.contains('open');
-  sidebar.classList.toggle('open', !isOpen);
-  overlay.classList.toggle('open', !isOpen);
-}
-
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-}
+/* ── 1. SIDEBAR TOGGLE — provided globally by admin-shared.js ── */
 
 /* ── 2. NOTIFICATION PANEL ─────────────────────────────────── */
 let notifOpen = false;
@@ -1901,7 +1890,7 @@ async function loadRecentOrders() {
           <td><span class="order-method">${metode}</span></td>
           <td>${getStatusBadge(status)}</td>
           <td>
-            <button class="btn-action" onclick="window.location.href='admin-transactions.html'">Detail</button>
+            <button class="btn-action" onclick="window.location.href='transactions.html'">Detail</button>
           </td>
         </tr>
       `;
@@ -2086,11 +2075,7 @@ async function loadPendingPayments() {
 }
 
 /* ── 15. LOGOUT ────────────────────────────────────────────── */
-function handleLogout() {
-  if (confirm('Yakin ingin keluar?')) {
-    API.logout();
-  }
-}
+/* handleLogout — provided globally by admin-shared.js */
 
 /* ── 16. REFRESH ALL ───────────────────────────────────────── */
 async function refreshAll() {

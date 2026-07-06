@@ -248,6 +248,10 @@
           </div>`;
       }).join('');
     }
+    
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('open');
+    }
 
     function handleAdd(id) {
       const product = allProducts.find(p => p.id === id);

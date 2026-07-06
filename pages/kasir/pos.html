@@ -1065,6 +1065,31 @@
     @media (max-width: 768px) {
       .app-layout { grid-template-columns: 1fr; }
 
+      /* pos.html akalin biar tidak sempit */
+      .main-content { padding: 0 !important; }
+      main#main-content, .main-content { min-width: 0; }
+
+      /* jadikan layout kiri/kanan jadi 1 kolom */
+      .main-content > div[style*="grid-template-columns: 2fr 1fr"] { grid-template-columns: 1fr !important; gap: 12px !important; }
+
+      /* bikin card pos full width dan tinggi otomatis */
+      .main-content > div[style*="height: calc(100vh - 160px)"] { height: auto !important; }
+
+      /* padding internal lebih kecil */
+      .main-content > div[style*="padding: 24px"] { padding: 16px !important; }
+
+      /* komponen cart supaya nyaman di layar kecil */
+      #pos-products { padding-right: 0 !important; }
+      #pos-cart { padding: 12px 0 !important; margin-bottom: 14px !important; }
+
+      /* tombol tetap besar */
+      #pos-pay-btn { font-size: 15px !important; padding: 14px !important; }
+    }
+
+    @media (max-width: 768px) {
+      .app-layout { grid-template-columns: 1fr; }
+
+
       .sidebar {
         position: fixed;
         left: 0; top: 0; bottom: 0;
@@ -1109,7 +1134,7 @@
   <!-- ═══════════════════════════════════════════
        SIDEBAR
        ═══════════════════════════════════════════ -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <div class="sidebar-brand-icon">🏗</div>
       <div>UD. Alam Makmur Jaya</div>
@@ -1232,6 +1257,7 @@
 
     <!-- Script -->
     <script src="../../js/api.js"></script>
+<script src="../../js/admin-shared.js"></script>
 <script>/* sidebar-username-patch */
 (function() {
   var stored = sessionStorage.getItem('user');

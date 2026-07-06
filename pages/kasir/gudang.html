@@ -299,7 +299,7 @@
 
 
     <!-- OVERLAY (mobile) -->
-    <div class="admin-overlay" id="overlay" onclick="closeSidebar()"></div>
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
     <!-- BODY -->
     <div class="admin-body">
@@ -595,15 +595,7 @@
       }).join('');
     }
 
-    // ── SIDEBAR MOBILE ─────────────────────────────────────────
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-      document.getElementById('overlay').classList.toggle('open');
-    }
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-      document.getElementById('overlay').classList.remove('open');
-    }
+    // ── SIDEBAR MOBILE — provided globally by admin-shared.js ────────────────
   </script>
 </body>
 </html>

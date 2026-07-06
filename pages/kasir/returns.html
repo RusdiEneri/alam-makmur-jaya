@@ -44,6 +44,7 @@
   </style>
 </head>
 <body class="loaded">
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 <div class="app-layout">
   <!-- ═══════════════════════════════════════════
        SIDEBAR
@@ -119,7 +120,10 @@
 
   <div class="content-wrapper">
     <header class="top-header">
-      <div class="header-title">Laporan Retur Barang</div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+        <div class="header-title">Laporan Retur Barang</div>
+      </div>
     </header>
 
     <main class="main-content">

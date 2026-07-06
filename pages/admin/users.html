@@ -281,17 +281,18 @@
           grid-template-columns: 1fr;
         }
         .admin-sidebar {
-          display: none;
           position: fixed;
-          z-index: 100;
+          z-index: 999;
           left: 0;
           top: 0;
           bottom: 0;
           width: 260px;
+          transform: translateX(-100%);
+          transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
           box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
         }
         .admin-sidebar.open {
-          display: block;
+          transform: translateX(0);
         }
         .sidebar-overlay {
           display: none;
@@ -770,17 +771,21 @@
       document.getElementById("user-badge").textContent =
         "👤 " + (user.nama || user.name || user.email || "Admin");
 
-      function toggleSidebar() {
-        const sidebar = document.querySelector(".admin-sidebar");
-        const overlay = document.getElementById("sidebar-overlay");
-        if (sidebar.classList.contains("open")) {
-          sidebar.classList.remove("open");
-          overlay.classList.remove("open");
-        } else {
-          sidebar.classList.add("open");
-          overlay.classList.add("open");
-        }
-      }
+      // Sidebar toggle for users.html (uses .admin-sidebar class)
+      window.toggleSidebar = function() {
+        const sidebar = document.querySelector('.admin-sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (!sidebar) return;
+        const isOpen = sidebar.classList.contains('open');
+        sidebar.classList.toggle('open', !isOpen);
+        if (overlay) overlay.classList.toggle('open', !isOpen);
+      };
+      window.closeSidebar = function() {
+        const sidebar = document.querySelector('.admin-sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        if (sidebar) sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('open');
+      };
 
       // Security: Hide tabs for kasir (FR-01 / NFR-01)
       if (user.role === "kasir") {

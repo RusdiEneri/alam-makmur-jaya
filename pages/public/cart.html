@@ -94,6 +94,7 @@
       <a href="../public/cart.html" class="active">🛒 Keranjang <span id="cart-count" class="badge">0</span></a>
       <a href="../public/login.html" class="btn-login">Masuk</a>
     </div>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
   </nav>
 
   <div class="page-hero">
@@ -272,6 +273,10 @@
   <script src="../../js/api.js"></script>
   <script src="../../js/data.js"></script>
   <script>
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('open');
+    }
+
     function updatePaymentMethod() {
       const methodTransfer = document.getElementById('method-transfer');
       const isTransfer = methodTransfer && methodTransfer.checked;
