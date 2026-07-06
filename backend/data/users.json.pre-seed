@@ -3,7 +3,7 @@
     "id": "user-001",
     "nama": "Admin Toko",
     "username": "admin@amj.com",
-    "password": "$2a$10$c2ws2fMxHeXH75JUJwTYk.rrrITxpYo41FTMKJcSKgPTjFcJSTBv2",
+    "password": "$2a$10$UCFesb6kyKnlf5X1H.pyr.Vraz9XUzB8/qG3U70Y8VAUkc.TnKGii",
     "role": "admin",
     "aktif": true,
     "createdAt": "2025-01-01T00:00:00.000Z"
@@ -12,7 +12,7 @@
     "id": "user-002",
     "nama": "Kasir Satu",
     "username": "kasir@amj.com",
-    "password": "$2a$10$c2ws2fMxHeXH75JUJwTYk.rrrITxpYo41FTMKJcSKgPTjFcJSTBv2",
+    "password": "$2a$10$UCFesb6kyKnlf5X1H.pyr.Vraz9XUzB8/qG3U70Y8VAUkc.TnKGii",
     "role": "kasir",
     "aktif": true,
     "createdAt": "2025-01-01T00:00:00.000Z"
@@ -21,7 +21,7 @@
     "id": "user-003",
     "nama": "Budi Santoso",
     "username": "budi@amj.com",
-    "password": "$2a$10$c2ws2fMxHeXH75JUJwTYk.rrrITxpYo41FTMKJcSKgPTjFcJSTBv2",
+    "password": "$2a$10$UCFesb6kyKnlf5X1H.pyr.Vraz9XUzB8/qG3U70Y8VAUkc.TnKGii",
     "role": "kasir",
     "aktif": true,
     "createdAt": "2025-06-15T08:00:00.000Z"

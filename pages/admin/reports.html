@@ -34,6 +34,7 @@
     .sidebar { background: #0F172A; color: #94A3B8; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; z-index: 100; }
     .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 24px 20px; border-bottom: 1px solid #1E293B; color: white; font-weight: bold; }
     .sidebar-brand-icon { width: 36px; height: 36px; background: var(--color-primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .sidebar-section { font-size: 10px; font-weight: 700; color: #475569; letter-spacing: 1px; text-transform: uppercase; padding: 14px 14px 6px; }
     .sidebar-nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
     .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 8px; font-size: 14px; transition: 0.2s; cursor: pointer; }
     .sidebar-link:hover { background: #1E293B; color: white; }
@@ -146,18 +147,21 @@
 
 <div class="app-layout">
   <!-- SIDEBAR -->
-  <aside class="sidebar no-print">
+  <aside class="sidebar">
     <div class="sidebar-brand">
       <div class="sidebar-brand-icon">🏗</div>
       <div>UD. Alam Makmur Jaya</div>
     </div>
     <nav class="sidebar-nav">
+      <div class="sidebar-section">Menu Utama</div>
       <a class="sidebar-link" href="../admin/dashboard.html">🚀 Dashboard</a>
       <a class="sidebar-link" href="../admin/products.html">📦 Produk & Stok</a>
       <a class="sidebar-link" href="../admin/transactions.html">📝 Transaksi</a>
+      <div class="sidebar-section">Operasional</div>
       <a class="sidebar-link" href="../kasir/receivables.html">💰 Piutang</a>
       <a class="sidebar-link" href="../kasir/deliveries.html">🚚 Pengiriman</a>
       <a class="sidebar-link" href="../kasir/pos.html">💻 Kasir (POS)</a>
+      <div class="sidebar-section">Analitik</div>
       <a class="sidebar-link active" href="../admin/reports.html">📊 Laporan</a>
     </nav>
     <div class="sidebar-footer">
@@ -505,10 +509,10 @@ async function fetchCustomRange(start, end) {
   results.forEach((r, i) => {
     if (!r) return;
     merged.totalPendapatan += r.totalPendapatan || 0;
-    merged.totalTransaksi += r.totalTransaksi || 0;
-    merged.totalHPP += r.totalHPP || 0;
+    merged.totalTransaksi += r.jumlahTransaksi || 0;
+    merged.totalHPP += r.costOfGoodsSold || 0;
     merged.labaKotor += r.labaKotor || 0;
-    if (r.transactions) merged.transactions.push(...r.transactions);
+    if (r.transaksi) merged.transactions.push(...r.transaksi);
     merged.trendData.push({ label: dates[i], pendapatan: r.totalPendapatan || 0, laba: r.labaKotor || 0 });
   });
 
@@ -520,7 +524,7 @@ async function fetchCustomRange(start, end) {
 ═══════════════════════════════════════════════════════ */
 function renderSummary(r) {
   const pendapatan = r.totalPendapatan || 0;
-  const trxCount = r.totalTransaksi || 0;
+  const trxCount = r.jumlahTransaksi || 0;
   const rataRata = trxCount ? Math.round(pendapatan / trxCount) : 0;
   const laba = r.labaKotor || 0;
   const daysInPeriod = getDaysInPeriod();
@@ -547,7 +551,7 @@ function renderSummary(r) {
       <div class="sc-icon">${c.icon}</div>
       <div style="flex:1; min-width:0">
         <div class="sc-label">${c.label}</div>
-        <div class="sc-val" id="scv-${i}" data-target="${c.val.replace(/[^0-9]/g, '')}">${c.val}</div>
+        <div class="sc-val" id="scv-${i}" data-target="${String(c.val).replace(/[^0-9]/g, '')}">${c.val}</div>
         ${c.sub ? `<div class="sc-sub">${c.sub}</div>` : ''}
         ${c.extra || ''}
       </div>
@@ -611,9 +615,9 @@ function renderMainChart(r) {
     pendapatanData = [r.totalPendapatan || 0];
     labaData = [r.labaKotor || 0];
     document.getElementById('main-chart-title').textContent = 'Pendapatan & Laba Harian';
-  } else if (r.monthlyData || r.dailySummaries || r.trendData) {
+  } else if (r.breakdown || r.trendData || r.trendData) {
     // Monthly/annual — line over time
-    const trend = r.monthlyData || r.dailySummaries || r.trendData || [];
+    const trend = r.breakdown || r.trendData || [];
     trend.forEach(t => {
       labels.push(t.label || t.bulan || t.tanggal || '');
       pendapatanData.push(t.pendapatan || t.totalPendapatan || 0);
@@ -726,7 +730,7 @@ function renderTopProductsPrintTable(topProds) {
    TRANSACTIONS TABLE
 ═══════════════════════════════════════════════════════ */
 function renderTransactions(r) {
-  const rows = r.transactions || r.transaksi || [];
+  const rows = r.transaksi || r.transaksi || [];
   allTrxRows = rows;
   currentPage = 1;
   renderTablePage();
@@ -825,7 +829,7 @@ async function exportExcel() {
     // Sheet 1: Summary
     const r = currentReport;
     const topProds = currentTopProducts;
-    const trxCount = r.totalTransaksi || 0;
+    const trxCount = r.jumlahTransaksi || 0;
     const pendapatan = r.totalPendapatan || 0;
     const laba = r.labaKotor || 0;
     const rataRata = trxCount ? Math.round(pendapatan / trxCount) : 0;
@@ -858,7 +862,7 @@ async function exportExcel() {
     XLSX.utils.book_append_sheet(wb, wsSummary, 'Ringkasan');
 
     // Sheet 2: Transactions
-    const trxRows = (r.transactions || r.transaksi || []).map(t => ({
+    const trxRows = (r.transaksi || r.transaksi || []).map(t => ({
       'Tanggal': new Date(t.createdAt || t.tanggal || '').toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
       'No. Pesanan': t.noOrder || '-',
       'Nama Pelanggan': t.namaPelanggan || '-',

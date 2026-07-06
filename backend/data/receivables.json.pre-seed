@@ -12,8 +12,8 @@
     "status_nota": "sementara",
     "riwayatPembayaran": [],
     "catatan": "Pembelian semen 5 sak + pipa untuk proyek perumahan",
-    "createdAt": "2026-06-16T11:10:11.032Z",
-    "updatedAt": "2026-06-16T11:10:11.032Z"
+    "createdAt": "2026-06-16T10:34:15.500Z",
+    "updatedAt": "2026-06-16T10:34:15.500Z"
   },
   {
     "id": "rec-seed-002",
@@ -29,13 +29,13 @@
     "riwayatPembayaran": [
       {
         "jumlah": 200000,
-        "tanggal": "2026-07-01T11:10:11.032Z",
+        "tanggal": "2026-07-01T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ],
     "catatan": "Sudah bayar sebagian Rp 200.000",
-    "createdAt": "2026-06-22T11:10:11.032Z",
-    "updatedAt": "2026-07-01T11:10:11.032Z"
+    "createdAt": "2026-06-22T10:34:15.500Z",
+    "updatedAt": "2026-07-01T10:34:15.500Z"
   },
   {
     "id": "rec-seed-003",
@@ -50,8 +50,8 @@
     "status_nota": "sementara",
     "riwayatPembayaran": [],
     "catatan": "Pembelian material untuk renovasi dapur",
-    "createdAt": "2026-06-29T11:10:11.032Z",
-    "updatedAt": "2026-06-29T11:10:11.032Z"
+    "createdAt": "2026-06-29T10:34:15.500Z",
+    "updatedAt": "2026-06-29T10:34:15.500Z"
   },
   {
     "id": "rec-seed-004",
@@ -64,22 +64,22 @@
     "jatuhTempo": "2026-07-03",
     "status": "lunas",
     "status_nota": "lunas",
-    "tanggalLunas": "2026-07-04T11:10:11.032Z",
+    "tanggalLunas": "2026-07-04T10:34:15.500Z",
     "riwayatPembayaran": [
       {
         "jumlah": 500000,
-        "tanggal": "2026-06-26T11:10:11.032Z",
+        "tanggal": "2026-06-26T10:34:15.500Z",
         "oleh": "Kasir Satu"
       },
       {
         "jumlah": 750000,
-        "tanggal": "2026-07-04T11:10:11.032Z",
+        "tanggal": "2026-07-04T10:34:15.500Z",
         "oleh": "Admin Toko"
       }
     ],
     "catatan": "Pembelian besar untuk proyek — sudah LUNAS",
-    "createdAt": "2026-06-15T11:10:11.032Z",
-    "updatedAt": "2026-07-04T11:10:11.032Z"
+    "createdAt": "2026-06-15T10:34:15.500Z",
+    "updatedAt": "2026-07-04T10:34:15.500Z"
   },
   {
     "id": "rec-seed-005",
@@ -94,7 +94,7 @@
     "status_nota": "sementara",
     "riwayatPembayaran": [],
     "catatan": "Pembelian besi beton dan kawat bendrat",
-    "createdAt": "2026-07-03T11:10:11.032Z",
-    "updatedAt": "2026-07-03T11:10:11.032Z"
+    "createdAt": "2026-07-03T10:34:15.500Z",
+    "updatedAt": "2026-07-03T10:34:15.500Z"
   }
 ]

@@ -3,42 +3,42 @@
     "action": "LOGIN",
     "user": "admin@amj.com",
     "detail": "Login berhasil",
-    "timestamp": "2026-07-06T11:10:11.032Z"
+    "timestamp": "2026-07-06T10:34:15.500Z"
   },
   {
     "action": "CREATE_TRANSACTION",
     "user": "kasir@amj.com",
     "detail": "Buat transaksi trx-seed-001",
-    "timestamp": "2026-07-06T11:10:11.032Z"
+    "timestamp": "2026-07-06T10:34:15.500Z"
   },
   {
     "action": "UPDATE_STOCK",
     "user": "admin@amj.com",
     "detail": "Restock Paku Biasa 5cm +20kg",
-    "timestamp": "2026-07-05T11:10:11.032Z"
+    "timestamp": "2026-07-05T10:34:15.500Z"
   },
   {
     "action": "CREATE_DELIVERY",
     "user": "kasir@amj.com",
     "detail": "Jadwalkan pengiriman del-seed-002",
-    "timestamp": "2026-07-06T11:10:11.032Z"
+    "timestamp": "2026-07-06T10:34:15.500Z"
   },
   {
     "action": "UPDATE_PAYMENT",
     "user": "kasir@amj.com",
     "detail": "Bayar piutang rec-seed-002 Rp200.000",
-    "timestamp": "2026-07-01T11:10:11.032Z"
+    "timestamp": "2026-07-01T10:34:15.500Z"
   },
   {
     "action": "CREATE_RETURN",
     "user": "kasir@amj.com",
     "detail": "Retur Cat Tembok ret-seed-001",
-    "timestamp": "2026-06-26T11:10:11.032Z"
+    "timestamp": "2026-06-26T10:34:15.500Z"
   },
   {
     "action": "LOGIN",
     "user": "kasir@amj.com",
     "detail": "Login berhasil",
-    "timestamp": "2026-07-05T11:10:11.032Z"
+    "timestamp": "2026-07-05T10:34:15.500Z"
   }
 ]

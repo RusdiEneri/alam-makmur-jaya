@@ -13,8 +13,8 @@
     "status": "diterima",
     "catatanAdmin": "Sudah dikonfirmasi cacat dari supplier",
     "dicatatOleh": "Kasir Satu",
-    "createdAt": "2026-06-26T11:10:11.032Z",
-    "updatedAt": "2026-06-28T11:10:11.032Z"
+    "createdAt": "2026-06-26T10:34:15.500Z",
+    "updatedAt": "2026-06-28T10:34:15.500Z"
   },
   {
     "id": "ret-seed-002",
@@ -30,8 +30,8 @@
     "status": "selesai",
     "catatanAdmin": "Barang sudah dikembalikan ke rak, kirim ulang kran yg benar",
     "dicatatOleh": "Admin Toko",
-    "createdAt": "2026-07-01T11:10:11.032Z",
-    "updatedAt": "2026-07-03T11:10:11.032Z"
+    "createdAt": "2026-07-01T10:34:15.500Z",
+    "updatedAt": "2026-07-03T10:34:15.500Z"
   },
   {
     "id": "ret-seed-003",
@@ -46,7 +46,7 @@
     "keterangan": "Keramik pecah saat pengiriman, 3 dus retak",
     "status": "diajukan",
     "dicatatOleh": "Kasir Satu",
-    "createdAt": "2026-07-05T11:10:11.032Z",
-    "updatedAt": "2026-07-05T11:10:11.032Z"
+    "createdAt": "2026-07-05T10:34:15.500Z",
+    "updatedAt": "2026-07-05T10:34:15.500Z"
   }
 ]

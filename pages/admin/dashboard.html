@@ -1548,7 +1548,7 @@ async function loadKPIs() {
     if (daily.status === 'fulfilled') {
       const d = daily.value;
       const rev = d.totalPendapatan || d.pendapatan || d.revenue || 0;
-      const trx = d.totalTransaksi || d.transaksi || d.jumlahTransaksi || 0;
+      const trx = d.jumlahTransaksi || d.transaksiSelesai || d.totalTransaksi || (typeof d.transaksi === 'number' ? d.transaksi : 0);
 
       const revEl = document.getElementById('kpi-revenue');
       const revSubEl = document.getElementById('kpi-revenue-sub');
@@ -1573,7 +1573,7 @@ async function loadKPIs() {
     // Stock alerts
     if (stockAlerts.status === 'fulfilled') {
       const alerts = stockAlerts.value;
-      const arr = Array.isArray(alerts) ? alerts : (alerts.data || alerts.produk || []);
+      const arr = Array.isArray(alerts) ? alerts : (alerts.produkKritis || alerts.data || alerts.produk || []);
       const count = arr.length;
 
       const stockEl = document.getElementById('kpi-stock');
@@ -1592,7 +1592,7 @@ async function loadKPIs() {
       const recv = receivables.value;
       const arr = Array.isArray(recv) ? recv : (recv.data || recv.piutang || []);
       const belumLunas = arr.filter(r => (r.status || '').toLowerCase().includes('belum'));
-      const total = belumLunas.reduce((s, r) => s + (r.sisaHutang || r.jumlah || r.nominal || 0), 0);
+      const total = belumLunas.reduce((s, r) => s + (r.sisaTagihan || r.sisaHutang || r.jumlah || r.nominal || 0), 0);
 
       const recvEl = document.getElementById('kpi-recv');
       const recvSubEl = document.getElementById('kpi-recv-sub');

@@ -232,7 +232,7 @@
             <div class="col-header-text">📦 Perlu Dikirim<span class="col-badge" id="cnt-perlu">0</span></div>
           </div>
           <div class="dropzone" id="zone-menunggu"
-            ondragover="allowDrop(event)" ondrop="handleDrop(event,'menunggu')"
+            ondragover="allowDrop(event)" ondrop="handleDrop(event,'dijadwalkan')"
             ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
           </div>
         </div>
@@ -254,7 +254,7 @@
             <div class="col-header-text">✅ Selesai<span class="col-badge" id="cnt-selesai">0</span></div>
           </div>
           <div class="dropzone" id="zone-selesai"
-            ondragover="allowDrop(event)" ondrop="handleDrop(event,'selesai')"
+            ondragover="allowDrop(event)" ondrop="handleDrop(event,'sampai')"
             ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
           </div>
         </div>
@@ -420,8 +420,8 @@ function buildCard(d, idx, status) {
   const itemsSummary = (d.items || []).slice(0, 2).map(i => `${i.qty}× ${i.namaProduk || '-'}`).join(', ');
   const moreItems = (d.items || []).length > 2 ? ` +${d.items.length - 2} lainnya` : '';
 
-  const statusLabel = { menunggu: 'Belum Dijadwal', dijadwalkan: 'Dijadwalkan', dikirim: 'Dikirim', diproses: 'Diproses', terkirim: 'Terkirim', selesai: 'Selesai' };
-  const statusCls   = ['selesai','terkirim'].includes(status) ? 'status-selesai' : ['dikirim','dijadwalkan','diproses'].includes(status) ? 'status-dikirim' : 'status-menunggu';
+  const statusLabel = { menunggu: 'Belum Dijadwal', dijadwalkan: 'Dijadwalkan', dikirim: 'Dikirim', diproses: 'Diproses', terkirim: 'Terkirim', selesai: 'Selesai', sampai: 'Sampai' };
+  const statusCls   = ['selesai','terkirim','sampai'].includes(status) ? 'status-selesai' : ['dikirim','diproses'].includes(status) ? 'status-dikirim' : 'status-menunggu';
 
   const kurirHtml = d.namaKurir ? `
     <div class="card-meta">
@@ -497,7 +497,7 @@ async function handleDrop(e, newStatus) {
   if (curZone === newZone) return;
 
   // Cannot drag BACK from selesai
-  if (['selesai','terkirim'].includes(curStatus)) return;
+  if (['selesai','terkirim','sampai'].includes(curStatus)) return;
 
   // If dropping to scheduled (dikirim) but card has no kurir, open drawer instead
   if (newStatus === 'dikirim' && !d.namaKurir) {
@@ -517,7 +517,7 @@ async function doStatusUpdate(id, newStatus) {
     const d = allDeliveries.find(x => x.id === id);
     if (d) d.status = newStatus;
 
-    if (['selesai','terkirim'].includes(newStatus)) {
+    if (['selesai','terkirim','sampai'].includes(newStatus)) {
       // Fly-out animation then render
       const card = document.getElementById(`card-${id}`);
       if (card) {

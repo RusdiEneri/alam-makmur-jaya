@@ -30,7 +30,7 @@
     ],
     "total": 132000,
     "metodeBayar": "transfer",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "dikirim",
     "stokDireservasi": true,
     "buktiTransfer": "payment-proofs/bukti-seed-1.jpg",
@@ -38,32 +38,32 @@
     "catatanPengiriman": "Jl. Merdeka No. 45, Gresik",
     "checkoutToken": null,
     "needsDelivery": true,
-    "tanggal": "2026-07-06T11:10:11.031Z",
-    "createdAt": "2026-07-06T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.031Z",
+    "tanggal": "2026-07-06T10:34:15.500Z",
+    "createdAt": "2026-07-06T10:34:15.500Z",
+    "updatedAt": "2026-07-06T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pesanan",
         "status": "dikirim",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -109,7 +109,7 @@
     ],
     "total": 1098000,
     "metodeBayar": "cod",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "selesai",
     "stokDireservasi": true,
     "buktiTransfer": null,
@@ -117,38 +117,38 @@
     "catatanPengiriman": "Jl. Industri No. 8, Surabaya",
     "checkoutToken": null,
     "needsDelivery": true,
-    "tanggal": "2026-07-06T11:10:11.031Z",
-    "createdAt": "2026-07-06T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.031Z",
+    "tanggal": "2026-07-06T10:34:15.500Z",
+    "createdAt": "2026-07-06T10:34:15.500Z",
+    "updatedAt": "2026-07-06T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pesanan",
         "status": "dikirim",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pesanan",
         "status": "selesai",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -182,20 +182,20 @@
     "catatanPengiriman": "Jl. Raya Tuban KM 5, Tuban",
     "checkoutToken": null,
     "needsDelivery": true,
-    "tanggal": "2026-07-06T11:10:11.031Z",
-    "createdAt": "2026-07-06T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.031Z",
+    "tanggal": "2026-07-06T10:34:15.500Z",
+    "createdAt": "2026-07-06T10:34:15.500Z",
+    "updatedAt": "2026-07-06T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "sistem"
       }
     ]
@@ -231,7 +231,7 @@
     ],
     "total": 300000,
     "metodeBayar": "transfer",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "diproses",
     "stokDireservasi": true,
     "buktiTransfer": "payment-proofs/bukti-seed-4.jpg",
@@ -239,26 +239,26 @@
     "catatanPengiriman": "Jl. Kalimantan No. 33, Gresik",
     "checkoutToken": null,
     "needsDelivery": true,
-    "tanggal": "2026-07-05T11:10:11.031Z",
-    "createdAt": "2026-07-05T11:10:11.031Z",
-    "updatedAt": "2026-07-05T11:10:11.031Z",
+    "tanggal": "2026-07-05T10:34:15.500Z",
+    "createdAt": "2026-07-05T10:34:15.500Z",
+    "updatedAt": "2026-07-05T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-05T11:10:11.031Z",
+        "timestamp": "2026-07-05T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-05T11:10:11.031Z",
+        "timestamp": "2026-07-05T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-07-05T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-07-05T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -312,20 +312,20 @@
     "catatanPengiriman": "Jl. Sunan Giri No. 17, Gresik",
     "checkoutToken": null,
     "needsDelivery": true,
-    "tanggal": "2026-07-05T11:10:11.031Z",
-    "createdAt": "2026-07-05T11:10:11.031Z",
-    "updatedAt": "2026-07-05T11:10:11.031Z",
+    "tanggal": "2026-07-05T10:34:15.500Z",
+    "createdAt": "2026-07-05T10:34:15.500Z",
+    "updatedAt": "2026-07-05T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-05T11:10:11.031Z",
+        "timestamp": "2026-07-05T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-05T11:10:11.031Z",
+        "timestamp": "2026-07-05T10:34:15.500Z",
         "oleh": "sistem"
       }
     ]
@@ -351,7 +351,7 @@
     ],
     "total": 90000,
     "metodeBayar": "transfer",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "dikirim",
     "stokDireservasi": true,
     "buktiTransfer": "payment-proofs/bukti-seed-6.jpg",
@@ -359,32 +359,32 @@
     "catatanPengiriman": "Jl. Ahmad Yani No. 90, Lamongan",
     "checkoutToken": null,
     "needsDelivery": true,
-    "tanggal": "2026-07-04T11:10:11.031Z",
-    "createdAt": "2026-07-04T11:10:11.031Z",
-    "updatedAt": "2026-07-04T11:10:11.031Z",
+    "tanggal": "2026-07-04T10:34:15.500Z",
+    "createdAt": "2026-07-04T10:34:15.500Z",
+    "updatedAt": "2026-07-04T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-04T11:10:11.031Z",
+        "timestamp": "2026-07-04T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-04T11:10:11.031Z",
+        "timestamp": "2026-07-04T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pesanan",
         "status": "dikirim",
-        "timestamp": "2026-07-05T11:10:11.031Z",
+        "timestamp": "2026-07-05T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-07-04T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-07-04T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -420,7 +420,7 @@
     ],
     "total": 381000,
     "metodeBayar": "cod",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "selesai",
     "stokDireservasi": true,
     "buktiTransfer": null,
@@ -428,38 +428,38 @@
     "catatanPengiriman": "Desa Bawean RT 03 RW 02",
     "checkoutToken": null,
     "needsDelivery": true,
-    "tanggal": "2026-07-04T11:10:11.031Z",
-    "createdAt": "2026-07-04T11:10:11.031Z",
-    "updatedAt": "2026-07-04T11:10:11.031Z",
+    "tanggal": "2026-07-04T10:34:15.500Z",
+    "createdAt": "2026-07-04T10:34:15.500Z",
+    "updatedAt": "2026-07-04T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-04T11:10:11.031Z",
+        "timestamp": "2026-07-04T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-04T11:10:11.031Z",
+        "timestamp": "2026-07-04T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pesanan",
         "status": "dikirim",
-        "timestamp": "2026-07-05T11:10:11.031Z",
+        "timestamp": "2026-07-05T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pesanan",
         "status": "selesai",
-        "timestamp": "2026-07-06T11:10:11.031Z",
+        "timestamp": "2026-07-06T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-07-04T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-07-04T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -513,20 +513,20 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": true,
-    "tanggal": "2026-07-03T11:10:11.031Z",
-    "createdAt": "2026-07-03T11:10:11.031Z",
-    "updatedAt": "2026-07-03T11:10:11.031Z",
+    "tanggal": "2026-07-03T10:34:15.500Z",
+    "createdAt": "2026-07-03T10:34:15.500Z",
+    "updatedAt": "2026-07-03T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-03T11:10:11.031Z",
+        "timestamp": "2026-07-03T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-03T11:10:11.031Z",
+        "timestamp": "2026-07-03T10:34:15.500Z",
         "oleh": "sistem"
       }
     ]
@@ -552,7 +552,7 @@
     ],
     "total": 425000,
     "metodeBayar": "transfer",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "diproses",
     "stokDireservasi": true,
     "buktiTransfer": "payment-proofs/bukti-seed-9.jpg",
@@ -560,26 +560,26 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": true,
-    "tanggal": "2026-07-02T11:10:11.031Z",
-    "createdAt": "2026-07-02T11:10:11.031Z",
-    "updatedAt": "2026-07-02T11:10:11.031Z",
+    "tanggal": "2026-07-02T10:34:15.500Z",
+    "createdAt": "2026-07-02T10:34:15.500Z",
+    "updatedAt": "2026-07-02T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-02T11:10:11.031Z",
+        "timestamp": "2026-07-02T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-02T11:10:11.031Z",
+        "timestamp": "2026-07-02T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-07-02T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-07-02T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -623,20 +623,20 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": false,
-    "tanggal": "2026-07-01T11:10:11.031Z",
-    "createdAt": "2026-07-01T11:10:11.031Z",
-    "updatedAt": "2026-07-01T11:10:11.031Z",
+    "tanggal": "2026-07-01T10:34:15.500Z",
+    "createdAt": "2026-07-01T10:34:15.500Z",
+    "updatedAt": "2026-07-01T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-07-01T11:10:11.031Z",
+        "timestamp": "2026-07-01T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-07-01T11:10:11.031Z",
+        "timestamp": "2026-07-01T10:34:15.500Z",
         "oleh": "sistem"
       }
     ]
@@ -682,7 +682,7 @@
     ],
     "total": 370000,
     "metodeBayar": "transfer",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "dikirim",
     "stokDireservasi": true,
     "buktiTransfer": "payment-proofs/bukti-seed-11.jpg",
@@ -690,32 +690,32 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": false,
-    "tanggal": "2026-06-30T11:10:11.031Z",
-    "createdAt": "2026-06-30T11:10:11.031Z",
-    "updatedAt": "2026-06-30T11:10:11.031Z",
+    "tanggal": "2026-06-30T10:34:15.500Z",
+    "createdAt": "2026-06-30T10:34:15.500Z",
+    "updatedAt": "2026-06-30T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-06-30T11:10:11.031Z",
+        "timestamp": "2026-06-30T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-06-30T11:10:11.031Z",
+        "timestamp": "2026-06-30T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pesanan",
         "status": "dikirim",
-        "timestamp": "2026-07-01T11:10:11.031Z",
+        "timestamp": "2026-07-01T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-06-30T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-06-30T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -741,7 +741,7 @@
     ],
     "total": 195000,
     "metodeBayar": "cod",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "selesai",
     "stokDireservasi": true,
     "buktiTransfer": null,
@@ -749,38 +749,38 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": false,
-    "tanggal": "2026-06-29T11:10:11.031Z",
-    "createdAt": "2026-06-29T11:10:11.031Z",
-    "updatedAt": "2026-06-29T11:10:11.031Z",
+    "tanggal": "2026-06-29T10:34:15.500Z",
+    "createdAt": "2026-06-29T10:34:15.500Z",
+    "updatedAt": "2026-06-29T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-06-29T11:10:11.031Z",
+        "timestamp": "2026-06-29T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-06-29T11:10:11.031Z",
+        "timestamp": "2026-06-29T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pesanan",
         "status": "dikirim",
-        "timestamp": "2026-06-30T11:10:11.031Z",
+        "timestamp": "2026-06-30T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pesanan",
         "status": "selesai",
-        "timestamp": "2026-07-01T11:10:11.031Z",
+        "timestamp": "2026-07-01T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-06-29T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-06-29T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -824,20 +824,20 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": false,
-    "tanggal": "2026-06-28T11:10:11.031Z",
-    "createdAt": "2026-06-28T11:10:11.031Z",
-    "updatedAt": "2026-06-28T11:10:11.031Z",
+    "tanggal": "2026-06-28T10:34:15.500Z",
+    "createdAt": "2026-06-28T10:34:15.500Z",
+    "updatedAt": "2026-06-28T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-06-28T11:10:11.031Z",
+        "timestamp": "2026-06-28T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-06-28T11:10:11.031Z",
+        "timestamp": "2026-06-28T10:34:15.500Z",
         "oleh": "sistem"
       }
     ]
@@ -883,7 +883,7 @@
     ],
     "total": 1600000,
     "metodeBayar": "transfer",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "diproses",
     "stokDireservasi": true,
     "buktiTransfer": "payment-proofs/bukti-seed-14.jpg",
@@ -891,26 +891,26 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": false,
-    "tanggal": "2026-06-27T11:10:11.031Z",
-    "createdAt": "2026-06-27T11:10:11.031Z",
-    "updatedAt": "2026-06-27T11:10:11.031Z",
+    "tanggal": "2026-06-27T10:34:15.500Z",
+    "createdAt": "2026-06-27T10:34:15.500Z",
+    "updatedAt": "2026-06-27T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-06-27T11:10:11.031Z",
+        "timestamp": "2026-06-27T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-06-27T11:10:11.031Z",
+        "timestamp": "2026-06-27T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-06-27T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-06-27T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -944,20 +944,20 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": false,
-    "tanggal": "2026-06-26T11:10:11.031Z",
-    "createdAt": "2026-06-26T11:10:11.031Z",
-    "updatedAt": "2026-06-26T11:10:11.031Z",
+    "tanggal": "2026-06-26T10:34:15.500Z",
+    "createdAt": "2026-06-26T10:34:15.500Z",
+    "updatedAt": "2026-06-26T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-06-26T11:10:11.031Z",
+        "timestamp": "2026-06-26T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-06-26T11:10:11.031Z",
+        "timestamp": "2026-06-26T10:34:15.500Z",
         "oleh": "sistem"
       }
     ]
@@ -993,7 +993,7 @@
     ],
     "total": 132000,
     "metodeBayar": "transfer",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "dikirim",
     "stokDireservasi": true,
     "buktiTransfer": "payment-proofs/bukti-seed-16.jpg",
@@ -1001,32 +1001,32 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": false,
-    "tanggal": "2026-06-25T11:10:11.031Z",
-    "createdAt": "2026-06-25T11:10:11.031Z",
-    "updatedAt": "2026-06-25T11:10:11.031Z",
+    "tanggal": "2026-06-25T10:34:15.500Z",
+    "createdAt": "2026-06-25T10:34:15.500Z",
+    "updatedAt": "2026-06-25T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-06-25T11:10:11.031Z",
+        "timestamp": "2026-06-25T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-06-25T11:10:11.031Z",
+        "timestamp": "2026-06-25T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pesanan",
         "status": "dikirim",
-        "timestamp": "2026-06-26T11:10:11.031Z",
+        "timestamp": "2026-06-26T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-06-25T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-06-25T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -1072,7 +1072,7 @@
     ],
     "total": 1098000,
     "metodeBayar": "cod",
-    "statusPembayaran": "berhasil",
+    "statusPembayaran": "lunas",
     "statusPesanan": "selesai",
     "stokDireservasi": true,
     "buktiTransfer": null,
@@ -1080,38 +1080,38 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": false,
-    "tanggal": "2026-06-24T11:10:11.031Z",
-    "createdAt": "2026-06-24T11:10:11.031Z",
-    "updatedAt": "2026-06-24T11:10:11.031Z",
+    "tanggal": "2026-06-24T10:34:15.500Z",
+    "createdAt": "2026-06-24T10:34:15.500Z",
+    "updatedAt": "2026-06-24T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-06-24T11:10:11.031Z",
+        "timestamp": "2026-06-24T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-06-24T11:10:11.031Z",
+        "timestamp": "2026-06-24T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pesanan",
         "status": "dikirim",
-        "timestamp": "2026-06-25T11:10:11.031Z",
+        "timestamp": "2026-06-25T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pesanan",
         "status": "selesai",
-        "timestamp": "2026-06-26T11:10:11.031Z",
+        "timestamp": "2026-06-26T10:34:15.500Z",
         "oleh": "Admin Toko"
       },
       {
         "tipe": "pembayaran",
-        "status": "berhasil",
-        "timestamp": "2026-06-24T11:10:11.031Z",
+        "status": "lunas",
+        "timestamp": "2026-06-24T10:34:15.500Z",
         "oleh": "Kasir Satu"
       }
     ]
@@ -1145,20 +1145,20 @@
     "catatanPengiriman": null,
     "checkoutToken": null,
     "needsDelivery": false,
-    "tanggal": "2026-06-23T11:10:11.031Z",
-    "createdAt": "2026-06-23T11:10:11.031Z",
-    "updatedAt": "2026-06-23T11:10:11.031Z",
+    "tanggal": "2026-06-23T10:34:15.500Z",
+    "createdAt": "2026-06-23T10:34:15.500Z",
+    "updatedAt": "2026-06-23T10:34:15.500Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
         "status": "diproses",
-        "timestamp": "2026-06-23T11:10:11.031Z",
+        "timestamp": "2026-06-23T10:34:15.500Z",
         "oleh": "sistem"
       },
       {
         "tipe": "pembayaran",
         "status": "pending",
-        "timestamp": "2026-06-23T11:10:11.031Z",
+        "timestamp": "2026-06-23T10:34:15.500Z",
         "oleh": "sistem"
       }
     ]

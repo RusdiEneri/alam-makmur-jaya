@@ -9,7 +9,7 @@
     "kurir": null,
     "kendaraan": null,
     "namaKurir": null,
-    "status": "menunggu",
+    "status": "dijadwalkan",
     "catatan": "Pesanan baru, belum dijadwalkan",
     "items": [
       {
@@ -33,8 +33,8 @@
         "subtotal": 56000
       }
     ],
-    "createdAt": "2026-07-06T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.031Z"
+    "createdAt": "2026-07-06T10:34:15.500Z",
+    "updatedAt": "2026-07-06T10:36:31.334Z"
   },
   {
     "id": "del-seed-002",
@@ -80,8 +80,8 @@
         "subtotal": 204000
       }
     ],
-    "createdAt": "2026-07-06T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.031Z"
+    "createdAt": "2026-07-06T10:34:15.500Z",
+    "updatedAt": "2026-07-06T10:34:15.500Z"
   },
   {
     "id": "del-seed-003",
@@ -117,9 +117,9 @@
         "subtotal": 160000
       }
     ],
-    "createdAt": "2026-07-05T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.031Z",
-    "waktuKirim": "2026-07-06T11:10:11.031Z"
+    "createdAt": "2026-07-05T10:34:15.500Z",
+    "updatedAt": "2026-07-06T10:34:15.500Z",
+    "waktuKirim": "2026-07-06T10:34:15.500Z"
   },
   {
     "id": "del-seed-004",
@@ -165,10 +165,10 @@
         "subtotal": 145000
       }
     ],
-    "createdAt": "2026-07-04T11:10:11.031Z",
-    "updatedAt": "2026-07-05T11:10:11.031Z",
-    "waktuKirim": "2026-07-04T11:10:11.031Z",
-    "waktuTiba": "2026-07-05T11:10:11.031Z"
+    "createdAt": "2026-07-04T10:34:15.500Z",
+    "updatedAt": "2026-07-05T10:34:15.500Z",
+    "waktuKirim": "2026-07-04T10:34:15.500Z",
+    "waktuTiba": "2026-07-05T10:34:15.500Z"
   },
   {
     "id": "del-seed-005",
@@ -180,7 +180,7 @@
     "kurir": null,
     "kendaraan": null,
     "namaKurir": null,
-    "status": "menunggu",
+    "status": "dijadwalkan",
     "catatan": "Menunggu penjadwalan kurir",
     "items": [
       {
@@ -194,7 +194,7 @@
         "subtotal": 26000
       }
     ],
-    "createdAt": "2026-07-06T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.032Z"
+    "createdAt": "2026-07-06T10:34:15.500Z",
+    "updatedAt": "2026-07-06T10:36:42.199Z"
   }
 ]
