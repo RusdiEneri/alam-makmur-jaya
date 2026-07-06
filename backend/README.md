@@ -80,7 +80,7 @@ Server akan berjalan di: **http://localhost:3000**
 | Kasir   | kasir@amj.com  | password123 |
 
 > Password di atas sudah di-hash dengan bcrypt.
-> Akun admin/kasir memakai password demo `admin123`.
+> Akun admin/kasir memakai password demo `password123`.
 
 ---
 
