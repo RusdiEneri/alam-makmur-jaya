@@ -74,11 +74,10 @@ Server akan berjalan di: **http://localhost:3000**
 
 ## Akun Demo
 
-| Role    | Email          | Password |
-| ------- | -------------- | -------- |
-| Admin   | admin@amj.com  | admin123 |
-| Kasir   | kasir@amj.com  | admin123 |
-| Pembeli | budi@email.com | password |
+| Role    | Email          | Password    |
+| ------- | -------------- | ----------- |
+| Admin   | admin@amj.com  | password123 |
+| Kasir   | kasir@amj.com  | password123 |
 
 > Password di atas sudah di-hash dengan bcrypt.
 > Akun admin/kasir memakai password demo `admin123`.
