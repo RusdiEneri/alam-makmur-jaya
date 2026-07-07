@@ -69,7 +69,7 @@ npm test
 Gunakan kredensial berikut untuk masuk ke Panel Admin (`pages/login.html`):
 
 - **Email**: `admin@amj.com`
-- **Password**: `admin123`
+- **Password**: `password123`
 
 _(Sangat disarankan untuk mengubah password ini atau membuat akun staf baru setelah instalasi)._
 
