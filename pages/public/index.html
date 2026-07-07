@@ -1,582 +1,824 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UD. Alam Makmur Jaya</title>
-  <link rel="icon" href="../../assets/store.ico" type="image/x-icon"/>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="../../css/style.css"/>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UD. Alam Makmur Jaya</title>
+    <link rel="icon" href="../../assets/store.ico" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/style.css" />
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav class="navbar">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">🏗</span>
+        <div>
+          <span class="brand-name">Alam Makmur Jaya</span>
+          <span class="brand-sub">Toko Bahan Bangunan</span>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Beranda</a>
+        <a href="catalog.html">Katalog</a>
+        <!-- <a href="#cek-pesanan">📦 Cek Pesanan</a> -->
+        <a href="cart.html"
+          >🛒 Keranjang <span id="cart-count" class="badge">0</span></a
+        >
+        <a href="login.html" class="btn-login">Masuk</a>
+      </div>
+      <button class="hamburger" onclick="toggleMenu()">☰</button>
+    </nav>
 
-  <!-- NAV -->
-  <nav class="navbar">
-    <a href="index.html" class="brand">
-      <span class="brand-icon">🏗</span>
-      <div>
-        <span class="brand-name">Alam Makmur Jaya</span>
-        <span class="brand-sub">Toko Bahan Bangunan</span>
-      </div>
-    </a>
-    <div class="nav-links">
-      <a href="index.html" class="active">Beranda</a>
-      <a href="catalog.html">Katalog</a>
-      <!-- <a href="#cek-pesanan">📦 Cek Pesanan</a> -->
-      <a href="cart.html">🛒 Keranjang <span id="cart-count" class="badge">0</span></a>
-      <a href="login.html" class="btn-login">Masuk</a>
-    </div>
-    <button class="hamburger" onclick="toggleMenu()">☰</button>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-content">
-      <span class="hero-tag">Terpercaya Sejak 2010 · Gresik, Jawa Timur</span>
-      <h1>Material Bangunan <em>Berkualitas</em>, Harga <em>Terjangkau</em></h1>
-      <p>Temukan ribuan produk bahan bangunan dari semen, pipa, maupun kabel tersedia stok secara real-time, pesan kapanpun dan dimanapun.</p>
-      <div class="hero-actions">
-        <a href="catalog.html" class="btn-primary">Lihat Katalog →</a>
-        <a href="#categories" class="btn-ghost">Kategori Produk</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Produk</span></div>
-        <div class="stat-div"></div>
-        <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">Online</span></div>
-        <div class="stat-div"></div>
-        <div class="stat"><span class="stat-num">QRIS</span><span class="stat-label">Pembayaran</span></div>
-        <div class="stat-div"></div>
-        <div class="stat"><span class="stat-num">COD</span><span class="stat-label">Pembayaran</span></div>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="hero-card floating">
-        <div class="hcard-row">
-          <span class="hcard-icon">📦</span>
-          <div>
-            <p class="hcard-label">Stok Tersedia</p>
-            <p class="hcard-val">Semen Portland 50kg</p>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <span class="hero-tag">Terpercaya Sejak 2010 · Gresik, Jawa Timur</span>
+        <h1>
+          Material Bangunan <em>Berkualitas</em>, Harga <em>Terjangkau</em>
+        </h1>
+        <p>
+          Temukan ribuan produk bahan bangunan dari semen, pipa, maupun kabel
+          tersedia stok secara real-time, pesan kapanpun dan dimanapun.
+        </p>
+        <div class="hero-actions">
+          <a href="catalog.html" class="btn-primary">Lihat Katalog →</a>
+          <a href="#categories" class="btn-ghost">Kategori Produk</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-num">500+</span
+            ><span class="stat-label">Produk</span>
           </div>
-          <span class="hcard-badge in">✓ Ada</span>
+          <div class="stat-div"></div>
+          <div class="stat">
+            <span class="stat-num">24/7</span
+            ><span class="stat-label">Online</span>
+          </div>
+          <div class="stat-div"></div>
+          <div class="stat">
+            <span class="stat-num">QRIS</span
+            ><span class="stat-label">Pembayaran</span>
+          </div>
+          <div class="stat-div"></div>
+          <div class="stat">
+            <span class="stat-num">COD</span
+            ><span class="stat-label">Pembayaran</span>
+          </div>
         </div>
       </div>
-      <div class="hero-img-box">
-        <img src="../../assets/fotoToko.jpeg" alt="Ilustrasi Toko Bahan Bangunan" class="hero-img" width="550px" height="auto" loading="lazy"/>
-        <!-- <div class="img-placeholder">
+      <div class="hero-visual">
+        <div class="hero-card floating">
+          <div class="hcard-row">
+            <span class="hcard-icon">📦</span>
+            <div>
+              <p class="hcard-label">Stok Tersedia</p>
+              <p class="hcard-val">Semen Portland 50kg</p>
+            </div>
+            <span class="hcard-badge in">✓ Ada</span>
+          </div>
+        </div>
+        <div class="hero-img-box">
+          <img
+            src="../../assets/fotoToko.jpeg"
+            alt="Ilustrasi Toko Bahan Bangunan"
+            class="hero-img"
+            width="550px"
+            height="auto"
+            loading="lazy"
+          />
+          <!-- <div class="img-placeholder">
           <span class="big-emoji">🏗️</span>
           <p>UD. Alam Makmur Jaya</p>
           <small>Gresik, Jawa Timur</small>
         </div> -->
-      </div>
-      <div class="hero-card floating-2">
-        <p class="hcard-label">Pesanan Baru ✓</p>
-        <p class="hcard-val">Pipa PVC 3/4" · 20 pcs</p>
-        <p class="hcard-price">Rp 480.000</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CATEGORIES -->
-  <section class="categories" id="categories">
-    <div class="section-header">
-      <h2>Kategori Produk</h2>
-      <a href="catalog.html" class="see-all">Lihat semua →</a>
-    </div>
-    <div class="cat-grid">
-      <a href="catalog.html?cat=Bahan%20Bangunan" class="cat-card">
-        <span class="cat-emoji">🧱</span>
-        <p class="cat-name">Bahan Bangunan</p>
-        <p class="cat-count">12 produk</p>
-      </a>
-      <a href="catalog.html?cat=Pipa%20%26%20Selang" class="cat-card">
-        <span class="cat-emoji">🔧</span>
-        <p class="cat-name">Pipa & Selang</p>
-        <p class="cat-count">38 produk</p>
-      </a>
-      <a href="catalog.html?cat=Listrik" class="cat-card">
-        <span class="cat-emoji">⚡</span>
-        <p class="cat-name">Listrik</p>
-        <p class="cat-count">25 produk</p>
-      </a>
-      <a href="catalog.html?cat=Cat" class="cat-card">
-        <span class="cat-emoji">🎨</span>
-        <p class="cat-name">Cat</p>
-        <p class="cat-count">30 produk</p>
-      </a>
-      <a href="catalog.html?cat=Paku%20%26%20Baut" class="cat-card">
-        <span class="cat-emoji">🔩</span>
-        <p class="cat-name">Paku & Baut</p>
-        <p class="cat-count">44 produk</p>
-      </a>
-      <a href="catalog.html?cat=Kayu" class="cat-card">
-        <span class="cat-emoji">🪵</span>
-        <p class="cat-name">Kayu</p>
-        <p class="cat-count">18 produk</p>
-      </a>
-    </div>
-  </section>
-
-  <!-- FEATURED PRODUCTS -->
-  <section class="featured">
-    <div class="section-header">
-      <h2>Produk Terlaris</h2>
-      <a href="catalog.html" class="see-all">Lihat semua →</a>
-    </div>
-    <div class="product-grid" id="featured-grid"></div>
-  </section>
-
-  <!-- CEK PESANAN -->
-  <section class="track-section" id="cek-pesanan">
-    <div class="track-inner">
-      <div class="track-header">
-        <span class="track-tag">📦 Lacak Pesanan</span>
-        <h2>Cek Status Pesanan Kamu</h2>
-        <p>Masukkan nomor pesanan dan nomor WhatsApp untuk melihat status terkini.</p>
-      </div>
-
-      <div class="track-grid">
-        <!-- FORM -->
-        <div class="track-form-card">
-          <div class="track-form-group">
-            <label class="track-label">Nomor Pesanan</label>
-            <input type="text" id="idx-order-input" class="track-input" placeholder="Contoh: ORD-12345678">
-          </div>
-          <div class="track-form-group">
-            <label class="track-label">Nomor WhatsApp</label>
-            <input type="tel" id="idx-wa-input" class="track-input" placeholder="08xxxxxxxxxx">
-          </div>
-          <button class="track-btn" id="idx-track-btn" onclick="idxDoTrack()">
-            <span>Cek Status Pesanan</span>
-            <span>→</span>
-          </button>
-          <div id="idx-track-error" style="color:#DC2626;font-size:12px;margin-top:8px;display:none;text-align:center;"></div>
-          <div style="margin-top:14px;text-align:center;">
-            <a href="order-status.html" style="font-size:12px;color:var(--muted);text-decoration:none;">Halaman Lacak Pesanan Lengkap →</a>
-          </div>
         </div>
-
-        <!-- RESULT -->
-        <div class="track-result" id="idx-result" style="display:none;">
-          <div class="track-result-header">
-            <div>
-              <div class="track-order-no" id="idx-no-order">—</div>
-              <div class="track-order-date" id="idx-date">—</div>
-            </div>
-            <div class="track-pay-badge" id="idx-pay-badge">—</div>
-          </div>
-
-          <!-- Timeline -->
-          <div class="track-timeline" id="idx-timeline">
-            <div class="tl-step" id="tl-menunggu">
-              <div class="tl-dot"></div>
-              <div class="tl-content">
-                <div class="tl-title">Menunggu Konfirmasi</div>
-                <div class="tl-desc">Pesanan sedang menunggu verifikasi admin.</div>
-              </div>
-            </div>
-            <div class="tl-step" id="tl-diproses">
-              <div class="tl-dot"></div>
-              <div class="tl-content">
-                <div class="tl-title">Sedang Dikemas</div>
-                <div class="tl-desc">Barang sedang disiapkan di gudang kami.</div>
-              </div>
-            </div>
-            <div class="tl-step" id="tl-dikirim">
-              <div class="tl-dot"></div>
-              <div class="tl-content">
-                <div class="tl-title">Dalam Pengiriman</div>
-                <div class="tl-desc">Pesanan sedang dalam perjalanan ke alamat Anda.</div>
-              </div>
-            </div>
-            <div class="tl-step" id="tl-selesai">
-              <div class="tl-dot"></div>
-              <div class="tl-content">
-                <div class="tl-title">Selesai</div>
-                <div class="tl-desc">Pesanan telah sampai. Terima kasih! 🎉</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Items -->
-          <div class="track-items">
-            <div class="track-items-label">Rincian Barang</div>
-            <div id="idx-items-list"></div>
-            <div class="track-total">
-              <span>Total Bayar</span>
-              <span id="idx-total">Rp 0</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- EMPTY PROMPT -->
-        <div class="track-empty" id="idx-empty">
-          <div class="track-empty-icon">🔍</div>
-          <div class="track-empty-text">Masukkan nomor pesanan dan WhatsApp, lalu klik <strong>Cek Status</strong> untuk melihat status terkini pesanan Anda.</div>
+        <div class="hero-card floating-2">
+          <p class="hcard-label">Pesanan Baru ✓</p>
+          <p class="hcard-val">Pipa PVC 3/4" · 20 pcs</p>
+          <p class="hcard-price">Rp 480.000</p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FEATURES -->
-  <section class="features">
-    <div class="feat-grid">
-      <div class="feat-card">
-        <span class="feat-icon">📱</span>
-        <h3>Pesan Online</h3>
-        <p>Cek stok dan pesan kapanpun dari rumah atau lokasi proyek.</p>
+    <!-- CATEGORIES -->
+    <section class="categories" id="categories">
+      <div class="section-header">
+        <h2>Kategori Produk</h2>
+        <a href="catalog.html" class="see-all">Lihat semua →</a>
       </div>
-      <div class="feat-card">
-        <span class="feat-icon">⚡</span>
-        <h3>Stok Real-Time</h3>
-        <p>Informasi ketersediaan barang selalu up-to-date, tidak ada kecewaan.</p>
+      <div class="cat-grid">
+        <a href="catalog.html?cat=Bahan%20Bangunan" class="cat-card">
+          <span class="cat-emoji">🧱</span>
+          <p class="cat-name">Bahan Bangunan</p>
+          <p class="cat-count">12 produk</p>
+        </a>
+        <a href="catalog.html?cat=Pipa%20%26%20Selang" class="cat-card">
+          <span class="cat-emoji">🔧</span>
+          <p class="cat-name">Pipa & Selang</p>
+          <p class="cat-count">38 produk</p>
+        </a>
+        <a href="catalog.html?cat=Listrik" class="cat-card">
+          <span class="cat-emoji">⚡</span>
+          <p class="cat-name">Listrik</p>
+          <p class="cat-count">25 produk</p>
+        </a>
+        <a href="catalog.html?cat=Cat" class="cat-card">
+          <span class="cat-emoji">🎨</span>
+          <p class="cat-name">Cat</p>
+          <p class="cat-count">30 produk</p>
+        </a>
+        <a href="catalog.html?cat=Paku%20%26%20Baut" class="cat-card">
+          <span class="cat-emoji">🔩</span>
+          <p class="cat-name">Paku & Baut</p>
+          <p class="cat-count">44 produk</p>
+        </a>
+        <a href="catalog.html?cat=Kayu" class="cat-card">
+          <span class="cat-emoji">🪵</span>
+          <p class="cat-name">Kayu</p>
+          <p class="cat-count">18 produk</p>
+        </a>
       </div>
-      <div class="feat-card">
-        <span class="feat-icon">💳</span>
-        <h3>Bayar via QRIS</h3>
-        <p>Pembayaran digital yang cepat dan praktis, semua e-wallet diterima.</p>
+    </section>
+
+    <!-- FEATURED PRODUCTS -->
+    <section class="featured">
+      <div class="section-header">
+        <h2>Produk Terlaris</h2>
+        <a href="catalog.html" class="see-all">Lihat semua →</a>
       </div>
-      <div class="feat-card">
-        <span class="feat-icon">📊</span>
-        <h3>Riwayat Transaksi</h3>
-        <p>Semua pesanan tercatat rapi, bisa dicek kapanpun.</p>
+      <div class="product-grid" id="featured-grid"></div>
+    </section>
+
+    <!-- CEK PESANAN -->
+    <section class="track-section" id="cek-pesanan">
+      <div class="track-inner">
+        <div class="track-header">
+          <span class="track-tag">📦 Lacak Pesanan</span>
+          <h2>Cek Status Pesanan Kamu</h2>
+          <p>
+            Masukkan nomor pesanan dan nomor WhatsApp untuk melihat status
+            terkini.
+          </p>
+        </div>
+
+        <div class="track-grid">
+          <!-- FORM -->
+          <div class="track-form-card">
+            <div class="track-form-group">
+              <label class="track-label">Nomor Pesanan</label>
+              <input
+                type="text"
+                id="idx-order-input"
+                class="track-input"
+                placeholder="Contoh: ORD-12345678"
+              />
+            </div>
+            <div class="track-form-group">
+              <label class="track-label">Nomor WhatsApp</label>
+              <input
+                type="tel"
+                id="idx-wa-input"
+                class="track-input"
+                placeholder="08xxxxxxxxxx"
+              />
+            </div>
+            <button class="track-btn" id="idx-track-btn" onclick="idxDoTrack()">
+              <span>Cek Status Pesanan</span>
+              <span>→</span>
+            </button>
+            <div
+              id="idx-track-error"
+              style="
+                color: #dc2626;
+                font-size: 12px;
+                margin-top: 8px;
+                display: none;
+                text-align: center;
+              "
+            ></div>
+            <div style="margin-top: 14px; text-align: center">
+              <a
+                href="order-status.html"
+                style="
+                  font-size: 12px;
+                  color: var(--muted);
+                  text-decoration: none;
+                "
+                >Halaman Lacak Pesanan Lengkap →</a
+              >
+            </div>
+          </div>
+
+          <!-- RESULT -->
+          <div class="track-result" id="idx-result" style="display: none">
+            <div class="track-result-header">
+              <div>
+                <div class="track-order-no" id="idx-no-order">—</div>
+                <div class="track-order-date" id="idx-date">—</div>
+              </div>
+              <div class="track-pay-badge" id="idx-pay-badge">—</div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="track-timeline" id="idx-timeline">
+              <div class="tl-step" id="tl-menunggu">
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                  <div class="tl-title">Menunggu Konfirmasi</div>
+                  <div class="tl-desc">
+                    Pesanan sedang menunggu verifikasi admin.
+                  </div>
+                </div>
+              </div>
+              <div class="tl-step" id="tl-diproses">
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                  <div class="tl-title">Sedang Dikemas</div>
+                  <div class="tl-desc">
+                    Barang sedang disiapkan di gudang kami.
+                  </div>
+                </div>
+              </div>
+              <div class="tl-step" id="tl-dikirim">
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                  <div class="tl-title">Dalam Pengiriman</div>
+                  <div class="tl-desc">
+                    Pesanan sedang dalam perjalanan ke alamat Anda.
+                  </div>
+                </div>
+              </div>
+              <div class="tl-step" id="tl-selesai">
+                <div class="tl-dot"></div>
+                <div class="tl-content">
+                  <div class="tl-title">Selesai</div>
+                  <div class="tl-desc">
+                    Pesanan telah sampai. Terima kasih! 🎉
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Items -->
+            <div class="track-items">
+              <div class="track-items-label">Rincian Barang</div>
+              <div id="idx-items-list"></div>
+              <div class="track-total">
+                <span>Total Bayar</span>
+                <span id="idx-total">Rp 0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- EMPTY PROMPT -->
+          <div class="track-empty" id="idx-empty">
+            <div class="track-empty-icon">🔍</div>
+            <div class="track-empty-text">
+              Masukkan nomor pesanan dan WhatsApp, lalu klik
+              <strong>Cek Status</strong> untuk melihat status terkini pesanan
+              Anda.
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div>
-        <p class="footer-brand">🏗 UD. Alam Makmur Jaya</p>
-        <p class="footer-addr">Gresik, Jawa Timur 61124</p>
-        <p class="footer-addr">Pemilik: Muhammad Alam Shah</p>
+    <!-- FEATURES -->
+    <section class="features">
+      <div class="feat-grid">
+        <div class="feat-card">
+          <span class="feat-icon">📱</span>
+          <h3>Pesan Online</h3>
+          <p>Cek stok dan pesan kapanpun dari rumah atau lokasi proyek.</p>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">⚡</span>
+          <h3>Stok Real-Time</h3>
+          <p>
+            Informasi ketersediaan barang selalu up-to-date, tidak ada kecewaan.
+          </p>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">💳</span>
+          <h3>Bayar via QRIS</h3>
+          <p>
+            Pembayaran digital yang cepat dan praktis, semua e-wallet diterima.
+          </p>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">📊</span>
+          <h3>Riwayat Transaksi</h3>
+          <p>Semua pesanan tercatat rapi, bisa dicek kapanpun.</p>
+        </div>
       </div>
-      <div class="footer-links">
-        <a href="catalog.html">Katalog</a>
-        <a href="login.html">Login Admin</a>
-        <a href="cart.html">Keranjang</a>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div>
+          <p class="footer-brand">🏗 UD. Alam Makmur Jaya</p>
+          <p class="footer-addr">Gresik, Jawa Timur 61124</p>
+          <p class="footer-addr">Pemilik: Muhammad Alam Shah</p>
+        </div>
+        <div class="footer-links">
+          <a href="catalog.html">Katalog</a>
+          <a href="login.html">Login Admin</a>
+          <a href="cart.html">Keranjang</a>
+        </div>
       </div>
-    </div>
-    <p class="footer-copy">© 2025 UD. Alam Makmur Jaya · Dibuat oleh Kelompok 8 UISI</p>
-  </footer>
+      <p class="footer-copy">
+        © 2025 UD. Alam Makmur Jaya · Dibuat oleh Kelompok 8 UISI
+      </p>
+    </footer>
 
-  <script src="../../js/api.js"></script>
-  <script src="../../js/data.js"></script>
-  <script src="../../js/main.js"></script>
+    <script src="../../config.js"></script>
+    <script src="../../js/api.js"></script>
 
-  <!-- TRACKING SECTION STYLES + LOGIC -->
-  <style>
-    /* ── CEK PESANAN SECTION ───────────────────────────────────── */
-    .track-section {
-      background: linear-gradient(135deg, #1C1C1E 0%, #2D1C0F 60%, #1C1C1E 100%);
-      padding: 5rem 4rem;
-    }
-    .track-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-    }
-    .track-header {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-    .track-tag {
-      display: inline-block;
-      background: rgba(232, 93, 38, 0.2);
-      color: #FBA07A;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 5px 14px;
-      border-radius: 99px;
-      margin-bottom: 1rem;
-      letter-spacing: 0.3px;
-      border: 1px solid rgba(232, 93, 38, 0.3);
-    }
-    .track-header h2 {
-      font-family: 'Fraunces', serif;
-      font-size: clamp(1.75rem, 3vw, 2.5rem);
-      font-weight: 700;
-      color: white;
-      margin-bottom: 0.75rem;
-    }
-    .track-header p {
-      color: #9CA3AF;
-      font-size: 15px;
-    }
+    <script src="../../js/data.js"></script>
+    <script src="../../js/main.js"></script>
 
-    .track-grid {
-      display: grid;
-      grid-template-columns: 360px 1fr;
-      gap: 1.5rem;
-      align-items: start;
-    }
-
-    /* FORM CARD */
-    .track-form-card {
-      background: #FFFFFF;
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
-    }
-    .track-form-group { margin-bottom: 1.1rem; }
-    .track-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      color: #374151;
-      margin-bottom: 6px;
-    }
-    .track-input {
-      width: 100%;
-      padding: 11px 14px;
-      border: 1.5px solid #E5E7EB;
-      border-radius: 9px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      color: #1C1C1E;
-      background: #F9FAFB;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .track-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: white;
-      box-shadow: 0 0 0 3px rgba(232,93,38,0.12);
-    }
-    .track-btn {
-      width: 100%;
-      padding: 13px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 16px rgba(232,93,38,0.35);
-      margin-top: 4px;
-    }
-    .track-btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(232,93,38,0.4);
-    }
-    .track-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* RESULT CARD */
-    .track-result {
-      background: white;
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.3);
-      animation: fadeInUp 0.4s both;
-    }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .track-result-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px dashed #E5E7EB;
-    }
-    .track-order-no { font-size: 18px; font-weight: 800; color: #1C1C1E; margin-bottom: 3px; }
-    .track-order-date { font-size: 12px; color: #6B7280; }
-    .track-pay-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 5px 12px; border-radius: 99px; font-size: 11px; font-weight: 700;
-    }
-    .track-pay-badge.menunggu { background: rgba(245,158,11,0.12); color: #B45309; animation: pulse 2s infinite; }
-    .track-pay-badge.berhasil { background: rgba(26,107,58,0.12); color: #1A6B3A; }
-    .track-pay-badge.ditolak  { background: rgba(220,38,38,0.12); color: #B91C1C; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
-
-    /* TIMELINE */
-    .track-timeline { position: relative; padding-left: 20px; margin-bottom: 20px; }
-    .track-timeline::before {
-      content: '';
-      position: absolute; left: 5px; top: 8px; bottom: 8px;
-      width: 2px; background: #E5E7EB;
-    }
-    .tl-step {
-      position: relative; display: flex; gap: 14px;
-      margin-bottom: 18px; opacity: 0;
-      animation: fadeIn 0.4s forwards;
-    }
-    .tl-step:nth-child(1){animation-delay:.1s}
-    .tl-step:nth-child(2){animation-delay:.2s}
-    .tl-step:nth-child(3){animation-delay:.3s}
-    .tl-step:nth-child(4){animation-delay:.4s}
-    .tl-step:last-child { margin-bottom: 0; }
-    @keyframes fadeIn { to { opacity: 1; } }
-    .tl-dot {
-      position: absolute; left: -20px; top: 3px;
-      width: 12px; height: 12px; border-radius: 50%;
-      background: white; border: 2px solid #D1D5DB; z-index: 2;
-      transition: all 0.3s;
-      flex-shrink: 0;
-    }
-    .tl-step.completed .tl-dot { background: var(--accent); border-color: var(--accent); }
-    .tl-step.completed .tl-dot::after {
-      content: '';
-      position: absolute; left: 2px; top: 0px; width: 4px; height: 7px;
-      border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg);
-    }
-    .tl-step.active .tl-dot {
-      background: white; border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(232,93,38,0.2);
-    }
-    .tl-title { font-size: 14px; font-weight: 700; color: #9CA3AF; margin-bottom: 2px; transition: color 0.3s; }
-    .tl-desc { font-size: 12px; color: #6B7280; display: none; }
-    .tl-step.completed .tl-title,
-    .tl-step.active .tl-title { color: #1C1C1E; }
-    .tl-step.active .tl-desc { display: block; }
-    .tl-content { padding-left: 4px; }
-
-    /* ITEMS */
-    .track-items {
-      background: #F9FAFB;
-      border-radius: 10px;
-      padding: 14px;
-    }
-    .track-items-label {
-      font-size: 10px; font-weight: 700; color: #9CA3AF;
-      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
-    }
-    .track-item-row {
-      display: flex; justify-content: space-between;
-      font-size: 13px; margin-bottom: 6px; color: #374151;
-    }
-    .track-total {
-      display: flex; justify-content: space-between;
-      font-weight: 800; font-size: 15px;
-      color: var(--primary);
-      border-top: 1px solid #E5E7EB;
-      padding-top: 10px; margin-top: 10px;
-    }
-
-    /* EMPTY */
-    .track-empty {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      min-height: 240px;
-      background: rgba(255,255,255,0.06);
-      border: 1.5px dashed rgba(255,255,255,0.15);
-      border-radius: 16px;
-      text-align: center;
-      padding: 40px 24px;
-    }
-    .track-empty-icon { font-size: 48px; margin-bottom: 14px; }
-    .track-empty-text { color: #6B7280; font-size: 14px; line-height: 1.6; max-width: 280px; }
-    .track-empty-text strong { color: white; }
-
-    /* Nav link for cek pesanan */
-    .nav-links a[href="#cek-pesanan"] { color: var(--primary) !important; }
-
-    @media (max-width: 900px) {
-      .track-section { padding: 3rem 2rem; }
-      .track-grid { grid-template-columns: 1fr; }
-      .track-empty { display: none; }
-    }
-    @media (max-width: 600px) {
-      .track-section { padding: 2.5rem 1.5rem; }
-    }
-  </style>
-
-  <script>
-    // ── CEK PESANAN (index.html inline) ─────────────────────────
-    async function idxDoTrack() {
-      const order  = document.getElementById('idx-order-input').value.trim();
-      const wa     = document.getElementById('idx-wa-input').value.trim();
-      const errEl  = document.getElementById('idx-track-error');
-      const btn    = document.getElementById('idx-track-btn');
-
-      if (!order || !wa) {
-        errEl.textContent = 'Harap isi Nomor Pesanan dan Nomor WhatsApp.';
-        errEl.style.display = 'block';
-        return;
+    <!-- TRACKING SECTION STYLES + LOGIC -->
+    <style>
+      /* ── CEK PESANAN SECTION ───────────────────────────────────── */
+      .track-section {
+        background: linear-gradient(
+          135deg,
+          #1c1c1e 0%,
+          #2d1c0f 60%,
+          #1c1c1e 100%
+        );
+        padding: 5rem 4rem;
       }
-      errEl.style.display = 'none';
-      btn.disabled = true;
-      btn.querySelector('span').textContent = 'Mencari...';
-
-      try {
-        const res = await API.trackOrder(order, wa);
-        idxRenderResult(res);
-        document.getElementById('idx-result').style.display = 'block';
-        document.getElementById('idx-empty').style.display  = 'none';
-      } catch (err) {
-        errEl.textContent = err.message || 'Pesanan tidak ditemukan. Periksa kembali nomor pesanan dan WhatsApp.';
-        errEl.style.display = 'block';
-        document.getElementById('idx-result').style.display = 'none';
-        document.getElementById('idx-empty').style.display  = 'flex';
-      } finally {
-        btn.disabled = false;
-        btn.querySelector('span').textContent = 'Cek Status Pesanan';
+      .track-inner {
+        max-width: 1280px;
+        margin: 0 auto;
       }
-    }
+      .track-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+      .track-tag {
+        display: inline-block;
+        background: rgba(232, 93, 38, 0.2);
+        color: #fba07a;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 14px;
+        border-radius: 99px;
+        margin-bottom: 1rem;
+        letter-spacing: 0.3px;
+        border: 1px solid rgba(232, 93, 38, 0.3);
+      }
+      .track-header h2 {
+        font-family: "Fraunces", serif;
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        font-weight: 700;
+        color: white;
+        margin-bottom: 0.75rem;
+      }
+      .track-header p {
+        color: #9ca3af;
+        font-size: 15px;
+      }
 
-    // Allow Enter key
-    document.addEventListener('DOMContentLoaded', () => {
-      ['idx-order-input','idx-wa-input'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') idxDoTrack(); });
+      .track-grid {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 1.5rem;
+        align-items: start;
+      }
+
+      /* FORM CARD */
+      .track-form-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+      }
+      .track-form-group {
+        margin-bottom: 1.1rem;
+      }
+      .track-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 6px;
+      }
+      .track-input {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 9px;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 14px;
+        color: #1c1c1e;
+        background: #f9fafb;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .track-input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 3px rgba(232, 93, 38, 0.12);
+      }
+      .track-btn {
+        width: 100%;
+        padding: 13px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition:
+          background 0.2s,
+          transform 0.15s,
+          box-shadow 0.2s;
+        box-shadow: 0 4px 16px rgba(232, 93, 38, 0.35);
+        margin-top: 4px;
+      }
+      .track-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 24px rgba(232, 93, 38, 0.4);
+      }
+      .track-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* RESULT CARD */
+      .track-result {
+        background: white;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+        animation: fadeInUp 0.4s both;
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .track-result-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px dashed #e5e7eb;
+      }
+      .track-order-no {
+        font-size: 18px;
+        font-weight: 800;
+        color: #1c1c1e;
+        margin-bottom: 3px;
+      }
+      .track-order-date {
+        font-size: 12px;
+        color: #6b7280;
+      }
+      .track-pay-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 12px;
+        border-radius: 99px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .track-pay-badge.menunggu {
+        background: rgba(245, 158, 11, 0.12);
+        color: #b45309;
+        animation: pulse 2s infinite;
+      }
+      .track-pay-badge.berhasil {
+        background: rgba(26, 107, 58, 0.12);
+        color: #1a6b3a;
+      }
+      .track-pay-badge.ditolak {
+        background: rgba(220, 38, 38, 0.12);
+        color: #b91c1c;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.6;
+        }
+      }
+
+      /* TIMELINE */
+      .track-timeline {
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 20px;
+      }
+      .track-timeline::before {
+        content: "";
+        position: absolute;
+        left: 5px;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background: #e5e7eb;
+      }
+      .tl-step {
+        position: relative;
+        display: flex;
+        gap: 14px;
+        margin-bottom: 18px;
+        opacity: 0;
+        animation: fadeIn 0.4s forwards;
+      }
+      .tl-step:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .tl-step:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .tl-step:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .tl-step:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .tl-step:last-child {
+        margin-bottom: 0;
+      }
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+      .tl-dot {
+        position: absolute;
+        left: -20px;
+        top: 3px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: white;
+        border: 2px solid #d1d5db;
+        z-index: 2;
+        transition: all 0.3s;
+        flex-shrink: 0;
+      }
+      .tl-step.completed .tl-dot {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+      .tl-step.completed .tl-dot::after {
+        content: "";
+        position: absolute;
+        left: 2px;
+        top: 0px;
+        width: 4px;
+        height: 7px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      .tl-step.active .tl-dot {
+        background: white;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(232, 93, 38, 0.2);
+      }
+      .tl-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #9ca3af;
+        margin-bottom: 2px;
+        transition: color 0.3s;
+      }
+      .tl-desc {
+        font-size: 12px;
+        color: #6b7280;
+        display: none;
+      }
+      .tl-step.completed .tl-title,
+      .tl-step.active .tl-title {
+        color: #1c1c1e;
+      }
+      .tl-step.active .tl-desc {
+        display: block;
+      }
+      .tl-content {
+        padding-left: 4px;
+      }
+
+      /* ITEMS */
+      .track-items {
+        background: #f9fafb;
+        border-radius: 10px;
+        padding: 14px;
+      }
+      .track-items-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 10px;
+      }
+      .track-item-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        margin-bottom: 6px;
+        color: #374151;
+      }
+      .track-total {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 800;
+        font-size: 15px;
+        color: var(--primary);
+        border-top: 1px solid #e5e7eb;
+        padding-top: 10px;
+        margin-top: 10px;
+      }
+
+      /* EMPTY */
+      .track-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 240px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1.5px dashed rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        text-align: center;
+        padding: 40px 24px;
+      }
+      .track-empty-icon {
+        font-size: 48px;
+        margin-bottom: 14px;
+      }
+      .track-empty-text {
+        color: #6b7280;
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 280px;
+      }
+      .track-empty-text strong {
+        color: white;
+      }
+
+      /* Nav link for cek pesanan */
+      .nav-links a[href="#cek-pesanan"] {
+        color: var(--primary) !important;
+      }
+
+      @media (max-width: 900px) {
+        .track-section {
+          padding: 3rem 2rem;
+        }
+        .track-grid {
+          grid-template-columns: 1fr;
+        }
+        .track-empty {
+          display: none;
+        }
+      }
+      @media (max-width: 600px) {
+        .track-section {
+          padding: 2.5rem 1.5rem;
+        }
+      }
+    </style>
+
+    <script>
+      // ── CEK PESANAN (index.html inline) ─────────────────────────
+      async function idxDoTrack() {
+        const order = document.getElementById("idx-order-input").value.trim();
+        const wa = document.getElementById("idx-wa-input").value.trim();
+        const errEl = document.getElementById("idx-track-error");
+        const btn = document.getElementById("idx-track-btn");
+
+        if (!order || !wa) {
+          errEl.textContent = "Harap isi Nomor Pesanan dan Nomor WhatsApp.";
+          errEl.style.display = "block";
+          return;
+        }
+        errEl.style.display = "none";
+        btn.disabled = true;
+        btn.querySelector("span").textContent = "Mencari...";
+
+        try {
+          const res = await API.trackOrder(order, wa);
+          idxRenderResult(res);
+          document.getElementById("idx-result").style.display = "block";
+          document.getElementById("idx-empty").style.display = "none";
+        } catch (err) {
+          errEl.textContent =
+            err.message ||
+            "Pesanan tidak ditemukan. Periksa kembali nomor pesanan dan WhatsApp.";
+          errEl.style.display = "block";
+          document.getElementById("idx-result").style.display = "none";
+          document.getElementById("idx-empty").style.display = "flex";
+        } finally {
+          btn.disabled = false;
+          btn.querySelector("span").textContent = "Cek Status Pesanan";
+        }
+      }
+
+      // Allow Enter key
+      document.addEventListener("DOMContentLoaded", () => {
+        ["idx-order-input", "idx-wa-input"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el)
+            el.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") idxDoTrack();
+            });
+        });
       });
-    });
 
-    function idxRenderResult(data) {
-      const trx = data;
+      function idxRenderResult(data) {
+        const trx = data;
 
-      // Header
-      document.getElementById('idx-no-order').textContent = trx.noOrder;
-      document.getElementById('idx-date').textContent =
-        new Date(trx.createdAt || Date.now()).toLocaleDateString('id-ID', {
-          year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'
+        // Header
+        document.getElementById("idx-no-order").textContent = trx.noOrder;
+        document.getElementById("idx-date").textContent = new Date(
+          trx.createdAt || Date.now(),
+        ).toLocaleDateString("id-ID", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
         });
 
-      // Payment Badge
-      const pb = document.getElementById('idx-pay-badge');
-      pb.className = 'track-pay-badge';
-      if (trx.statusPembayaran === 'menunggu') { pb.classList.add('menunggu'); pb.textContent = '🟡 Menunggu Verifikasi'; }
-      else if (trx.statusPembayaran === 'berhasil' || trx.statusPembayaran === 'lunas') { pb.classList.add('berhasil'); pb.textContent = '🟢 Pembayaran Berhasil'; }
-      else if (trx.statusPembayaran === 'ditolak') { pb.classList.add('ditolak'); pb.textContent = '🔴 Pembayaran Ditolak'; }
-      else if (trx.metodeBayar === 'cod') { pb.classList.add('berhasil'); pb.textContent = '🚚 COD'; }
+        // Payment Badge
+        const pb = document.getElementById("idx-pay-badge");
+        pb.className = "track-pay-badge";
+        if (trx.statusPembayaran === "menunggu") {
+          pb.classList.add("menunggu");
+          pb.textContent = "🟡 Menunggu Verifikasi";
+        } else if (
+          trx.statusPembayaran === "berhasil" ||
+          trx.statusPembayaran === "lunas"
+        ) {
+          pb.classList.add("berhasil");
+          pb.textContent = "🟢 Pembayaran Berhasil";
+        } else if (trx.statusPembayaran === "ditolak") {
+          pb.classList.add("ditolak");
+          pb.textContent = "🔴 Pembayaran Ditolak";
+        } else if (trx.metodeBayar === "cod") {
+          pb.classList.add("berhasil");
+          pb.textContent = "🚚 COD";
+        }
 
-      // Timeline
-      const statuses = ['menunggu','diproses','dikirim','selesai'];
-      const cur = statuses.indexOf(trx.statusPesanan) === -1 ? 0 : statuses.indexOf(trx.statusPesanan);
-      statuses.forEach((st, i) => {
-        const el = document.getElementById('tl-' + st);
-        el.className = 'tl-step';
-        if (i < cur) el.classList.add('completed');
-        if (i === cur) el.classList.add('active');
-      });
-
-      // Items
-      const list = document.getElementById('idx-items-list');
-      list.innerHTML = '';
-      if (data.items) {
-        data.items.forEach(it => {
-          list.innerHTML += `<div class="track-item-row"><span>${it.qty}× ${it.namaProduk || 'Produk'}</span><span style="font-weight:600">${fRp(it.subtotal)}</span></div>`;
+        // Timeline
+        const statuses = ["menunggu", "diproses", "dikirim", "selesai"];
+        const cur =
+          statuses.indexOf(trx.statusPesanan) === -1
+            ? 0
+            : statuses.indexOf(trx.statusPesanan);
+        statuses.forEach((st, i) => {
+          const el = document.getElementById("tl-" + st);
+          el.className = "tl-step";
+          if (i < cur) el.classList.add("completed");
+          if (i === cur) el.classList.add("active");
         });
-      }
-      document.getElementById('idx-total').textContent = fRp(trx.total);
-    }
 
-    function fRp(n) {
-      return 'Rp ' + Number(n || 0).toLocaleString('id-ID');
-    }
-  </script>
-</body>
+        // Items
+        const list = document.getElementById("idx-items-list");
+        list.innerHTML = "";
+        if (data.items) {
+          data.items.forEach((it) => {
+            list.innerHTML += `<div class="track-item-row"><span>${it.qty}× ${it.namaProduk || "Produk"}</span><span style="font-weight:600">${fRp(it.subtotal)}</span></div>`;
+          });
+        }
+        document.getElementById("idx-total").textContent = fRp(trx.total);
+      }
+
+      function fRp(n) {
+        return "Rp " + Number(n || 0).toLocaleString("id-ID");
+      }
+    </script>
+  </body>
 </html>
