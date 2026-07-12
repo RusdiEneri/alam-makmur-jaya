@@ -6,14 +6,21 @@
     "noWhatsapp": "6281234567005",
     "total": 540000,
     "batasKredit": 1000000,
-    "sisaTagihan": 540000,
+    "sisaTagihan": 0,
     "jatuhTempo": "2026-07-11",
-    "status": "jatuhTempo",
-    "status_nota": "sementara",
-    "riwayatPembayaran": [],
+    "status": "lunas",
+    "status_nota": "lunas",
+    "riwayatPembayaran": [
+      {
+        "jumlah": 540000,
+        "tanggal": "2026-07-12T02:37:30.572Z",
+        "oleh": "Admin Toko"
+      }
+    ],
     "catatan": "Pembelian semen 5 sak + pipa untuk proyek perumahan",
     "createdAt": "2026-06-16T11:10:11.032Z",
-    "updatedAt": "2026-06-16T11:10:11.032Z"
+    "updatedAt": "2026-07-12T02:37:30.572Z",
+    "tanggalLunas": "2026-07-12T02:37:30.572Z"
   },
   {
     "id": "rec-seed-002",
@@ -96,5 +103,28 @@
     "catatan": "Pembelian besi beton dan kawat bendrat",
     "createdAt": "2026-07-03T11:10:11.032Z",
     "updatedAt": "2026-07-03T11:10:11.032Z"
+  },
+  {
+    "id": "rec-07cf9825",
+    "transaksiId": null,
+    "namaPelanggan": "test utang",
+    "noWhatsapp": "081233649676",
+    "total": 10000,
+    "batasKredit": null,
+    "sisaTagihan": 0,
+    "jatuhTempo": "2026-07-13",
+    "status": "lunas",
+    "status_nota": "lunas",
+    "riwayatPembayaran": [
+      {
+        "jumlah": 10000,
+        "tanggal": "2026-07-12T02:37:01.812Z",
+        "oleh": "Admin Toko"
+      }
+    ],
+    "catatan": "",
+    "createdAt": "2026-07-12T02:33:18.099Z",
+    "updatedAt": "2026-07-12T02:37:01.812Z",
+    "tanggalLunas": "2026-07-12T02:37:01.812Z"
   }
 ]

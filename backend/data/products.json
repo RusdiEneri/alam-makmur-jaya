@@ -4,7 +4,7 @@
     "nama": "Semen Tiga Roda 40kg",
     "kategori": "Bahan Bangunan",
     "harga": 72000,
-    "stok": 82,
+    "stok": 71,
     "stokMinimum": 10,
     "hargaPokok": 57600,
     "aktif": true,
@@ -18,7 +18,7 @@
     "nama": "Pipa PVC AW 1/2 inch",
     "kategori": "Pipa & Selang",
     "harga": 38000,
-    "stok": 45,
+    "stok": 42,
     "stokMinimum": 8,
     "hargaPokok": 30400,
     "aktif": true,
@@ -39,7 +39,16 @@
     "bolehDesimal": true,
     "masa_simpan": null,
     "id_satuan": 3,
-    "createdAt": "2025-01-01T00:00:00.000Z"
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "riwayatStok": [
+      {
+        "tipe": "restock",
+        "jumlah": 1,
+        "stokAkhir": 4,
+        "tanggal": "2026-07-11T14:02:53.567Z",
+        "oleh": "Admin Toko"
+      }
+    ]
   },
   {
     "id": "prod-004",
@@ -144,14 +153,23 @@
     "nama": "Cat Tembok 5kg",
     "kategori": "Cat",
     "harga": 95000,
-    "stok": 2,
+    "stok": 3,
     "stokMinimum": 5,
     "hargaPokok": 76000,
     "aktif": true,
     "bolehDesimal": false,
     "masa_simpan": null,
     "id_satuan": 9,
-    "createdAt": "2025-04-01T00:00:00.000Z"
+    "createdAt": "2025-04-01T00:00:00.000Z",
+    "riwayatStok": [
+      {
+        "tipe": "restock",
+        "jumlah": 1,
+        "stokAkhir": 3,
+        "tanggal": "2026-07-11T14:02:57.609Z",
+        "oleh": "Admin Toko"
+      }
+    ]
   },
   {
     "id": "prod-012",
@@ -200,13 +218,22 @@
     "nama": "Kawat Bendrat 1kg",
     "kategori": "Besi",
     "harga": 22000,
-    "stok": 1,
+    "stok": 2,
     "stokMinimum": 5,
     "hargaPokok": 17600,
     "aktif": true,
     "bolehDesimal": true,
     "masa_simpan": null,
     "id_satuan": 3,
-    "createdAt": "2025-06-01T00:00:00.000Z"
+    "createdAt": "2025-06-01T00:00:00.000Z",
+    "riwayatStok": [
+      {
+        "tipe": "restock",
+        "jumlah": 1,
+        "stokAkhir": 2,
+        "tanggal": "2026-07-11T14:03:00.018Z",
+        "oleh": "Admin Toko"
+      }
+    ]
   }
 ]

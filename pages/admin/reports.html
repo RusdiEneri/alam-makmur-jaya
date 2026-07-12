@@ -6,7 +6,7 @@
   <title>Laporan Keuangan — Panel Admin UD. Alam Makmur Jaya</title>
   <meta name="description" content="Laporan keuangan harian, bulanan, dan tahunan UD. Alam Makmur Jaya."/>
 
-  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link rel="icon" href="../../assets/icon.png" type="image/x-icon"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
@@ -32,14 +32,46 @@
 
     /* SIDEBAR */
     .sidebar { background: #0F172A; color: #94A3B8; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; z-index: 100; }
-    .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 24px 20px; border-bottom: 1px solid #1E293B; color: white; font-weight: bold; }
-    .sidebar-brand-icon { width: 36px; height: 36px; background: var(--color-primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 22px 20px; border-bottom: 1px solid #1E293B; color: white; font-weight: 700; font-size: 14px; background: rgba(255, 255, 255, 0.02); }
+    .sidebar-brand-icon { 
+      width: 44px; 
+      height: 44px; 
+      background: white; 
+      border-radius: 10px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .sidebar-brand-icon img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
     .sidebar-section { font-size: 10px; font-weight: 700; color: #475569; letter-spacing: 1px; text-transform: uppercase; padding: 14px 14px 6px; }
-    .sidebar-nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
-    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 8px; font-size: 14px; transition: 0.2s; cursor: pointer; }
-    .sidebar-link:hover { background: #1E293B; color: white; }
-    .sidebar-link.active { background: rgba(22,163,74,0.15); color: #FBA07A; font-weight: 600; }
-    .sidebar-footer { padding: 16px; border-top: 1px solid #1E293B; }
+    .sidebar-nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #94A3B8; transition: 0.2s; cursor: pointer; position: relative; }
+    .sidebar-link:hover { background: #1E293B; color: #E2E8F0; }
+    .sidebar-link.active { 
+      background: rgba(232, 93, 38, 0.15); 
+      color: #E85D26; 
+      font-weight: 600; 
+    }
+    .sidebar-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 60%;
+      background: #E85D26;
+      border-radius: 0 3px 3px 0;
+    }
+    .sidebar-footer { padding: 16px 12px; border-top: 1px solid #1E293B; }
 
     /* CONTENT WRAPPER */
     .content-wrapper { display: flex; flex-direction: column; min-width: 0; height: 100vh; overflow-y: auto; }
@@ -51,13 +83,13 @@
     .tab-bar { position: relative; display: flex; gap: 4px; background: white; border: 1px solid var(--color-border); border-radius: 10px; padding: 4px; margin-bottom: 24px; width: fit-content; box-shadow: var(--shadow-sm); }
     .tab-btn { position: relative; z-index: 1; padding: 9px 20px; border-radius: 7px; border: none; background: transparent; font-family: inherit; font-size: 14px; font-weight: 600; color: var(--color-text-muted); cursor: pointer; transition: color 0.25s; white-space: nowrap; }
     .tab-btn.active { color: white; }
-    .tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 4px; border-radius: 7px; background: var(--color-primary); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), width 0.3s ease; z-index: 0; pointer-events: none; }
+    .tab-indicator { position: absolute; top: 4px; bottom: 4px; left: 4px; border-radius: 7px; background: #E85D26; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), width 0.3s ease; z-index: 0; pointer-events: none; }
 
     /* PERIOD CONTROLS */
     .period-controls { background: white; border: 1px solid var(--color-border); border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; box-shadow: var(--shadow-sm); }
     .period-label { font-size: 13px; font-weight: 600; color: var(--color-text-muted); min-width: 80px; }
     .form-input { padding: 9px 12px; border: 1px solid var(--color-border); border-radius: 7px; font-family: inherit; font-size: 14px; transition: 0.2s; }
-    .form-input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(22,163,74,0.15); }
+    .form-input:focus { outline: none; border-color: #E85D26; box-shadow: 0 0 0 3px rgba(232, 93, 38, 0.15); }
     .form-select { padding: 9px 32px 9px 12px; border: 1px solid var(--color-border); border-radius: 7px; font-family: inherit; font-size: 14px; background: white url('data:image/svg+xml;utf8,<svg fill="%236B7280" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>') no-repeat right 10px center; background-size: 14px; -webkit-appearance: none; appearance: none; }
 
     /* EXPORT BAR */
@@ -65,8 +97,8 @@
     .btn-export { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
     .btn-excel { background: #217346; color: white; }
     .btn-excel:hover { background: #1a5c38; }
-    .btn-pdf { background: #C0392B; color: white; }
-    .btn-pdf:hover { background: #922b21; }
+    .btn-pdf { background: #E85D26; color: white; }
+    .btn-pdf:hover { background: #C04718; }
     .btn-export:disabled { opacity: 0.65; cursor: not-allowed; }
     .btn-spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -84,11 +116,11 @@
     .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 28px; }
     .summary-card { background: white; border-radius: 16px; padding: 20px; border: 1px solid var(--color-border); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 14px; }
     .sc-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-    .sc-1 .sc-icon { background: rgba(22,163,74,0.1); }
+    .sc-1 .sc-icon { background: rgba(232, 93, 38, 0.1); }
     .sc-2 .sc-icon { background: rgba(59,130,246,0.1); }
     .sc-3 .sc-icon { background: rgba(139,92,246,0.1); }
     .sc-4 .sc-icon { background: rgba(245,158,11,0.1); }
-    .sc-5 .sc-icon { background: rgba(236,72,153,0.1); }
+    .sc-5 .sc-icon { background: rgba(26, 107, 58, 0.1); }
     .sc-label { font-size: 12px; font-weight: 600; color: var(--color-text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
     .sc-val { font-size: 22px; font-weight: 800; font-family: var(--font-serif); color: var(--color-text); line-height: 1.2; }
     .sc-sub { font-size: 12px; color: var(--color-text-muted); margin-top: 3px; }
@@ -118,9 +150,10 @@
 
     /* BADGE */
     .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 99px; font-size: 11px; font-weight: 700; }
-    .badge-green { background: rgba(22,163,74,0.1); color: #15803D; }
+    .badge-green { background: rgba(26, 107, 58, 0.1); color: #1A6B3A; }
     .badge-red { background: rgba(220,38,38,0.1); color: #B91C1C; animation: pulseBadge 2s infinite; }
     .badge-blue { background: rgba(59,130,246,0.1); color: #1D4ED8; }
+    .badge-orange { background: rgba(232, 93, 38, 0.1); color: #C04718; }
     @keyframes pulseBadge { 0%,100% { opacity:1; } 50% { opacity:0.6; } }
 
     /* PAGINATION */
@@ -152,7 +185,9 @@
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="sidebar-brand-icon">🏗</div>
+      <div class="sidebar-brand-icon">
+        <img src="../../assets/icon.png" alt="Logo UD. Alam Makmur Jaya"/>
+      </div>
       <div>UD. Alam Makmur Jaya</div>
     </div>
     <nav class="sidebar-nav">
@@ -350,9 +385,9 @@ if (!sessionStorage.getItem('token')) window.location.replace('../public/login.h
 const DAILY_TARGET_BASE = 900000; // Rp 900.000/day baseline
 
 let currentTab = 'harian';
-let currentReport = null;    // Last fetched report data (in-memory cache)
+let currentReport = null;
 let currentTopProducts = null;
-let allTrxRows = [];         // Flat transaction rows for pagination
+let allTrxRows = [];
 let currentPage = 1;
 const PAGE_SIZE = 20;
 let sortCol = 'tanggal';
@@ -407,16 +442,13 @@ function initTabIndicator() {
 function switchTab(tab, btn) {
   currentTab = tab;
 
-  // Update button states
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   moveIndicator(btn);
 
-  // Toggle period controls
   document.querySelectorAll('.period-ctrl').forEach(el => el.style.display = 'none');
   document.getElementById(`ctrl-${tab}`).style.display = 'flex';
 
-  // Fade content out
   fadeContent(false);
 
   debouncedFetch();
@@ -488,7 +520,6 @@ async function fetchPeriodData() {
       return API.getLaporanTahunan(y);
     }
     case 'kustom': {
-      // Compute from daily data by fetching each date
       const start = new Date(document.getElementById('input-start').value);
       const end = new Date(document.getElementById('input-end').value);
       return fetchCustomRange(start, end);
@@ -499,7 +530,6 @@ async function fetchPeriodData() {
 }
 
 async function fetchCustomRange(start, end) {
-  // Merge daily reports in range
   const dates = [];
   const cur = new Date(start);
   while (cur <= end) {
@@ -509,7 +539,6 @@ async function fetchCustomRange(start, end) {
 
   const results = await Promise.all(dates.map(d => API.getLaporanHarian(d).catch(() => null)));
 
-  // Merge into aggregate
   const merged = {
     totalPendapatan: 0, totalTransaksi: 0, totalHPP: 0, labaKotor: 0,
     transactions: [], trendData: []
@@ -539,7 +568,9 @@ function renderSummary(r) {
   const daysInPeriod = getDaysInPeriod();
   const target = DAILY_TARGET_BASE * daysInPeriod;
   const pct = target > 0 ? Math.min(Math.round((pendapatan / target) * 100), 999) : 0;
-  const barColor = pct >= 100 ? '#22C55E' : pct >= 60 ? '#F59E0B' : '#EF4444';
+  
+  // FIX: Gunakan warna orange brand untuk progress bar
+  const barColor = pct >= 100 ? '#1A6B3A' : pct >= 60 ? '#E85D26' : '#DC2626';
 
   const cards = [
     { cls: 'sc-1', icon: '💰', label: 'Total Pendapatan Kotor', val: formatRupiah(pendapatan), sub: '' },
@@ -567,14 +598,12 @@ function renderSummary(r) {
     </div>
   `).join('');
 
-  // Count-up animation for numeric cards (Rp and integer)
   animateCounter('scv-0', pendapatan, true);
   animateCounter('scv-1', trxCount, false);
   animateCounter('scv-2', rataRata, true);
   animateCounter('scv-3', laba, true);
   animateCounter('scv-4', pct, false, '%');
 
-  // Animate target bar
   requestAnimationFrame(() => {
     setTimeout(() => {
       const bar = document.getElementById('target-bar');
@@ -619,13 +648,11 @@ function renderMainChart(r) {
   let labels = [], pendapatanData = [], labaData = [];
 
   if (currentTab === 'harian') {
-    // Single day — bar chart with just one bar
     labels = [document.getElementById('input-date').value];
     pendapatanData = [r.totalPendapatan || 0];
     labaData = [r.labaKotor || 0];
     document.getElementById('main-chart-title').textContent = 'Pendapatan & Laba Harian';
-  } else if (r.breakdown || r.trendData || r.trendData) {
-    // Monthly/annual — line over time
+  } else if (r.breakdown || r.trendData) {
     const trend = r.breakdown || r.trendData || [];
     trend.forEach(t => {
       labels.push(t.label || t.bulan || t.tanggal || '');
@@ -646,8 +673,9 @@ function renderMainChart(r) {
         {
           label: 'Pendapatan',
           data: pendapatanData,
-          borderColor: '#16A34A',
-          backgroundColor: type === 'bar' ? 'rgba(22,163,74,0.7)' : 'rgba(22,163,74,0.1)',
+          // FIX: Gunakan warna orange brand
+          borderColor: '#E85D26',
+          backgroundColor: type === 'bar' ? 'rgba(232, 93, 38, 0.7)' : 'rgba(232, 93, 38, 0.1)',
           borderWidth: 2,
           fill: type === 'line',
           tension: 0.4,
@@ -656,8 +684,8 @@ function renderMainChart(r) {
         {
           label: 'Laba Bersih',
           data: labaData,
-          borderColor: '#2563EB',
-          backgroundColor: type === 'bar' ? 'rgba(37,99,235,0.7)' : 'rgba(37,99,235,0.1)',
+          borderColor: '#C04718',
+          backgroundColor: type === 'bar' ? 'rgba(192, 71, 24, 0.7)' : 'rgba(192, 71, 24, 0.1)',
           borderWidth: 2,
           fill: type === 'line',
           tension: 0.4,
@@ -702,9 +730,13 @@ function renderTopChart(topProds) {
       datasets: [{
         label: 'Qty Terjual',
         data,
+        // FIX: Gunakan warna orange brand sebagai warna pertama
         backgroundColor: [
-          'rgba(22,163,74,0.8)', 'rgba(37,99,235,0.8)', 'rgba(245,158,11,0.8)',
-          'rgba(236,72,153,0.8)', 'rgba(139,92,246,0.8)'
+          'rgba(232, 93, 38, 0.8)',   // Orange brand
+          'rgba(192, 71, 24, 0.8)',   // Orange dark
+          'rgba(245, 158, 11, 0.8)',  // Amber
+          'rgba(26, 107, 58, 0.8)',   // Accent green
+          'rgba(59, 130, 246, 0.8)'   // Blue
         ],
         borderRadius: 6,
         borderSkipped: false
@@ -753,7 +785,6 @@ function sortTable(col) {
 }
 
 function renderTablePage() {
-  // Sort
   const sorted = [...allTrxRows].sort((a, b) => {
     let va = a[sortCol], vb = b[sortCol];
     if (sortCol === 'tanggal') { va = new Date(a.createdAt || a.tanggal); vb = new Date(b.createdAt || b.tanggal); }
@@ -780,11 +811,12 @@ function renderTablePage() {
       const prodStr = (t.items || []).map(it => it.namaProduk || '-').join(', ') || (t.namaProduk || '-');
       const qtyStr = (t.items || []).map(it => `${it.qty} ${it.satuan}`).join(', ') || '-';
       const statusPay = t.statusPembayaran || '';
-      const badgeClass = ['berhasil','lunas'].includes(statusPay) ? 'badge-green' : statusPay === 'ditolak' ? 'badge-red' : 'badge-blue';
+      // FIX: Gunakan badge-orange untuk status menunggu
+      const badgeClass = ['berhasil','lunas'].includes(statusPay) ? 'badge-green' : statusPay === 'ditolak' ? 'badge-red' : 'badge-orange';
 
       tr.innerHTML = `
         <td>${date}</td>
-        <td style="font-weight:600; color:var(--color-primary)">${t.noOrder || '-'}</td>
+        <td style="font-weight:600; color:#E85D26">${t.noOrder || '-'}</td>
         <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">${prodStr}</td>
         <td>${qtyStr}</td>
         <td style="font-weight:700">${formatRupiah(t.total || 0)}</td>
@@ -835,7 +867,6 @@ async function exportExcel() {
   try {
     const wb = XLSX.utils.book_new();
 
-    // Sheet 1: Summary
     const r = currentReport;
     const topProds = currentTopProducts;
     const trxCount = r.jumlahTransaksi || 0;
@@ -860,7 +891,6 @@ async function exportExcel() {
     ];
     const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
 
-    // Currency format
     const currencyFmt = '#,##0';
     [5, 7, 8].forEach(row => {
       const cell = wsSummary[XLSX.utils.encode_cell({ r: row, c: 1 })];
@@ -870,7 +900,6 @@ async function exportExcel() {
     wsSummary['!cols'] = [{ wch: 45 }, { wch: 25 }];
     XLSX.utils.book_append_sheet(wb, wsSummary, 'Ringkasan');
 
-    // Sheet 2: Transactions
     const trxRows = (r.transaksi || r.transaksi || []).map(t => ({
       'Tanggal': new Date(t.createdAt || t.tanggal || '').toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }),
       'No. Pesanan': t.noOrder || '-',
@@ -885,7 +914,6 @@ async function exportExcel() {
     const wsDetail = XLSX.utils.json_to_sheet(trxRows);
     wsDetail['!cols'] = [{ wch: 22 }, { wch: 16 }, { wch: 22 }, { wch: 30 }, { wch: 14 }, { wch: 18 }, { wch: 14 }, { wch: 12 }];
 
-    // Currency format for Total
     if (trxRows.length) {
       for (let i = 1; i <= trxRows.length; i++) {
         const cell = wsDetail[XLSX.utils.encode_cell({ r: i, c: 5 })];
@@ -894,7 +922,6 @@ async function exportExcel() {
     }
     XLSX.utils.book_append_sheet(wb, wsDetail, 'Detail Transaksi');
 
-    // Sheet 3: Top Products
     const prods = Array.isArray(topProds) ? topProds : (topProds?.products || []);
     const topData = prods.map((p, i) => ({
       'Peringkat': i + 1,
@@ -906,7 +933,6 @@ async function exportExcel() {
     wsTop['!cols'] = [{ wch: 10 }, { wch: 28 }, { wch: 14 }, { wch: 22 }];
     XLSX.utils.book_append_sheet(wb, wsTop, 'Top Produk');
 
-    // Generate filename
     const periodStr = getPeriodString().replace(/[^a-zA-Z0-9]/g, '_');
     const exportDate = toDateStr(toWIBDate(new Date())).replace(/-/g, '');
     const filename = `Laporan_AMJ_${periodStr}_${exportDate}.xlsx`;
@@ -958,7 +984,6 @@ function setExportLoading(type, loading) {
    DATE / PERIOD UTILS
 ═══════════════════════════════════════════════════════ */
 function toWIBDate(d) {
-  // Returns Date adjusted to WIB (UTC+7) when operating on date-only values
   const offset = 7 * 60 * 60 * 1000;
   return new Date(d.getTime() + offset - (d.getTimezoneOffset() * 60 * 1000));
 }

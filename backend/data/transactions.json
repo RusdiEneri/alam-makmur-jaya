@@ -110,7 +110,7 @@
     "total": 1098000,
     "metodeBayar": "cod",
     "statusPembayaran": "berhasil",
-    "statusPesanan": "selesai",
+    "statusPesanan": "dikirim",
     "stokDireservasi": true,
     "buktiTransfer": null,
     "catatanPembayaran": null,
@@ -119,7 +119,7 @@
     "needsDelivery": true,
     "tanggal": "2026-07-06T11:10:11.031Z",
     "createdAt": "2026-07-06T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.031Z",
+    "updatedAt": "2026-07-12T01:45:28.265Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
@@ -150,6 +150,12 @@
         "status": "berhasil",
         "timestamp": "2026-07-06T11:10:11.031Z",
         "oleh": "Kasir Satu"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-07-12T01:45:28.265Z",
+        "oleh": "Admin Toko"
       }
     ]
   },
@@ -1300,6 +1306,612 @@
         "tipe": "pembayaran",
         "status": "pending",
         "timestamp": "2026-07-06T12:11:26.315Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-768741fb",
+    "id_pembayaran": "pay-6cc42367",
+    "noOrder": "AMJ-20260711-001",
+    "namaPelanggan": "Master Sifu",
+    "alamat": "Sedap Malam",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-8544445e",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "dikirim",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "depan masjid",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-11T09:43:42.396Z",
+    "createdAt": "2026-07-11T09:43:42.396Z",
+    "updatedAt": "2026-07-11T09:47:14.079Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-11T09:43:42.396Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-11T09:43:42.396Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-07-11T09:47:11.176Z",
+        "oleh": "Admin Toko"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-07-11T09:47:14.080Z",
+        "oleh": "Admin Toko"
+      }
+    ]
+  },
+  {
+    "id": "trx-009798e2",
+    "id_pembayaran": "pay-3bd98e43",
+    "noOrder": "AMJ-20260711-002",
+    "namaPelanggan": "Saber",
+    "alamat": "Pegangsaan",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-63bb0094",
+        "productId": "prod-003",
+        "namaProduk": "Paku Biasa 5cm",
+        "satuan": "kg",
+        "hargaSatuan": 18000,
+        "hargaPokokSatuan": 14400,
+        "qty": 1,
+        "subtotal": 18000
+      }
+    ],
+    "total": 18000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "Jatim",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-11T14:04:28.365Z",
+    "createdAt": "2026-07-11T14:04:28.365Z",
+    "updatedAt": "2026-07-11T14:04:28.365Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-11T14:04:28.365Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-11T14:04:28.365Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-9de3c31c",
+    "id_pembayaran": "pay-d8de747b",
+    "noOrder": "AMJ-20260711-003",
+    "namaPelanggan": "aku lagi",
+    "alamat": "semua",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-e302e13a",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "tes",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-11T14:07:27.684Z",
+    "createdAt": "2026-07-11T14:07:27.684Z",
+    "updatedAt": "2026-07-11T14:07:27.684Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-11T14:07:27.684Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-11T14:07:27.684Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-5ef81f22",
+    "id_pembayaran": "pay-91f4dd9b",
+    "noOrder": "AMJ-20260711-004",
+    "namaPelanggan": "tes nama",
+    "alamat": "tes alamat",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-875d4aab",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      },
+      {
+        "id_detail": "det-0739b754",
+        "productId": "prod-002",
+        "namaProduk": "Pipa PVC AW 1/2 inch",
+        "satuan": "batang",
+        "hargaSatuan": 38000,
+        "hargaPokokSatuan": 30400,
+        "qty": 1,
+        "subtotal": 38000
+      }
+    ],
+    "total": 110000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "test catatan",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-11T14:08:14.379Z",
+    "createdAt": "2026-07-11T14:08:14.379Z",
+    "updatedAt": "2026-07-11T14:08:14.379Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-11T14:08:14.379Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-11T14:08:14.379Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-7c6fd78a",
+    "id_pembayaran": "pay-47f81f70",
+    "noOrder": "AMJ-20260711-005",
+    "namaPelanggan": "mas rafa",
+    "alamat": "indomaret gresik",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-4ef888bd",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "yang 24 jam",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-11T14:27:41.855Z",
+    "createdAt": "2026-07-11T14:27:41.855Z",
+    "updatedAt": "2026-07-11T14:27:41.855Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-11T14:27:41.855Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-11T14:27:41.855Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-7a2bb4c5",
+    "id_pembayaran": "pay-46db6322",
+    "noOrder": "AMJ-20260711-006",
+    "namaPelanggan": "test kembali",
+    "alamat": "tus",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-f9194e35",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "tes",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-11T15:03:05.488Z",
+    "createdAt": "2026-07-11T15:03:05.488Z",
+    "updatedAt": "2026-07-11T15:03:05.488Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-11T15:03:05.488Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-11T15:03:05.488Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-520aaede",
+    "id_pembayaran": "pay-f88d2364",
+    "noOrder": "AMJ-20260711-007",
+    "namaPelanggan": "alok",
+    "alamat": "semesta",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-e947a5ef",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": "dekat sana",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-11T15:25:46.282Z",
+    "createdAt": "2026-07-11T15:25:46.282Z",
+    "updatedAt": "2026-07-11T15:25:46.282Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-11T15:25:46.282Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-11T15:25:46.282Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-826e896f",
+    "id_pembayaran": "pay-de9ecd5e",
+    "noOrder": "AMJ-20260712-001",
+    "namaPelanggan": "Pelanggan Offline",
+    "alamat": "Walk-in (Kasir)",
+    "noWhatsapp": "6280000000000",
+    "items": [
+      {
+        "id_detail": "det-80213fb5",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      },
+      {
+        "id_detail": "det-267450d8",
+        "productId": "prod-002",
+        "namaProduk": "Pipa PVC AW 1/2 inch",
+        "satuan": "batang",
+        "hargaSatuan": 38000,
+        "hargaPokokSatuan": 30400,
+        "qty": 1,
+        "subtotal": 38000
+      }
+    ],
+    "total": 110000,
+    "metodeBayar": "tunai",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "selesai",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-12T02:52:54.243Z",
+    "createdAt": "2026-07-12T02:52:54.243Z",
+    "updatedAt": "2026-07-12T02:52:54.243Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "selesai",
+        "timestamp": "2026-07-12T02:52:54.243Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "lunas",
+        "timestamp": "2026-07-12T02:52:54.243Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-3e28c812",
+    "id_pembayaran": "pay-5dfc4f55",
+    "noOrder": "AMJ-20260712-002",
+    "namaPelanggan": "Pelanggan Offline",
+    "alamat": "Walk-in (Kasir)",
+    "noWhatsapp": "6280000000000",
+    "items": [
+      {
+        "id_detail": "det-a1c7c5fe",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      },
+      {
+        "id_detail": "det-d8d79d57",
+        "productId": "prod-002",
+        "namaProduk": "Pipa PVC AW 1/2 inch",
+        "satuan": "batang",
+        "hargaSatuan": 38000,
+        "hargaPokokSatuan": 30400,
+        "qty": 1,
+        "subtotal": 38000
+      }
+    ],
+    "total": 110000,
+    "metodeBayar": "tunai",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "selesai",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-12T02:53:07.853Z",
+    "createdAt": "2026-07-12T02:53:07.853Z",
+    "updatedAt": "2026-07-12T02:53:07.853Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "selesai",
+        "timestamp": "2026-07-12T02:53:07.853Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "lunas",
+        "timestamp": "2026-07-12T02:53:07.853Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-1473a680",
+    "id_pembayaran": "pay-042ca43e",
+    "noOrder": "AMJ-20260712-003",
+    "namaPelanggan": "Pelanggan Offline",
+    "alamat": "Walk-in (Kasir)",
+    "noWhatsapp": "6280000000000",
+    "items": [
+      {
+        "id_detail": "det-ce189a0d",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "tunai",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "selesai",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-12T02:57:46.342Z",
+    "createdAt": "2026-07-12T02:57:46.342Z",
+    "updatedAt": "2026-07-12T02:57:46.342Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "selesai",
+        "timestamp": "2026-07-12T02:57:46.342Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "lunas",
+        "timestamp": "2026-07-12T02:57:46.342Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-6842e32a",
+    "id_pembayaran": "pay-18f0dc31",
+    "noOrder": "AMJ-20260712-004",
+    "namaPelanggan": "Pelanggan Offline",
+    "alamat": "Walk-in (Kasir)",
+    "noWhatsapp": "6280000000000",
+    "items": [
+      {
+        "id_detail": "det-f70b81b3",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "tunai",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "selesai",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-12T02:59:35.420Z",
+    "createdAt": "2026-07-12T02:59:35.420Z",
+    "updatedAt": "2026-07-12T02:59:35.420Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "selesai",
+        "timestamp": "2026-07-12T02:59:35.420Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "lunas",
+        "timestamp": "2026-07-12T02:59:35.420Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-216b0d71",
+    "id_pembayaran": "pay-6884ebcc",
+    "noOrder": "AMJ-20260712-005",
+    "namaPelanggan": "Pelanggan Offline",
+    "alamat": "Walk-in (Kasir)",
+    "noWhatsapp": "6280000000000",
+    "items": [
+      {
+        "id_detail": "det-b3c4bee2",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "tunai",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "selesai",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-12T03:02:27.536Z",
+    "createdAt": "2026-07-12T03:02:27.536Z",
+    "updatedAt": "2026-07-12T03:02:27.536Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "selesai",
+        "timestamp": "2026-07-12T03:02:27.536Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "lunas",
+        "timestamp": "2026-07-12T03:02:27.536Z",
         "oleh": "sistem"
       }
     ]

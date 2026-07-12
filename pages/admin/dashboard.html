@@ -8,7 +8,7 @@
       name="description"
       content="Panel admin UD. Alam Makmur Jaya — ringkasan penjualan, stok, transaksi, dan laporan harian."
     />
-    <link rel="icon" href="/assets/store.ico" type="image/x-icon" />
+    <link rel="icon" href="/assets/icon.png" type="image/x-icon" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,6 +28,23 @@
 
     <style>
       /* ── BASE ─────────────────────────────────────────────── */
+      :root {
+  /* Orange Brand Colors - konsisten dengan index.html */
+  --color-primary: #E85D26;
+  --color-primary-dark: #C04718;
+  --color-primary-light: #FDF1EC;
+  --color-primary-50: #FDF1EC;
+  --color-primary-100: #FEE4D6;
+  --color-primary-200: #FDC9AD;
+  --color-primary-400: #F5987A;
+  --color-primary-800: #C04718;
+  
+  /* Tetap pertahankan warna lain */
+  --color-accent: #1A6B3A;
+  --color-accent-light: #E8F4ED;
+  --color-danger: #DC2626;
+  /* ... dst */
+}
       *,
       *::before,
       *::after {
@@ -79,27 +96,35 @@
         height: 100vh;
         z-index: 100;
       }
-      .sidebar-brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 22px 20px;
-        border-bottom: 1px solid #1e293b;
-        color: white;
-        font-weight: 700;
-        font-size: 14px;
-      }
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 22px 20px;
+  border-bottom: 1px solid #1e293b;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.02);
+}
       .sidebar-brand-icon {
-        width: 36px;
-        height: 36px;
-        background: linear-gradient(135deg, #16a34a, #22c55e);
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        flex-shrink: 0;
-      }
+  width: 44px;
+  height: 44px;
+  background: white;  /* Background putih untuk kontras */
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.sidebar-brand-icon img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
       .sidebar-nav {
         padding: 16px 12px;
         flex: 1;
@@ -134,8 +159,8 @@
         color: #e2e8f0;
       }
       .sidebar-link.active {
-        background: rgba(22, 163, 74, 0.15);
-        color: #fba07a;
+        background: rgba(232, 93, 38, 0.15);
+        color: #E85D26;
         font-weight: 600;
       }
       .sidebar-link.active::before {
@@ -146,7 +171,7 @@
         transform: translateY(-50%);
         width: 3px;
         height: 60%;
-        background: #4ade80;
+        background: #E85D26;
         border-radius: 0 3px 3px 0;
       }
       .sidebar-footer {
@@ -437,6 +462,12 @@
       }
 
       /* ── KPI CARDS ────────────────────────────────────────── */
+      .kpi-card.orange::after {
+  background: var(--color-primary);
+}
+.kpi-card.orange .kpi-icon {
+  background: var(--color-primary-50);
+}
       .kpi-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -578,12 +609,18 @@
       }
 
       /* ── TWO-COL ROW ──────────────────────────────────────── */
-      .two-col {
-        display: grid;
-        grid-template-columns: 260px 1fr;
-        gap: var(--space-4);
-        align-items: start;
-      }
+.two-col {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--space-4);
+  align-items: stretch; /* Ubah dari 'start' ke 'stretch' */
+}
+
+.two-col > .section-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
       /* ── SECTION CARD ─────────────────────────────────────── */
       .section-card {
@@ -639,13 +676,14 @@
       }
 
       /* ── CIRCULAR PROGRESS (SVG) ──────────────────────────── */
-      .target-widget {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: var(--space-6);
-        gap: var(--space-4);
-      }
+.target-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6);
+  gap: var(--space-4);
+  flex: 1; /* Tambahkan ini */
+}
 
       .ring-wrap {
         position: relative;
@@ -838,8 +876,8 @@
         border-radius: var(--radius-full);
         background: linear-gradient(
           90deg,
-          var(--color-primary) 0%,
-          var(--color-primary-400) 100%
+  #E85D26 0%,  /* orange */
+  #F5987A 100%
         );
         width: 0%;
         transition: width 1s var(--ease-smooth) 0.3s;
@@ -853,17 +891,25 @@
       }
 
       /* ── THREE-COL ROW ────────────────────────────────────── */
-      .three-col {
-        display: grid;
-        grid-template-columns: 1fr 1fr 320px;
-        gap: var(--space-4);
-        align-items: start;
-      }
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 320px;
+  gap: var(--space-4);
+  align-items: stretch; /* Ubah dari 'start' ke 'stretch' */
+}
+.three-col > .section-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
       /* ── ORDERS TABLE ─────────────────────────────────────── */
-      .orders-table-wrap {
-        overflow-x: auto;
-      }
+.orders-table-wrap {
+  overflow-x: auto;
+  flex: 1; /* Tambahkan ini */
+  display: flex;
+  flex-direction: column;
+}
 
       table.data-table {
         width: 100%;
@@ -993,22 +1039,37 @@
       }
 
       /* ── STOCK ALERT PANEL ────────────────────────────────── */
-      .stock-alert-list {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        padding: 0;
-      }
+.stock-alert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  flex: 1; /* Tambahkan ini */
+}
 
       .stock-alert-item {
-        display: flex;
-        align-items: center;
-        gap: var(--space-3);
-        padding: var(--space-3) var(--space-5);
-        border-bottom: 1px solid var(--color-gray-100);
-        transition: background var(--duration-fast) var(--ease-out);
-      }
-
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-gray-100);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+.stock-alert-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.stock-alert-info {
+  flex: 1;
+  min-width: 0;
+}
       .stock-alert-item:last-child {
         border-bottom: none;
       }
@@ -1026,14 +1087,26 @@
         min-width: 0;
       }
 
-      .stock-alert-name {
-        font-size: var(--text-sm);
-        font-weight: var(--font-semibold);
-        color: var(--color-text);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+.stock-alert-name {
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+.stock-alert-stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--color-primary);
+  font-weight: var(--font-semibold);
+}
+.stock-alert-stock.critical {
+  color: var(--color-danger);
+}
 
       .stock-alert-count {
         display: inline-flex;
@@ -1049,25 +1122,25 @@
         color: var(--color-accent-700);
       }
 
-      .btn-restock {
-        padding: 5px 12px;
-        border-radius: var(--radius-md);
-        border: 1.5px solid var(--color-primary-200);
-        background: var(--color-primary-50);
-        font-size: 11px;
-        font-weight: var(--font-bold);
-        color: var(--color-primary-dark);
-        cursor: pointer;
-        flex-shrink: 0;
-        transition: all var(--duration-base) var(--ease-spring);
-      }
+.btn-restock {
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-primary-200);
+  background: var(--color-primary-50);
+  font-size: 12px;
+  font-weight: var(--font-bold);
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--duration-base) var(--ease-spring);
+}
 
-      .btn-restock:hover {
-        background: var(--color-primary);
-        color: white;
-        border-color: var(--color-primary);
-        transform: translateY(-1px);
-      }
+.btn-restock:hover {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
 
       /* Badge on section title */
       .badge-count {
@@ -1359,9 +1432,11 @@
        ═══════════════════════════════════════════ -->
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-          <div class="sidebar-brand-icon">🏗</div>
-          <div>UD. Alam Makmur Jaya</div>
-        </div>
+<div class="sidebar-brand-icon">
+  <img src="../../assets/icon.png" alt="Logo UD. Alam Makmur Jaya"/>
+</div>
+<div>UD. Alam Makmur Jaya</div>
+</div>
         <nav class="sidebar-nav">
           <div class="sidebar-section">Menu Utama</div>
           <a class="sidebar-link active" href="../admin/dashboard.html"
@@ -1464,7 +1539,7 @@
           <!-- ── KPI CARDS ──────────────────────────────── -->
           <div class="kpi-grid stagger-children" id="kpi-grid">
             <!-- Revenue -->
-            <div class="kpi-card green animate-on-scroll">
+            <div class="kpi-card orange animate-on-scroll">
               <div class="kpi-top">
                 <span class="kpi-label">Pendapatan Hari Ini</span>
                 <div class="kpi-icon">💰</div>
@@ -1554,43 +1629,41 @@
             </div>
 
             <!-- Revenue Line Chart -->
-            <div
-              class="section-card"
-              style="display: flex; flex-direction: column"
-            >
-              <div class="section-card-header">
-                <span class="section-card-title">
-                  <span class="section-card-title-icon">📈</span>
-                  Grafik Pendapatan
-                </span>
-                <div class="chart-toggle">
-                  <button
-                    class="chart-toggle-btn active"
-                    id="toggle-7d"
-                    onclick="loadChart('7d')"
-                  >
-                    7 Hari
-                  </button>
-                  <button
-                    class="chart-toggle-btn"
-                    id="toggle-30d"
-                    onclick="loadChart('30d')"
-                  >
-                    30 Hari
-                  </button>
-                  <button
-                    class="chart-toggle-btn"
-                    id="toggle-ytd"
-                    onclick="loadChart('ytd')"
-                  >
-                    Tahun Ini
-                  </button>
-                </div>
-              </div>
-              <div class="chart-wrap">
-                <canvas id="revenue-chart" height="250"></canvas>
-              </div>
-            </div>
+            <!-- Revenue Line Chart -->
+<div class="section-card">
+  <div class="section-card-header">
+    <span class="section-card-title">
+      <span class="section-card-title-icon">📈</span>
+      Grafik Pendapatan
+    </span>
+    <div class="chart-toggle">
+      <button
+        class="chart-toggle-btn active"
+        id="toggle-7d"
+        onclick="loadChart('7d')"
+      >
+        7 Hari
+      </button>
+      <button
+        class="chart-toggle-btn"
+        id="toggle-30d"
+        onclick="loadChart('30d')"
+      >
+        30 Hari
+      </button>
+      <button
+        class="chart-toggle-btn"
+        id="toggle-ytd"
+        onclick="loadChart('ytd')"
+      >
+        Tahun Ini
+      </button>
+    </div>
+  </div>
+  <div class="chart-wrap">
+    <canvas id="revenue-chart" height="250"></canvas>
+  </div>
+</div>
           </div>
 
           <!-- ── TOP PRODUCTS + RECENT ORDERS + STOCK ALERTS ── -->
@@ -2067,25 +2140,48 @@
           }
 
           // Stock alerts
-          if (stockAlerts.status === "fulfilled") {
-            const alerts = stockAlerts.value;
-            const arr = Array.isArray(alerts)
-              ? alerts
-              : alerts.produkKritis || alerts.data || alerts.produk || [];
-            const count = arr.length;
+if (stockAlerts.status === "fulfilled") {
+  const alerts = stockAlerts.value;
+  console.log("📊 KPI Stock Alerts:", alerts);
+  
+  let arr = [];
+  if (Array.isArray(alerts)) {
+    arr = alerts;
+  } else if (alerts && typeof alerts === 'object') {
+    arr = alerts.produkKritis || 
+          alerts.stokKritis || 
+          alerts.produkMenipis || 
+          alerts.data || 
+          alerts.produk || 
+          alerts.items || 
+          alerts.results || 
+          alerts.alerts ||
+          alerts.list ||
+          [];
+  }
+  
+  // Filter produk kritis
+  const THRESHOLD = 10;
+  const criticalProducts = arr.filter(p => {
+    const stok = p.stok ?? p.stokAktual ?? p.stock ?? p.quantity ?? 999;
+    return stok <= THRESHOLD;
+  });
+  
+  const count = criticalProducts.length;
 
-            const stockEl = document.getElementById("kpi-stock");
-            const stockSubEl = document.getElementById("kpi-stock-sub");
-            if (stockEl) {
-              stockEl.textContent = "0";
-              animCounter(stockEl, count, 1000);
-            }
-            if (stockSubEl)
-              stockSubEl.textContent =
-                count > 0 ? "produk perlu restock" : "Semua stok aman";
+  const stockEl = document.getElementById("kpi-stock");
+  const stockSubEl = document.getElementById("kpi-stock-sub");
+  if (stockEl) {
+    stockEl.textContent = "0";
+    animCounter(stockEl, count, 1000);
+  }
+  if (stockSubEl)
+    stockSubEl.textContent =
+      count > 0 ? "produk perlu restock" : "Semua stok aman";
 
-            renderStockAlerts(arr);
-          }
+  // Jangan render di sini karena sudah di-render oleh loadStockAlerts()
+  // renderStockAlerts(criticalProducts); // HAPUS INI
+}
 
           // Receivables
           if (receivables.status === "fulfilled") {
@@ -2149,15 +2245,15 @@
         // Color based on progress
         let color, badgeClass, badgeText;
         if (pct < 50) {
-          color = "#DC2626";
+          color = "#C04718";
           badgeClass = "danger";
           badgeText = "⬇ Di bawah target";
         } else if (pct < 100) {
-          color = "#F59E0B";
+          color = "#E85D26";
           badgeClass = "amber";
           badgeText = "🔥 Menuju target!";
         } else {
-          color = "#16A34A";
+          color = "#1A6B3A";
           badgeClass = "success";
           badgeText = "🎉 Target tercapai!";
         }
@@ -2293,8 +2389,8 @@
 
         // Gradient fill
         const gradient = ctx.createLinearGradient(0, 0, 0, 250);
-        gradient.addColorStop(0, "rgba(22, 163, 74, 0.25)");
-        gradient.addColorStop(1, "rgba(22, 163, 74, 0.00)");
+gradient.addColorStop(0, "rgba(232, 93, 38, 0.25)");  // orange
+gradient.addColorStop(1, "rgba(232, 93, 38, 0.00)");
 
         if (revenueChart) revenueChart.destroy();
 
@@ -2306,10 +2402,10 @@
               {
                 label: "Pendapatan",
                 data,
-                borderColor: "#16A34A",
+                borderColor: "#E85D26",
                 backgroundColor: gradient,
                 borderWidth: 2.5,
-                pointBackgroundColor: "#16A34A",
+                pointBackgroundColor: "#E85D26",
                 pointBorderColor: "#fff",
                 pointBorderWidth: 2,
                 pointRadius: 5,
@@ -2481,62 +2577,92 @@
       }
 
       /* ── 12. STOCK ALERTS ──────────────────────────────────────── */
-      let stockAlertData = [];
+let stockAlertData = [];
 
-      async function loadStockAlerts() {
-        try {
-          const res = await API.getStokAlerts();
-          stockAlertData = Array.isArray(res)
-            ? res
-            : res.data || res.produk || [];
-          renderStockAlerts(stockAlertData);
-        } catch (err) {
-          console.warn("Stock alerts error:", err);
-          const container = document.getElementById("stock-alert-list");
-          if (container)
-            container.innerHTML =
-              '<div class="empty-state" style="padding:var(--space-6)"><div class="empty-state-icon">⚠️</div><div class="empty-state-text">Gagal memuat data stok</div></div>';
-        }
-      }
+async function loadStockAlerts() {
+  try {
+    const res = await API.getStokAlerts();
+    
+    // DEBUG: Lihat struktur response di console
+    console.log("🔍 Stock Alerts Response:", res);
+    
+    // Parsing response yang lebih robust - handle berbagai kemungkinan struktur
+    let arr = [];
+    
+    if (Array.isArray(res)) {
+      arr = res;
+    } else if (res && typeof res === 'object') {
+      // Coba berbagai kemungkinan key
+      arr = res.produkKritis || 
+            res.stokKritis || 
+            res.produkMenipis || 
+            res.data || 
+            res.produk || 
+            res.items || 
+            res.results || 
+            res.alerts ||
+            res.list ||
+            [];
+    }
+    
+    // Filter hanya produk yang stoknya benar-benar kritis (stok <= threshold)
+    // Biasanya threshold adalah 10 atau bisa disesuaikan
+    const THRESHOLD = 10;
+    stockAlertData = arr.filter(p => {
+      const stok = p.stok ?? p.stokAktual ?? p.stock ?? p.quantity ?? 999;
+      return stok <= THRESHOLD;
+    });
+    
+    console.log("✅ Filtered Stock Alerts:", stockAlertData);
+    
+    renderStockAlerts(stockAlertData);
+  } catch (err) {
+    console.error("❌ Stock alerts error:", err);
+    const container = document.getElementById("stock-alert-list");
+    if (container)
+      container.innerHTML =
+        '<div class="empty-state" style="padding:var(--space-6)"><div class="empty-state-icon">⚠️</div><div class="empty-state-text">Gagal memuat data stok: ' + err.message + '</div></div>';
+  }
+}
 
-      function renderStockAlerts(arr) {
-        const container = document.getElementById("stock-alert-list");
-        const badgeEl = document.getElementById("stock-badge-count");
-        if (!container) return;
+function renderStockAlerts(arr) {
+  const container = document.getElementById("stock-alert-list");
+  const badgeEl = document.getElementById("stock-badge-count");
+  if (!container) return;
 
-        if (badgeEl) badgeEl.textContent = arr.length;
+  if (badgeEl) badgeEl.textContent = arr.length;
 
-        if (arr.length === 0) {
-          container.innerHTML =
-            '<div class="empty-state" style="padding:var(--space-6)"><div class="empty-state-icon">✅</div><div class="empty-state-text">Semua stok dalam kondisi aman</div></div>';
-          return;
-        }
+  if (!arr || arr.length === 0) {
+    container.innerHTML =
+      '<div class="empty-state" style="padding:var(--space-6)"><div class="empty-state-icon">✅</div><div class="empty-state-text">Semua stok dalam kondisi aman</div></div>';
+    return;
+  }
 
-        container.innerHTML = arr
-          .map((p) => {
-            const name = p.nama || p.name || "Produk";
-            const stok = p.stok ?? p.stokAktual ?? 0;
-            const satuan = p.satuan || "pcs";
-            const emoji = p.emoji || "📦";
-            const isOut = stok <= 0;
-            const countClass = isOut ? "" : "warning";
-            const countText = isOut
-              ? "⚠ Stok HABIS"
-              : `⚠ Sisa ${stok} ${satuan}`;
-
-            return `
+  container.innerHTML = arr
+    .map((p) => {
+      const name = p.nama || p.namaProduk || p.name || p.productName || "Produk";
+      const stok = p.stok ?? p.stokAktual ?? p.stock ?? p.quantity ?? 0;
+      const satuan = p.satuan || p.unit || "pcs";
+      const isOut = stok <= 0;
+      const isCritical = stok <= 3;
+      
+      return `
       <div class="stock-alert-item">
-        <span class="stock-alert-emoji">${emoji}</span>
+        <div class="stock-alert-icon">
+          ${isOut ? '' : '📦'}
+        </div>
         <div class="stock-alert-info">
           <div class="stock-alert-name" title="${name}">${name}</div>
-          <div class="stock-alert-count ${countClass}">${countText}</div>
+          <div class="stock-alert-stock ${isCritical ? 'critical' : ''}">
+            ${isOut ? '⚠️ Stok HABIS' : `⚠️ Sisa ${stok} ${satuan}`}
+          </div>
         </div>
-        <button class="btn-restock" onclick="openRestockModal('${p.id}', '${name.replace(/'/g, "\\'")}')">Restock</button>
+        <button class="btn-restock" onclick="openRestockModal('${p.id || p.idProduk || p.productId}', '${name.replace(/'/g, "\\'")}')">Restock</button>
       </div>
     `;
-          })
-          .join("");
-      }
+    })
+    .join("");
+}
 
       /* ── 13. RESTOCK MODAL ─────────────────────────────────────── */
       let restockTargetId = null;

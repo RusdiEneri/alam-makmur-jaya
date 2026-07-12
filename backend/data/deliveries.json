@@ -9,7 +9,7 @@
     "kurir": null,
     "kendaraan": null,
     "namaKurir": null,
-    "status": "menunggu",
+    "status": "dijadwalkan",
     "catatan": "Pesanan baru, belum dijadwalkan",
     "items": [
       {
@@ -34,7 +34,7 @@
       }
     ],
     "createdAt": "2026-07-06T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.031Z"
+    "updatedAt": "2026-07-12T01:45:22.470Z"
   },
   {
     "id": "del-seed-002",
@@ -46,7 +46,7 @@
     "kurir": "Pak Ahmad",
     "kendaraan": "Pickup L300",
     "namaKurir": "Pak Ahmad",
-    "status": "dijadwalkan",
+    "status": "dikirim",
     "catatan": "Sudah dijadwalkan pengiriman siang ini",
     "items": [
       {
@@ -81,7 +81,8 @@
       }
     ],
     "createdAt": "2026-07-06T11:10:11.031Z",
-    "updatedAt": "2026-07-06T11:10:11.031Z"
+    "updatedAt": "2026-07-12T01:45:28.265Z",
+    "waktuKirim": "2026-07-12T01:45:28.265Z"
   },
   {
     "id": "del-seed-003",

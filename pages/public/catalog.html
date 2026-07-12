@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Katalog Produk — UD. Alam Makmur Jaya</title>
-  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link rel="icon" href="../../assets/icon.png" type="image/x-icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../../css/style.css"/>
   <style>
@@ -43,11 +43,13 @@
 
   <nav class="navbar">
     <a href="index.html" class="brand">
-      <span class="brand-icon">🏗</span>
-      <div>
-        <span class="brand-name">Alam Makmur Jaya</span>
-        <span class="brand-sub">Toko Bahan Bangunan</span>
-      </div>
+      <span class="brand-icon">
+  <img src="../../assets/icon.png" alt="Logo UD. Alam Makmur Jaya" style="width: 50px; height: 50px;"/>
+</span>
+        <div>
+          <span class="brand-name">Alam Makmur Jaya</span>
+          <span class="brand-sub">Toko Bahan Bangunan</span>
+        </div>
     </a>
     <div class="nav-links">
       <a href="index.html">Beranda</a>
@@ -67,7 +69,8 @@
 
   <div class="page-body">
     <div class="search-bar">
-      <input type="text" id="search-input" placeholder="🔍  Cari produk... (cth: semen, pipa, kabel)" oninput="renderProducts(filterProducts())"/>
+      <!-- PERBAIKAN: Mengubah oninput menjadi handleSearch() -->
+      <input type="text" id="search-input" placeholder="🔍  Cari produk... (cth: semen, pipa, kabel)" oninput="handleSearch()"/>
     </div>
 
     <div class="catalog-layout">
@@ -82,9 +85,9 @@
         </div>
         <div class="filter-group">
           <p class="filter-label">Ketersediaan</p>
-          <div class="filter-item"><input type="radio" name="stok" id="stok-all" value="" checked onchange="renderProducts(filterProducts())"><label for="stok-all">Semua</label></div>
-          <div class="filter-item"><input type="radio" name="stok" id="stok-ada" value="ada" onchange="renderProducts(filterProducts())"><label for="stok-ada">✓ Tersedia</label></div>
-          <div class="filter-item"><input type="radio" name="stok" id="stok-habis" value="habis" onchange="renderProducts(filterProducts())"><label for="stok-habis">✗ Habis</label></div>
+          <div class="filter-item"><input type="radio" name="stok" id="stok-all" value="" checked onchange="fetchPage(1)"><label for="stok-all">Semua</label></div>
+          <div class="filter-item"><input type="radio" name="stok" id="stok-ada" value="ada" onchange="fetchPage(1)"><label for="stok-ada">✓ Tersedia</label></div>
+          <div class="filter-item"><input type="radio" name="stok" id="stok-habis" value="habis" onchange="fetchPage(1)"><label for="stok-habis">✗ Habis</label></div>
         </div>
       </aside>
 
@@ -103,15 +106,18 @@
   <footer class="footer">
     <div class="footer-inner">
       <div>
-        <p class="footer-brand">🏗 UD. Alam Makmur Jaya</p>
-        <p class="footer-addr">Gresik, Jawa Timur 61124</p>
+        <p class="footer-brand">UD. Alam Makmur Jaya</p>
+          <p class="footer-addr">Gresik, Jawa Timur 61124</p>
+          <!-- <p class="footer-addr">Pemilik: Muhammad Alam Shah</p> -->
       </div>
       <div class="footer-links">
+        <a href="../public/index.html">Beranda</a>
         <a href="../public/catalog.html">Katalog</a>
-        <a href="../public/login.html">Login Admin</a>
+        <a href="../public/cart.html">Keranjang</a>
+        <!-- <a href="../public/login.html">Login Admin</a> -->
       </div>
     </div>
-    <p class="footer-copy">© 2025 UD. Alam Makmur Jaya · Kelompok 8 UISI</p>
+    <p class="footer-copy">© 2026 UD. Alam Makmur Jaya · Dibuat oleh Kelompok 8</p>
   </footer>
 
 

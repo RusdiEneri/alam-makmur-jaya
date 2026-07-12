@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kasir (POS) — UD. Alam Makmur Jaya</title>
   <meta name="description" content="Panel admin UD. Alam Makmur Jaya — ringkasan penjualan, stok, transaksi, dan laporan harian."/>
-  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link rel="icon" href="../../assets/icon.png" type="image/x-icon"/>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -48,16 +48,108 @@
     }
 
     /* ── SIDEBAR ─────────────────────────────────────── */
-    .sidebar { background: #0F172A; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; z-index: 100; }
-    .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 22px 20px; border-bottom: 1px solid #1E293B; color: white; font-weight: 700; font-size: 14px; }
-    .sidebar-brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #16A34A, #22C55E); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-    .sidebar-nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
-    .sidebar-section { font-size: 10px; font-weight: 700; color: #475569; letter-spacing: 1px; text-transform: uppercase; padding: 14px 14px 6px; }
-    .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #94A3B8; transition: 0.2s; position: relative; }
-    .sidebar-link:hover { background: #1E293B; color: #E2E8F0; }
-    .sidebar-link.active { background: rgba(22,163,74,0.15); color: #FBA07A; font-weight: 600; }
-    .sidebar-link.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 60%; background: #4ADE80; border-radius: 0 3px 3px 0; }
-    .sidebar-footer { padding: 16px 12px; border-top: 1px solid #1E293B; }
+    /* ── SIDEBAR ─────────────────────────────────────── */
+.sidebar { 
+  background: #0F172A; 
+  display: flex; 
+  flex-direction: column; 
+  position: sticky; 
+  top: 0; 
+  height: 100vh; 
+  z-index: 100; 
+}
+
+.sidebar-brand { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  padding: 22px 20px; 
+  border-bottom: 1px solid #1E293B; 
+  color: white; 
+  font-weight: 700; 
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.sidebar-brand-icon { 
+  width: 44px;
+  height: 44px;
+  background: white;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-brand-icon img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.sidebar-nav { 
+  padding: 16px 12px; 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 2px; 
+  overflow-y: auto; 
+}
+
+.sidebar-section { 
+  font-size: 10px; 
+  font-weight: 700; 
+  color: #475569; 
+  letter-spacing: 1px; 
+  text-transform: uppercase; 
+  padding: 14px 14px 6px; 
+}
+
+.sidebar-link { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  padding: 10px 14px; 
+  border-radius: 8px; 
+  font-size: 14px; 
+  font-weight: 500; 
+  color: #94A3B8; 
+  transition: 0.2s; 
+  position: relative; 
+}
+
+.sidebar-link:hover { 
+  background: #1E293B; 
+  color: #E2E8F0; 
+}
+
+/* FIX: Active state dengan warna orange brand */
+.sidebar-link.active { 
+  background: rgba(232, 93, 38, 0.15); 
+  color: #E85D26; 
+  font-weight: 600; 
+}
+
+.sidebar-link.active::before { 
+  content: ''; 
+  position: absolute; 
+  left: 0; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  width: 3px; 
+  height: 60%; 
+  background: #E85D26; 
+  border-radius: 0 3px 3px 0; 
+}
+
+.sidebar-footer { 
+  padding: 16px 12px; 
+  border-top: 1px solid #1E293B; 
+}
 
     /* ── SIDEBAR OVERLAY (mobile) ──────────────────────────── */
     .sidebar-overlay {
@@ -1134,25 +1226,32 @@
   <!-- ═══════════════════════════════════════════
        SIDEBAR
        ═══════════════════════════════════════════ -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-      <div class="sidebar-brand-icon">🏗</div>
-      <div>UD. Alam Makmur Jaya</div>
+  <!-- ═══════════════════════════════════════════
+     SIDEBAR
+     ═══════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-brand-icon">
+      <img src="../../assets/icon.png" alt="Logo UD. Alam Makmur Jaya"/>
     </div>
-    <nav class="sidebar-nav">
-      <div class="sidebar-section">Menu Utama</div>
-      <a class="sidebar-link" href="../admin/dashboard.html">🚀 Dashboard</a>
-      <a class="sidebar-link" href="../admin/products.html">📦 Produk & Stok</a>
-      <a class="sidebar-link" href="../admin/transactions.html">📝 Transaksi</a>
-      <div class="sidebar-section">Operasional</div>
-      <a class="sidebar-link" href="../kasir/receivables.html">💰 Piutang</a>
-      <a class="sidebar-link" href="../kasir/deliveries.html">🚚 Pengiriman</a>
-      <a class="sidebar-link active" href="../kasir/pos.html">💻 Kasir (POS)</a>
-    </nav>
-    <div class="sidebar-footer">
-      <a class="sidebar-link" href="#" onclick="handleLogout()">🚪 Keluar</a>
-    </div>
-  </aside>
+    <div>UD. Alam Makmur Jaya</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">Menu Utama</div>
+    <a class="sidebar-link" href="../admin/dashboard.html">🚀 Dashboard</a>
+    <a class="sidebar-link" href="../admin/products.html">📦 Produk & Stok</a>
+    <a class="sidebar-link" href="../admin/transactions.html">📝 Transaksi</a>
+    <div class="sidebar-section">Operasional</div>
+    <a class="sidebar-link" href="../kasir/receivables.html">💰 Piutang</a>
+    <a class="sidebar-link" href="../kasir/deliveries.html">🚚 Pengiriman</a>
+    <a class="sidebar-link active" href="../kasir/pos.html">💻 Kasir (POS)</a>
+    <div class="sidebar-section">Analitik</div>
+    <a class="sidebar-link" href="../admin/reports.html">📊 Laporan</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="sidebar-link" href="#" onclick="handleLogout()">🚪 Keluar</a>
+  </div>
+</aside>
 
   <!-- Right column: header + content -->
   <div style="display:flex; flex-direction:column; min-width:0;">
@@ -1165,7 +1264,7 @@
         <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">
           ☰
         </button>
-        <span class="header-page-title">Dashboard</span>
+        <span class="header-page-title">Kasir (POS)</span>
       </div>
 
       <div class="header-right">
@@ -1234,7 +1333,7 @@
             
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 16px;">
               <span>Total Tagihan:</span>
-              <span id="pos-total" style="color: #16a34a;">Rp 0</span>
+              <span id="pos-total" style="color: #E85D26;">Rp 0</span>
             </div>
             
             <div style="margin-bottom: 20px;">
@@ -1247,7 +1346,7 @@
               <span id="pos-change">Rp 0</span>
             </div>
             
-            <button id="pos-pay-btn" style="width: 100%; padding: 16px; background: #16a34a; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 14px rgba(22,163,74,0.3);">
+            <button id="pos-pay-btn" style="width: 100%; padding: 16px; background: #E85D26; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 14px rgba(22,163,74,0.3);">
               💳 PROSES TRANSAKSI
             </button>
           </div>
@@ -1333,7 +1432,7 @@
           `;
           
           if (!isOutOfStock) {
-            div.onmouseover = () => div.style.borderColor = '#16a34a';
+            div.onmouseover = () => div.style.borderColor = '#E85D26';
             div.onmouseout = () => div.style.borderColor = '#e2e8f0';
             div.onclick = () => addToCart(p);
           }
@@ -1341,7 +1440,7 @@
           div.innerHTML = `
             <div>
               <div style="font-weight: 700; font-size: 14px; color: #1e293b; margin-bottom: 6px; line-height: 1.3;">${p.nama}</div>
-              <div style="font-size: 13px; color: #16a34a; font-weight: 800;">${formatIDR(p.harga)} / ${p.satuan}</div>
+              <div style="font-size: 13px; color: #E85D26; font-weight: 800;">${formatIDR(p.harga)} / ${p.satuan}</div>
             </div>
             <div style="margin-top: 12px; font-size: 12px; font-weight: 600; color: ${isOutOfStock ? '#ef4444' : '#64748b'}; background: ${isOutOfStock ? '#fef2f2' : '#f1f5f9'}; padding: 4px 8px; border-radius: 6px; display: inline-block; align-self: flex-start;">
               Stok: ${p.stok}
@@ -1419,7 +1518,7 @@
         
         if (cash >= total && total > 0) {
           changeEl.textContent = formatIDR(cash - total);
-          changeEl.style.color = '#16a34a';
+          changeEl.style.color = '#E85D26';
         } else {
           changeEl.textContent = 'Kurang ' + formatIDR(Math.abs(cash - total));
           changeEl.style.color = '#ef4444';
@@ -1431,55 +1530,78 @@
       }
 
       async function processPayment() {
-        if (cart.length === 0) return alert('Keranjang kosong!');
-        const total = parseFloat(document.getElementById('pos-total').dataset.val) || 0;
-        const cash = parseFloat(document.getElementById('pos-cash').value) || 0;
-        
-        if (cash < total) {
-          return alert('Uang tunai kurang dari total tagihan!');
-        }
+  if (cart.length === 0) return alert('Keranjang kosong!');
+  const total = parseFloat(document.getElementById('pos-total').dataset.val) || 0;
+  const cash = parseFloat(document.getElementById('pos-cash').value) || 0;
+  
+  if (cash < total) {
+    return alert('Uang tunai kurang dari total tagihan!');
+  }
 
-        const nama = document.getElementById('pos-customer').value || 'Pelanggan Offline';
-        
-        const payload = {
-          nama: nama,
-          alamat: 'Walk-in (Kasir)',
-          noWhatsapp: '080000000000',
-          metodeBayar: 'tunai',
-          items: cart.map(i => ({ productId: i.productId, qty: i.qty }))
-        };
+  const nama = document.getElementById('pos-customer').value || 'Pelanggan Offline';
+  
+  const payload = {
+    nama: nama,
+    alamat: 'Walk-in (Kasir)',
+    noWhatsapp: '080000000000',
+    metodeBayar: 'tunai',
+    items: cart.map(i => ({ productId: i.productId, qty: i.qty }))
+  };
 
-        try {
-          const btn = document.getElementById('pos-pay-btn');
-          const originalText = btn.innerHTML;
-          btn.innerHTML = 'Memproses...';
-          btn.disabled = true;
+  try {
+    const btn = document.getElementById('pos-pay-btn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = 'Memproses...';
+    btn.disabled = true;
 
-          const res = await API.checkout(payload);
-          alert('Transaksi Kasir Berhasil! Membuka nota...');
-          
-          // Clear cart
-          cart = [];
-          renderCart();
-          document.getElementById('pos-cash').value = '';
-          
-          // Refresh products to get updated stock
-          products = await API.getProducts();
-          renderProducts(products);
+    const res = await API.checkout(payload);
+    console.log('✅ Response checkout:', res);
+    
+    // Clear cart
+    cart = [];
+    renderCart();
+    document.getElementById('pos-cash').value = '';
+    
+    // Refresh products to get updated stock
+    products = await API.getProducts();
+    renderProducts(products);
 
-          // Open invoice
-          if (res.order && res.order.noOrder) {
-            window.open('nota.html?order=' + res.order.noOrder, '_blank');
-          }
-          
-          btn.innerHTML = originalText;
-          btn.disabled = false;
-        } catch (e) {
-          alert('Gagal memproses transaksi: ' + e.message);
-          document.getElementById('pos-pay-btn').innerHTML = '💳 PROSES TRANSAKSI';
-          document.getElementById('pos-pay-btn').disabled = false;
-        }
-      }
+    // FIX: Ambil noOrder dari res.transaction.noOrder
+    let noOrder = '';
+    
+    if (res.transaction && res.transaction.noOrder) {
+      noOrder = res.transaction.noOrder;
+    } else if (res.order && res.order.noOrder) {
+      noOrder = res.order.noOrder;
+    } else if (res.noOrder) {
+      noOrder = res.noOrder;
+    } else if (res.data && res.data.noOrder) {
+      noOrder = res.data.noOrder;
+    }
+    
+    console.log(' No Order:', noOrder);
+    
+    if (noOrder) {
+      // Redirect ke halaman transaksi dengan filter noOrder
+      window.location.href = `../admin/transactions.html?search=${noOrder}`;
+      
+      // Atau buka nota jika ada file nota.html
+      // window.open(`nota.html?order=${noOrder}`, '_blank', 'width=400,height=600');
+      
+      alert('✅ Transaksi Kasir Berhasil!\nNo. Order: ' + noOrder);
+    } else {
+      alert('✅ Transaksi Kasir Berhasil!\n\n⚠️ Nota tidak tersedia.');
+    }
+    
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  } catch (e) {
+    console.error('❌ Error checkout:', e);
+    alert('Gagal memproses transaksi: ' + e.message);
+    document.getElementById('pos-pay-btn').innerHTML = ' PROSES TRANSAKSI';
+    document.getElementById('pos-pay-btn').disabled = false;
+  }
+}
 
       // Check auth
       if (!API.getCurrentUser()) {

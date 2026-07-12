@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Piutang — Panel Admin UD. Alam Makmur Jaya</title>
+  <title>Piutang — UD. Alam Makmur Jaya</title>
 
-  <link rel="icon" href="/assets/store.ico" type="image/x-icon"/>
+  <link rel="icon" href="../../assets/icon.png" type="image/x-icon"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
@@ -20,23 +20,86 @@
     button { font-family: inherit; cursor: pointer; }
 
     /* ── LAYOUT ─────────────────────────────────────────── */
-    .app-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+    .app-layout { display: grid; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100vh; }
 
     /* ── SIDEBAR ────────────────────────────────────────── */
-    .sidebar { background: #0F172A; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; z-index: 100; }
-    .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 22px 20px; border-bottom: 1px solid #1E293B; color: white; font-weight: 700; font-size: 14px; }
-    .sidebar-brand-icon { width: 36px; height: 36px; background: linear-gradient(135deg, #16A34A, #22C55E); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .sidebar { 
+      background: #0F172A; 
+      display: flex; 
+      flex-direction: column; 
+      position: sticky; 
+      top: 0; 
+      height: 100vh; 
+      z-index: 100;
+      width: var(--sidebar-width);
+    }
+    .sidebar-brand { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      padding: 22px 20px; 
+      border-bottom: 1px solid #1E293B; 
+      color: white; 
+      font-weight: 700; 
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .sidebar-brand-icon { 
+      width: 44px;
+      height: 44px;
+      background: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .sidebar-brand-icon img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
     .sidebar-nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
     .sidebar-section { font-size: 10px; font-weight: 700; color: #475569; letter-spacing: 1px; text-transform: uppercase; padding: 14px 14px 6px; }
     .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #94A3B8; transition: 0.2s; position: relative; }
     .sidebar-link:hover { background: #1E293B; color: #E2E8F0; }
-    .sidebar-link.active { background: rgba(22,163,74,0.15); color: #FBA07A; font-weight: 600; }
-    .sidebar-link.active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 60%; background: #4ADE80; border-radius: 0 3px 3px 0; }
+    /* FIX: Active state dengan warna orange brand */
+    .sidebar-link.active { 
+      background: rgba(232, 93, 38, 0.15); 
+      color: #E85D26; 
+      font-weight: 600; 
+    }
+    .sidebar-link.active::before { 
+      content: ''; 
+      position: absolute; 
+      left: 0; 
+      top: 50%; 
+      transform: translateY(-50%); 
+      width: 3px; 
+      height: 60%; 
+      background: #E85D26; 
+      border-radius: 0 3px 3px 0; 
+    }
     .sidebar-footer { padding: 16px 12px; border-top: 1px solid #1E293B; }
 
     /* ── CONTENT ────────────────────────────────────────── */
     .content-wrapper { display: flex; flex-direction: column; height: 100vh; overflow-y: auto; min-width: 0; }
-    .top-header { background: white; height: 64px; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 80; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .top-header { 
+      background: white; 
+      height: 64px; 
+      border-bottom: 1px solid var(--color-border); 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 0 24px; 
+      position: sticky; 
+      top: 0; 
+      z-index: 80; 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04); 
+    }
     .header-title { font-size: 17px; font-weight: 700; }
     .main-content { padding: 24px; }
 
@@ -46,8 +109,13 @@
 
     /* ── BUTTONS ────────────────────────────────────────── */
     .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; border: none; transition: 0.2s; position: relative; overflow: hidden; }
-    .btn-primary { background: var(--color-primary); color: white; }
-    .btn-primary:hover { background: #15803D; transform: translateY(-1px); }
+    /* FIX: Button primary dengan warna orange brand */
+    .btn-primary { background: #E85D26; color: white; }
+    .btn-primary:hover { 
+      background: #C04718; 
+      transform: translateY(-1px); 
+      box-shadow: 0 4px 12px rgba(232, 93, 38, 0.3); 
+    }
     .btn-outline { background: white; color: var(--color-text); border: 1px solid var(--color-border); }
     .btn-outline:hover { background: #F8FAFC; }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
@@ -78,16 +146,16 @@
     /* Row state colors */
     .row-overdue { background: rgba(254,226,226,0.4) !important; animation: rowPulseRed 2.5s infinite !important; }
     .row-warning { background: rgba(254,243,199,0.5) !important; }
-    .row-paid    { background: rgba(220,252,231,0.5) !important; }
-    .row-flash   { animation: rowFlashGreen 1s ease-out forwards !important; }
+    .row-paid    { background: rgba(232, 93, 38, 0.08) !important; }
+    .row-flash   { animation: rowFlashOrange 1s ease-out forwards !important; }
 
     @keyframes rowPulseRed { 0%,100% { background: rgba(254,226,226,0.4); } 50% { background: rgba(254,226,226,0.8); } }
-    @keyframes rowFlashGreen { 0% { background: #4ADE80; } 100% { background: rgba(220,252,231,0.5); } }
+    @keyframes rowFlashOrange { 0% { background: rgba(232, 93, 38, 0.3); } 100% { background: rgba(232, 93, 38, 0.08); } }
 
     .sort-icon { font-size: 10px; margin-left: 4px; color: var(--color-gray-400); transition: 0.2s; }
-    .th-active .sort-icon { color: var(--color-primary); }
-    .th-asc .sort-icon  { transform: rotate(180deg); color: var(--color-primary); }
-    .th-desc .sort-icon { transform: rotate(0deg); color: var(--color-primary); }
+    .th-active .sort-icon { color: #E85D26; }
+    .th-asc .sort-icon  { transform: rotate(180deg); color: #E85D26; }
+    .th-desc .sort-icon { transform: rotate(0deg); color: #E85D26; }
 
     /* Table content */
     .buyer-name { font-weight: 700; }
@@ -100,7 +168,8 @@
     /* Badges */
     .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 700; }
     .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-    .badge-lunas  { background: rgba(22,163,74,0.1);  color: #14532D; }
+    /* FIX: Badge lunas dengan warna accent green brand */
+    .badge-lunas  { background: rgba(26, 107, 58, 0.1);  color: #1A6B3A; }
     .badge-belum  { background: rgba(220,38,38,0.1);  color: #7F1D1D; }
     .badge-cicil  { background: rgba(245,158,11,0.1); color: #92400E; }
 
@@ -111,8 +180,9 @@
     /* Action buttons */
     .action-cell { display: flex; gap: 6px; align-items: center; flex-wrap: nowrap; }
     .btn-sm { padding: 6px 11px; border-radius: 6px; font-size: 12px; font-weight: 600; border: none; transition: 0.2s; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
-    .btn-sm-pay { background: white; border: 1px solid var(--color-primary); color: var(--color-primary); }
-    .btn-sm-pay:hover { background: var(--color-primary); color: white; }
+    /* FIX: Button pay dengan warna orange */
+    .btn-sm-pay { background: white; border: 1px solid #E85D26; color: #E85D26; }
+    .btn-sm-pay:hover { background: #E85D26; color: white; }
     .btn-sm-wa  { background: #25D366; color: white; }
     .btn-sm-wa:hover  { background: #128C7E; }
 
@@ -125,9 +195,19 @@
     .form-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
     .form-label span { color: var(--color-danger); }
     .form-input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--color-border); border-radius: 8px; font-family: inherit; font-size: 14px; transition: 0.2s; background: #FAFBFC; }
-    .form-input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(22,163,74,0.15); background: white; }
+    /* FIX: Form focus dengan warna orange */
+    .form-input:focus { 
+      outline: none; 
+      border-color: #E85D26; 
+      box-shadow: 0 0 0 3px rgba(232, 93, 38, 0.15); 
+      background: white; 
+    }
     .form-select { padding: 10px 32px 10px 12px; border: 1.5px solid var(--color-border); border-radius: 8px; font-family: inherit; font-size: 14px; background: #FAFBFC url('data:image/svg+xml;utf8,<svg fill="%236B7280" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>') no-repeat right 10px center / 14px; -webkit-appearance: none; appearance: none; width: 100%; transition: 0.2s; }
-    .form-select:focus { outline: none; border-color: var(--color-primary); }
+    .form-select:focus { 
+      outline: none; 
+      border-color: #E85D26; 
+      box-shadow: 0 0 0 3px rgba(232, 93, 38, 0.15); 
+    }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .form-hint { font-size: 11px; color: var(--color-text-muted); margin-top: 4px; }
 
@@ -156,7 +236,9 @@
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="sidebar-brand-icon">🏗</div>
+      <div class="sidebar-brand-icon">
+        <img src="../../assets/icon.png" alt="Logo UD. Alam Makmur Jaya"/>
+      </div>
       <div>UD. Alam Makmur Jaya</div>
     </div>
     <nav class="sidebar-nav">
@@ -168,10 +250,13 @@
       <a class="sidebar-link active" href="../kasir/receivables.html">💰 Piutang</a>
       <a class="sidebar-link" href="../kasir/deliveries.html">🚚 Pengiriman</a>
       <a class="sidebar-link" href="../kasir/pos.html">💻 Kasir (POS)</a>
+      <div class="sidebar-section">Analitik</div>
+          <a class="sidebar-link" href="../admin/reports.html">📊 Laporan</a>
     </nav>
     <div class="sidebar-footer">
       <a class="sidebar-link" href="#" onclick="handleLogout()">🚪 Keluar</a>
     </div>
+    
   </aside>
 
   <!-- CONTENT -->
@@ -375,7 +460,7 @@ async function loadData() {
   try {
     allData = await API.getReceivables();
     document.getElementById('last-updated').textContent =
-      'Terakhir diperbarui ' + new Date().toLocaleTimeString('id-ID');
+      // 'Terakhir diperbarui ' + new Date().toLocaleTimeString('id-ID');
 
     updateSummaries();
     applyFilters();
@@ -541,7 +626,7 @@ function renderTable() {
       </td>
       <td>${d.noWhatsapp || '–'}</td>
       <td>
-        <div class="rp-amount" id="sisa-${d.id}" style="color:${lunas ? 'var(--color-primary)' : 'var(--color-danger)'}">
+        <div class="rp-amount" id="sisa-${d.id}" style="color:${lunas ? '#E85D26' : 'var(--color-danger)'}">
           ${lunas ? '✓ Lunas' : fmtRp(sisa)}
         </div>
         ${!lunas && d.jumlahPiutang && d.jumlahPiutang !== sisa ? `<div class="buyer-sub">dari ${fmtRp(d.jumlahPiutang)}</div>` : ''}
@@ -582,25 +667,33 @@ async function submitAdd() {
   const orig = btn.textContent; btn.textContent = '⏳ Menyimpan…'; btn.disabled = true;
 
   try {
+    // FIX: Sesuaikan field names dengan yang diharapkan backend
     const payload = {
-      namaPelanggan: nama, noWhatsapp: wa,
-      jumlahPiutang: jml, sisaPiutang: jml,
-      tanggalJatuhTempo: tgl, status: 'belum',
+      namaPelanggan: nama,
+      noWhatsapp: wa,
+      total: jml,              // Backend expects "total"
+      jatuhTempo: tgl,         // Backend expects "jatuhTempo" (not tanggalJatuhTempo)
+      status: 'belum-lunas',
       transactionId: document.getElementById('add-trx').value.trim() || undefined,
       keterangan: document.getElementById('add-ket').value.trim() || undefined
     };
+    
+    console.log('📤 Sending payload:', payload);
+    
     const res = await API.createReceivable(payload);
+    console.log('✅ Response:', res);
+    
     allData.push(res);
     closeModal('add-modal');
     updateSummaries();
     applyFilters();
   } catch (err) {
+    console.error('❌ Error:', err);
     alert('Gagal tambah piutang: ' + err.message);
   } finally {
     btn.textContent = orig; btn.disabled = false;
   }
 }
-
 /* ═══════════════════════════════════════════════════
    PAY MODAL
 ═══════════════════════════════════════════════════ */
@@ -643,7 +736,7 @@ async function submitPay() {
     const sisaEl = document.getElementById(`sisa-${id}`);
     if (sisaEl) {
       sisaEl.textContent = newSisa === 0 ? '✓ Lunas' : fmtRp(newSisa);
-      sisaEl.style.color = newSisa === 0 ? 'var(--color-primary)' : 'var(--color-danger)';
+      sisaEl.style.color = newSisa === 0 ? '#E85D26' : 'var(--color-danger)';
       sisaEl.classList.remove('flip-val');
       void sisaEl.offsetWidth;
       sisaEl.classList.add('flip-val');
@@ -651,7 +744,7 @@ async function submitPay() {
 
     const tr = document.getElementById(`row-${id}`);
     if (newSisa === 0 && tr) {
-      // Flash green then sort to bottom
+      // Flash orange then sort to bottom
       document.getElementById(`badge-${id}`).innerHTML = `<span class="badge badge-lunas"><span class="dot"></span>Lunas</span>`;
       document.getElementById(`action-${id}`).innerHTML = `<span style="color:var(--color-text-muted);font-size:12px">–</span>`;
       tr.classList.remove('row-overdue', 'row-warning');
@@ -705,11 +798,21 @@ function closeModal(id, e) {
    UTILS
 ═══════════════════════════════════════════════════ */
 function getSisa(d) {
-  return d.sisaPiutang !== undefined ? d.sisaPiutang : (d.jumlahPiutang || 0);
+  // Prioritas: sisaPiutang > jumlahPiutang > total
+  if (d.sisaPiutang !== undefined && d.sisaPiutang !== null) return d.sisaPiutang;
+  if (d.jumlahPiutang !== undefined && d.jumlahPiutang !== null) return d.jumlahPiutang;
+  if (d.total !== undefined && d.total !== null) return d.total;
+  return 0;
 }
 
 function isLunas(d) {
-  return d.status === 'lunas' || getSisa(d) <= 0;
+  // Cek status dari backend (bisa 'lunas', 'belum-lunas', 'belum', dll)
+  const status = (d.status || '').toLowerCase();
+  if (status === 'lunas') return true;
+  if (status === 'belum-lunas' || status === 'belum') return false;
+  
+  // Fallback: cek dari sisa
+  return getSisa(d) <= 0;
 }
 
 function fmtRp(n) { return 'Rp ' + Number(n || 0).toLocaleString('id-ID'); }

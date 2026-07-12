@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daftar Transaksi — Panel Admin UD. Alam Makmur Jaya</title>
+    <title>Transaksi — UD. Alam Makmur Jaya</title>
     <meta
       name="description"
       content="Manajemen transaksi dan verifikasi pembayaran UD. Alam Makmur Jaya."
     />
 
-    <link rel="icon" href="/assets/store.ico" type="image/x-icon" />
+    <link rel="icon" href="../../assets/icon.png" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,6 +25,12 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <style>
+      .header-page-title { 
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--color-text) !important;
+  margin: 0 !important;
+}
       /* ── RESET & BASE ───────────────────────────────────── */
       *,
       *::before,
@@ -74,17 +80,25 @@
         color: white;
         font-weight: 700;
         font-size: 14px;
+        background: rgba(255, 255, 255, 0.02);
       }
       .sidebar-brand-icon {
-        width: 36px;
-        height: 36px;
-        background: linear-gradient(135deg, #16a34a, #22c55e);
-        border-radius: 8px;
+        width: 44px;
+        height: 44px;
+        background: white;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
         flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .sidebar-brand-icon img {
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
       }
       .sidebar-nav {
         padding: 16px 12px;
@@ -120,8 +134,8 @@
         color: #e2e8f0;
       }
       .sidebar-link.active {
-        background: rgba(22, 163, 74, 0.15);
-        color: #fba07a;
+        background: rgba(232, 93, 38, 0.15);
+        color: #E85D26;
         font-weight: 600;
       }
       .sidebar-link.active::before {
@@ -132,7 +146,7 @@
         transform: translateY(-50%) scaleY(1);
         width: 3px;
         height: 60%;
-        background: #4ade80;
+        background: #E85D26;
         border-radius: 0 3px 3px 0;
       }
       .sidebar-footer {
@@ -221,11 +235,16 @@
         transform: translateY(-1px);
       }
       .btn-primary {
-        background: var(--color-primary);
+        background: #E85D26;
         color: white;
       }
       .btn-primary:hover {
-        background: #15803d;
+        background: #C04718;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(232, 93, 38, 0.3);
+      }
+      .btn-page.active {
+        background: #E85D26;
       }
       .btn-danger {
         background: var(--color-danger);
@@ -319,8 +338,8 @@
       }
       .form-input:focus {
         outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+        border-color: #E85D26;
+        box-shadow: 0 0 0 3px rgba(232, 93, 38, 0.15);
         background: white;
       }
       .form-input.no-icon {
@@ -342,8 +361,8 @@
       }
       .form-select:focus {
         outline: none;
-        border-color: var(--color-primary);
-        box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+        border-color: #E85D26;
+        box-shadow: 0 0 0 3px rgba(232, 93, 38, 0.15);
       }
       .filter-divider {
         width: 1px;
@@ -404,7 +423,7 @@
 
       .order-no {
         font-weight: 700;
-        color: var(--color-primary);
+        color: #E85D26;
         font-size: 13px;
       }
       .buyer-name {
@@ -458,8 +477,8 @@
       }
       .pay-berhasil,
       .pay-lunas {
-        background: rgba(22, 163, 74, 0.12);
-        color: #14532d;
+        background: rgba(26, 107, 58, 0.12);
+        color: #1A6B3A;
       }
       .pay-ditolak {
         background: rgba(220, 38, 38, 0.12);
@@ -491,7 +510,7 @@
       }
       .ord-selesai {
         background: #f0fdf4;
-        color: #14532d;
+        color: #1A6B3A;
       }
 
       /* Flip animation for badges */
@@ -731,7 +750,7 @@
       }
       .total-row.grand .total-amount {
         font-size: 20px;
-        color: var(--color-primary);
+        color: #E85D26;
       }
 
       /* ── RIGHT PANEL (Verification & Status) ────────────── */
@@ -741,10 +760,10 @@
         gap: 20px;
       }
 
-      /* Verifikasi card */
+      /* Verifikasi card - gradient orange light */
       .verify-card {
-        background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-        border: 2px solid #86efac;
+        background: linear-gradient(135deg, #FDF1EC, #FEE4D6);
+        border: 2px solid #FDC9AD;
         border-radius: 14px;
         padding: 22px;
       }
@@ -773,8 +792,8 @@
         font-size: 14px;
       }
       .verify-status-note.ok {
-        background: rgba(22, 163, 74, 0.1);
-        color: #14532d;
+        background: rgba(232, 93, 38, 0.1);
+        color: #C04718;
       }
       .verify-status-note.err {
         background: rgba(220, 38, 38, 0.1);
@@ -804,11 +823,11 @@
         overflow: hidden;
       }
       .btn-confirm {
-        background: var(--color-primary);
+        background: #E85D26;
         color: white;
       }
       .btn-confirm:hover {
-        background: #15803d;
+        background: #C04718;
       }
       .btn-confirm.confirming {
         background: #d97706;
@@ -861,7 +880,7 @@
       }
       .status-select:focus {
         outline: none;
-        border-color: var(--color-primary);
+        border-color: #E85D26;
       }
 
       .btn-update-status {
@@ -871,7 +890,7 @@
         font-size: 14px;
         border-radius: 8px;
         border: none;
-        background: var(--color-primary);
+        background: #E85D26;
         color: white;
         cursor: pointer;
         transition: 0.2s;
@@ -880,7 +899,7 @@
         overflow: hidden;
       }
       .btn-update-status:hover {
-        background: #15803d;
+        background: #C04718;
       }
 
       /* ── LIGHTBOX ───────────────────────────────────────── */
@@ -1056,7 +1075,9 @@
       <!-- ── SIDEBAR ─────────────────────────────────────────── -->
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-          <div class="sidebar-brand-icon">🏗</div>
+          <div class="sidebar-brand-icon">
+            <img src="../../assets/icon.png" alt="Logo UD. Alam Makmur Jaya"/>
+          </div>
           <div>UD. Alam Makmur Jaya</div>
         </div>
         <nav class="sidebar-nav">
@@ -1100,7 +1121,14 @@
             >
               ☰
             </button>
-            <div class="header-title">Manajemen Transaksi</div>
+            <header class="top-header">
+  <div class="header-left" style="display:flex;align-items:center;gap:12px;">
+    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+    <span class="header-page-title">Transaksi</span>
+  </div>
+  <div style="font-size:12px; color:var(--color-text-muted)" id="last-updated"></div>
+</header>
+            <!-- <div class="header-title">ManajemenTransaksi</div> -->
           </div>
           <div
             style="font-size: 12px; color: var(--color-text-muted)"
@@ -1110,7 +1138,7 @@
 
         <main class="main-content">
           <div class="section-header">
-            <h1 class="section-title">Daftar Transaksi</h1>
+            <!-- <h1 class="section-title">DaftarTransaksi</h1> -->
             <div class="btn-group">
               <button
                 class="btn btn-excel"
@@ -1372,7 +1400,7 @@
             <div class="modal-card">
               <div class="modal-card-title">Status Pesanan</div>
               <select class="status-select" id="dt-status-pesanan">
-                <option value="menunggu">⏳ Menunggu Konfirmasi</option>
+                <!-- <option value="menunggu">⏳ Menunggu Konfirmasi</option> -->
                 <option value="diproses">⚙️ Sedang Diproses</option>
                 <option value="dikirim">🚚 Sedang Dikirim</option>
                 <option value="selesai">✅ Selesai</option>
@@ -1448,9 +1476,6 @@
 ═══════════════════════════════════════════════════ */
       if (!sessionStorage.getItem("token"))
         window.location.replace("../public/login.html");
-      /* handleLogout — provided globally by admin-shared.js */
-
-      /* toggleSidebar/closeSidebar — provided globally by admin-shared.js */
 
       /* ═══════════════════════════════════════════════════
    STATE
@@ -1473,7 +1498,7 @@
           allTrx = await API.getTransactions();
           allTrx.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
           document.getElementById("last-updated").textContent =
-            "Terakhir diperbarui " + new Date().toLocaleTimeString("id-ID");
+            // "Terakhir diperbarui " + new Date().toLocaleTimeString("id-ID");
           applyFilters();
         } catch (err) {
           showTableError(err.message);
@@ -1498,7 +1523,6 @@
         const payStat = document.getElementById("filter-paystatus").value;
         const ordStat = document.getElementById("filter-ordstatus").value;
 
-        // Fade out
         const tbody = document.getElementById("table-body");
         tbody.style.opacity = "0.3";
         tbody.style.transition = "opacity 0.2s";
@@ -1627,7 +1651,6 @@
         if (!t) return;
         currentTrx = t;
 
-        // Header badges
         document.getElementById("dt-no").textContent = t.noOrder || "–";
         document.getElementById("dt-badge-pay").innerHTML = buildPayBadge(
           t.statusPembayaran,
@@ -1637,7 +1660,6 @@
           t.statusPesanan,
         );
 
-        // Buyer info
         document.getElementById("dt-nama").textContent = t.namaPelanggan || "–";
         document.getElementById("dt-wa").textContent = t.noWhatsapp || "–";
         document.getElementById("dt-date").textContent = fmtDate(t.createdAt);
@@ -1648,7 +1670,6 @@
         document.getElementById("dt-catatan").textContent =
           t.catatanPengiriman || "–";
 
-        // Items table
         const itbody = document.getElementById("dt-items-body");
         itbody.innerHTML = "";
         const items = t.items || [];
@@ -1666,14 +1687,11 @@
         document.getElementById("dt-subtotal").textContent = fmtRp(t.total);
         document.getElementById("dt-total").textContent = fmtRp(t.total);
 
-        // Transfer bukti button
         const tbWrap = document.getElementById("transfer-btn-wrap");
         tbWrap.style.display = t.metodeBayar === "transfer" ? "block" : "none";
 
-        // Verification panel
         resetVerifyPanel(t);
 
-        // Order status dropdown
         document.getElementById("dt-status-pesanan").value =
           t.statusPesanan || "menunggu";
 
@@ -1694,7 +1712,6 @@
         const btnK = document.getElementById("btn-konfirmasi");
         const btnT = document.getElementById("btn-tolak");
 
-        // Reset button states
         btnK.className = "btn-verify btn-confirm";
         btnK.textContent = "✅ Konfirmasi Pembayaran";
         btnK.disabled = false;
@@ -1744,7 +1761,6 @@
         addRipple(e, btn);
 
         if (!btn.dataset.confirming) {
-          // FIRST CLICK — stage confirm
           btn.dataset.confirming = "1";
           btn.classList.add("confirming");
           btn.textContent =
@@ -1752,7 +1768,6 @@
               ? "⚠️ Yakin Konfirmasi? Klik lagi"
               : "⚠️ Yakin Tolak? Klik lagi";
 
-          // Cancel other button pending state
           const otherId =
             btn.id === "btn-konfirmasi" ? "btn-tolak" : "btn-konfirmasi";
           const other = document.getElementById(otherId);
@@ -1766,7 +1781,6 @@
               ? "✅ Konfirmasi Pembayaran"
               : "❌ Tolak Pembayaran";
 
-          // Auto-reset after 4s
           setTimeout(() => {
             if (btn.dataset.confirming) {
               delete btn.dataset.confirming;
@@ -1783,7 +1797,6 @@
           return;
         }
 
-        // SECOND CLICK — execute
         delete btn.dataset.confirming;
         btn.disabled = true;
         btn.textContent = "Menyimpan…";
@@ -1799,11 +1812,9 @@
 
           await API.updateStatusBayar(currentTrx.id, targetStatus, catatan);
 
-          // Update local state
           currentTrx.statusPembayaran = targetStatus;
           if (catatan) currentTrx.catatanAdmin = catatan;
 
-          // Update badges in modal header + table
           const payHtml = buildPayBadge(targetStatus, currentTrx.metodeBayar);
           document.getElementById("dt-badge-pay").innerHTML = payHtml;
           document
@@ -1812,10 +1823,8 @@
             ?.classList.add("badge-flip");
           updateTableBadge(currentTrx.id, "pay", payHtml);
 
-          // Update verify panel
           resetVerifyPanel(currentTrx);
 
-          // Sync allTrx
           const idx = allTrx.findIndex((x) => x.id === currentTrx.id);
           if (idx !== -1) allTrx[idx] = { ...allTrx[idx], ...currentTrx };
         } catch (err) {
@@ -1845,7 +1854,6 @@
           await API.updateStatusPesanan(currentTrx.id, newStatus, "");
           currentTrx.statusPesanan = newStatus;
 
-          // Update badges
           const ordHtml = buildOrdBadge(newStatus);
           document.getElementById("dt-badge-ord").innerHTML = ordHtml;
           document
@@ -1854,7 +1862,6 @@
             ?.classList.add("badge-flip");
           updateTableBadge(currentTrx.id, "ord", ordHtml);
 
-          // Sync allTrx
           const idx = allTrx.findIndex((x) => x.id === currentTrx.id);
           if (idx !== -1) allTrx[idx].statusPesanan = newStatus;
         } catch (err) {
@@ -1986,43 +1993,146 @@
       }
 
       /* ═══════════════════════════════════════════════════
-   EXPORT PDF
+   EXPORT PDF (Client-Side) - FIXED
 ═══════════════════════════════════════════════════ */
-      async function exportPDF(e) {
-        const btn = document.getElementById("btn-pdf");
-        const sp = document.getElementById("sp-pdf");
-        addRipple(e, btn);
-        btn.disabled = true;
-        sp.style.display = "inline-block";
+async function exportPDF(e) {
+  const btn = document.getElementById("btn-pdf");
+  const sp = document.getElementById("sp-pdf");
+  addRipple(e, btn);
+  btn.disabled = true;
+  sp.style.display = "inline-block";
 
-        try {
-          const baseUrl = `http://${window.location.hostname || "localhost"}:3000/api`;
-          const res = await fetch(`${baseUrl}/reports/export/pdf`, {
-            headers: {
-              Authorization: "Bearer " + sessionStorage.getItem("token"),
-            },
-          });
-          if (!res.ok) {
-            const errData = await res.json().catch(() => ({}));
-            throw new Error(errData.message || "Gagal mengunduh PDF");
-          }
+  try {
+    // Load jsPDF dan autoTable dari CDN
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js');
 
-          const blob = await res.blob();
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = `AMJ-Transaksi-${new Date().toISOString().split("T")[0]}.pdf`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
-        } catch (err) {
-          alert("Gagal ekspor PDF: " + err.message);
-        } finally {
-          btn.disabled = false;
-          sp.style.display = "none";
-        }
-      }
+    const { jsPDF } = window.jspdf;
+    
+    // Gunakan landscape orientation agar lebih lebar
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    // Header
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text("UD. ALAM MAKMUR JAYA", 15, 20);
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("Toko Bahan Bangunan", 15, 26);
+    doc.text("Laporan Transaksi", 15, 32);
+    doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 15, 38);
+
+    // Prepare data
+    const data = filteredTrx.length ? filteredTrx : allTrx;
+    const rows = data.map(t => [
+      t.noOrder || "-",
+      fmtDate(t.createdAt),
+      t.namaPelanggan || "-",
+      fmtRp(t.total),
+      (t.metodeBayar || "-").toUpperCase(),
+      t.statusPembayaran || "-",
+      t.statusPesanan || "-"
+    ]);
+
+    // Table dengan konfigurasi yang lebih baik
+    doc.autoTable({
+      startY: 45,
+      head: [["No. Pesanan", "Tanggal", "Pembeli", "Total", "Metode", "Status Bayar", "Status Pesanan"]],
+      body: rows,
+      theme: "striped",
+      headStyles: { 
+        fillColor: [232, 93, 38], // Orange brand
+        textColor: 255,
+        fontSize: 9,
+        fontStyle: 'bold',
+        cellPadding: 3
+      },
+      bodyStyles: { 
+        fontSize: 8,
+        cellPadding: 3
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245]
+      },
+      // Column styles - atur lebar kolom
+      columnStyles: {
+        0: { cellWidth: 28 },  // No. Pesanan
+        1: { cellWidth: 25 },  // Tanggal
+        2: { cellWidth: 30 },  // Pembeli
+        3: { cellWidth: 22 },  // Total
+        4: { cellWidth: 18 },  // Metode
+        5: { cellWidth: 22 },  // Status Bayar
+        6: { cellWidth: 25 }   // Status Pesanan
+      },
+      // Auto resize untuk fit
+      margin: { top: 45, left: 10, right: 10 },
+      // Page break
+      pageBreak: 'auto',
+      // Table width
+      tableWidth: 'auto'
+    });
+
+    // Add footer dengan nomor halaman
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(150);
+      doc.text(
+        `Halaman ${i} dari ${pageCount}`,
+        doc.internal.pageSize.getWidth() / 2,
+        doc.internal.pageSize.getHeight() - 10,
+        { align: 'center' }
+      );
+    }
+
+    // Save
+    const date = new Date().toISOString().split("T")[0];
+    doc.save(`Transaksi_AMJ_${date}.pdf`);
+
+  } catch (err) {
+    console.error("PDF export error:", err);
+    alert("Gagal ekspor PDF: " + err.message);
+  } finally {
+    btn.disabled = false;
+    sp.style.display = "none";
+  }
+}
+
+// Helper to load script
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) {
+      resolve();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+// Helper to load script
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) {
+      resolve();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
 
       /* ═══════════════════════════════════════════════════
    UI HELPERS
