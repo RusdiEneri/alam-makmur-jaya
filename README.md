@@ -2,6 +2,8 @@
 
 Sistem Informasi Penjualan berbasis Web untuk mengelola transaksi, produk, staf, dan laporan penjualan UD. Alam Makmur Jaya.
 
+![](./screenshot_full.png)
+
 ## Stack Teknologi
 
 - **Frontend**: Vanilla HTML, CSS, JavaScript
