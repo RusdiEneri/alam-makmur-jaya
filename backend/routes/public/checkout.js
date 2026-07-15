@@ -355,4 +355,29 @@ router.post('/:id/upload-bukti', upload.single('bukti'), (req, res) => {
   res.json({ message: 'Bukti transfer berhasil diupload', buktiTransfer: trx.buktiTransfer });
 });
 
+// GET /api/checkout/:id/bukti-transfer - Ambil bukti transfer
+router.get('/:id/bukti-transfer', (req, res) => {
+  const transactions = db.read('transactions');
+  const trx = transactions.find(t => t.id === req.params.id);
+
+  if (!trx) {
+    return res.status(404).json({ message: 'Transaksi tidak ditemukan' });
+  }
+
+  if (!trx.buktiTransfer) {
+    return res.status(404).json({ message: 'Bukti transfer tidak ditemukan' });
+  }
+
+  // Construct full path to the file
+  const filePath = path.join(UPLOADS_DIR, path.basename(trx.buktiTransfer));
+  
+  // Check if file exists
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ message: 'File bukti transfer tidak ditemukan di server' });
+  }
+
+  // Send the file
+  res.sendFile(filePath);
+});
+
 module.exports = router;

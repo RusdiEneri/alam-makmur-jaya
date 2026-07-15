@@ -88,7 +88,7 @@
 
       /* ── SIDEBAR ─────────────────────────────────────── */
       .sidebar {
-        background: #0f172a;
+        background: #1c1c1e;
         display: flex;
         flex-direction: column;
         position: sticky;
@@ -101,7 +101,7 @@
   align-items: center;
   gap: 12px;
   padding: 22px 20px;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid #2c2c2e;
   color: white;
   font-weight: 700;
   font-size: 14px;
@@ -155,7 +155,7 @@
         position: relative;
       }
       .sidebar-link:hover {
-        background: #1e293b;
+        background: #2c2c2e;
         color: #e2e8f0;
       }
       .sidebar-link.active {
@@ -176,7 +176,7 @@
       }
       .sidebar-footer {
         padding: 16px 12px;
-        border-top: 1px solid #1e293b;
+        border-top: 1px solid #2c2c2e;
       }
 
       /* ── SIDEBAR OVERLAY (mobile) ──────────────────────────── */
@@ -1308,7 +1308,7 @@
       }
 
       .toast {
-        background: #0f172a;
+        background: #1c1c1e;
         color: white;
         padding: var(--space-3) var(--space-5);
         border-radius: var(--radius-base);
@@ -1439,30 +1439,18 @@
 </div>
         <nav class="sidebar-nav">
           <div class="sidebar-section">Menu Utama</div>
-          <a class="sidebar-link active" href="../admin/dashboard.html"
-            >🚀 Dashboard</a
-          >
-          <a class="sidebar-link" href="../admin/products.html"
-            >📦 Produk & Stok</a
-          >
-          <a class="sidebar-link" href="../admin/transactions.html"
-            >📝 Transaksi</a
-          >
+          <a class="sidebar-link active" href="../admin/dashboard.html">🚀 Dashboard</a>
+          <a class="sidebar-link" href="../admin/products.html">📦 Produk &amp; Stok</a>
+          <a class="sidebar-link" href="../admin/transactions.html">📝 Transaksi</a>
           <div class="sidebar-section">Operasional</div>
-          <a class="sidebar-link" href="../kasir/receivables.html"
-            >💰 Piutang</a
-          >
-          <a class="sidebar-link" href="../kasir/deliveries.html"
-            >🚚 Pengiriman</a
-          >
+          <a class="sidebar-link" href="../kasir/receivables.html">💰 Piutang</a>
+          <a class="sidebar-link" href="../kasir/deliveries.html">🚚 Pengiriman</a>
           <a class="sidebar-link" href="../kasir/pos.html">💻 Kasir (POS)</a>
           <div class="sidebar-section">Analitik</div>
           <a class="sidebar-link" href="../admin/reports.html">📊 Laporan</a>
         </nav>
         <div class="sidebar-footer">
-          <a class="sidebar-link" href="#" onclick="handleLogout()"
-            >🚪 Keluar</a
-          >
+          <a class="sidebar-link" href="#" onclick="handleLogout()">🚪 Keluar</a>
         </div>
       </aside>
 
@@ -2423,10 +2411,10 @@ gradient.addColorStop(1, "rgba(232, 93, 38, 0.00)");
             plugins: {
               legend: { display: false },
               tooltip: {
-                backgroundColor: "#0F172A",
+                backgroundColor: "#1c1c1e",
                 titleColor: "#94A3B8",
                 bodyColor: "#F1F5F9",
-                borderColor: "#1E293B",
+                borderColor: "#2c2c2e",
                 borderWidth: 1,
                 padding: 12,
                 callbacks: {

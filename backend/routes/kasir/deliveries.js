@@ -44,6 +44,29 @@ router.post('/', authenticate, staffOnly, (req, res) => {
   res.status(201).json({ message: 'Pengiriman dijadwalkan', delivery: newDelivery });
 });
 
+// PUT /api/deliveries/:id (staff) - Update detail pengiriman (kurir, dll)
+router.put('/:id', authenticate, staffOnly, (req, res) => {
+  const deliveries = db.read('deliveries');
+  const idx = deliveries.findIndex(d => d.id === req.params.id);
+  
+  if (idx === -1) return res.status(404).json({ message: 'Data pengiriman tidak ditemukan' });
+  
+  const { namaKurir, kurir, kendaraan, tanggalKirim, estimasiTiba, catatan } = req.body;
+  const delivery = deliveries[idx];
+  
+  if (namaKurir !== undefined) delivery.kurir = namaKurir;
+  if (kurir !== undefined) delivery.kurir = kurir;
+  if (kendaraan !== undefined) delivery.kendaraan = kendaraan;
+  if (tanggalKirim !== undefined) delivery.tanggalKirim = tanggalKirim;
+  if (estimasiTiba !== undefined) delivery.estimasiTiba = estimasiTiba;
+  if (catatan !== undefined) delivery.catatan = catatan;
+  
+  delivery.updatedAt = new Date().toISOString();
+  
+  db.write('deliveries', deliveries);
+  res.json({ message: 'Data pengiriman berhasil diperbarui', delivery });
+});
+
 // PUT /api/deliveries/:id/status  (staff)
 router.put('/:id/status', authenticate, staffOnly, (req, res) => {
   const { status } = req.body;

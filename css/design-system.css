@@ -92,8 +92,8 @@
   --color-text-inverse:   #FFFFFF;
 
   /* Dark mode surface shorthands (admin pages) */
-  --color-dark-bg:      #0F172A;
-  --color-dark-surface: #1E293B;
+  --color-dark-bg:      #1c1c1e;
+  --color-dark-surface: #2c2c2e;
   --color-dark-border:  #334155;
   --color-dark-text:    #F1F5F9;
   --color-dark-muted:   #94A3B8;

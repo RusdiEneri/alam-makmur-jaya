@@ -1,62 +1,809 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nota Pesanan</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nota Pesanan — UD. Alam Makmur Jaya</title>
+  <meta name="description" content="Nota pesanan Anda dari UD. Alam Makmur Jaya. Simpan halaman ini sebagai bukti transaksi." />
+  <link rel="icon" href="../../assets/icon.png" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=swap" rel="stylesheet" />
+
   <style>
-    body { font-family: monospace; font-size: 14px; max-width: 300px; margin: 0 auto; padding: 10px; color: #000; }
-    h3 { text-align: center; margin: 0 0 4px; }
-    p { margin: 3px 0; }
-    hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
-    .total { font-weight: bold; font-size: 16px; }
-    @media print { .no-print { display: none; } }
-    .print-btn {
-      display: block; width: 100%; padding: 10px; margin-bottom: 20px;
-      background: #E85D26; color: white; border: none; border-radius: 4px;
-      font-weight: bold; cursor: pointer;
+    /* ── RESET & BASE ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:        #E85D26;
+      --primary-dark:   #C04718;
+      --primary-light:  #FDF1EC;
+      --primary-glow:   rgba(232, 93, 38, 0.18);
+      --green:          #1A6B3A;
+      --green-light:    #E8F4ED;
+      --amber:          #D97706;
+      --amber-light:    #FEF3C7;
+      --dark:           #1C1C1E;
+      --text:           #2D2D2D;
+      --muted:          #6B6B6B;
+      --border:         #E5E5E5;
+      --bg:             #F5F5F7;
+      --white:          #FFFFFF;
+      --radius:         16px;
+      --shadow:         0 2px 24px rgba(0,0,0,0.08);
+      --shadow-lg:      0 8px 48px rgba(0,0,0,0.14);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NAVBAR ────────────────────────────────────────────────── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 60px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--dark);
+    }
+    .navbar-brand img { width: 32px; height: 32px; object-fit: contain; border-radius: 8px; }
+    .navbar-brand-sub { display: block; font-size: 11px; font-weight: 400; color: var(--muted); line-height: 1; }
+    .navbar-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+      border-radius: 8px;
+      padding: 6px 14px;
+      transition: background 0.2s;
+    }
+    .navbar-back:hover { background: var(--primary-light); }
+
+    /* ── PAGE WRAPPER ───────────────────────────────────────────── */
+    .page-wrapper {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 5rem;
+    }
+
+    /* ── SUCCESS HERO ───────────────────────────────────────────── */
+    .success-hero {
+      text-align: center;
+      padding: 2rem 1rem 1.5rem;
+      animation: fadeInDown 0.5s ease;
+    }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      background: var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 1rem;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+    }
+    .success-hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .success-hero p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* ── ORDER ID CARD ──────────────────────────────────────────── */
+    .order-id-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      margin: 1.25rem 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(232, 93, 38, 0.35);
+      animation: fadeInUp 0.5s ease 0.3s both;
+    }
+    .order-id-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .order-id-card::after {
+      content: '';
+      position: absolute;
+      bottom: -50px; left: -30px;
+      width: 140px; height: 140px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    .order-id-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 8px;
+    }
+    .order-id-value {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 0.04em;
+      margin-bottom: 1rem;
+      word-break: break-all;
+    }
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: white;
+      border-radius: 8px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+      position: relative;
+      z-index: 1;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.25); }
+    .copy-btn.copied { background: rgba(255,255,255,0.3); }
+    .order-id-hint {
+      font-size: 11px;
+      color: rgba(255,255,255,0.65);
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── PAYMENT STATUS BANNER ──────────────────────────────────── */
+    .status-banner {
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+      animation: fadeInUp 0.5s ease 0.4s both;
+    }
+    .status-banner.pending {
+      background: var(--amber-light);
+      border: 1.5px solid #FCD34D;
+    }
+    .status-banner.cod {
+      background: var(--green-light);
+      border: 1.5px solid #6EE7B7;
+    }
+    .status-icon { font-size: 24px; flex-shrink: 0; line-height: 1; }
+    .status-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 3px;
+    }
+    .status-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .status-desc a { color: var(--primary); font-weight: 600; }
+
+    /* ── NOTA CARD ──────────────────────────────────────────────── */
+    .nota-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      animation: fadeInUp 0.5s ease 0.5s both;
+    }
+
+    .nota-store-header {
+      background: var(--dark);
+      padding: 1.5rem;
+      text-align: center;
+      color: white;
+    }
+    .nota-store-logo {
+      width: 48px;
+      height: 48px;
+      background: white;
+      border-radius: 12px;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .nota-store-logo img { width: 40px; height: 40px; object-fit: contain; }
+    .nota-store-name { font-size: 16px; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 2px; }
+    .nota-store-sub { font-size: 11px; color: rgba(255,255,255,0.6); }
+
+    /* Dashed divider */
+    .nota-divider {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .nota-divider-circle {
+      width: 20px;
+      height: 20px;
+      background: var(--bg);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .nota-divider-line {
+      flex: 1;
+      border: none;
+      border-top: 2px dashed var(--border);
+    }
+
+    /* Info section */
+    .nota-info {
+      padding: 1.25rem 1.5rem;
+    }
+    .nota-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid #F5F5F5;
+      font-size: 13px;
+    }
+    .nota-info-row:last-child { border-bottom: none; }
+    .nota-info-label { color: var(--muted); font-weight: 500; white-space: nowrap; flex-shrink: 0; min-width: 110px; }
+    .nota-info-value { color: var(--dark); font-weight: 600; text-align: right; }
+
+    /* Items table */
+    .nota-items {
+      padding: 0 1.5rem 1.25rem;
+    }
+    .nota-items-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 10px;
+      padding-top: 4px;
+    }
+    .nota-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .nota-table thead tr {
+      background: #F9F9F9;
+      border-radius: 8px;
+    }
+    .nota-table th {
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .nota-table th:not(:first-child), .nota-table td:not(:first-child) {
+      text-align: right;
+    }
+    .nota-table td {
+      padding: 10px 10px;
+      border-bottom: 1px solid #F5F5F5;
+      vertical-align: top;
+    }
+    .nota-table tbody tr:last-child td { border-bottom: none; }
+    .nota-table .prod-name { font-weight: 600; color: var(--dark); }
+    .nota-table .prod-satuan { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .nota-table .prod-price { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* Total bar */
+    .nota-total-bar {
+      background: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nota-total-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .nota-total-value {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Footer */
+    .nota-footer-msg {
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      line-height: 1.7;
+    }
+
+    /* ── CATATAN PENGIRIMAN ─────────────────────────────────────── */
+    .catatan-box {
+      background: #FFFBF0;
+      border: 1.5px dashed #FCD34D;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--dark);
+      margin: 0 1.5rem 1.25rem;
+    }
+    .catatan-label { font-weight: 700; color: var(--amber); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+
+    /* ── ACTION BUTTONS ─────────────────────────────────────────── */
+    .action-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+      animation: fadeInUp 0.5s ease 0.6s both;
+    }
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-align: center;
+      text-decoration: none;
+    }
+    .action-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .action-btn:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 16px rgba(232, 93, 38, 0.35);
+      grid-column: 1 / -1;
+    }
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: white;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+    }
+    .btn-whatsapp:hover { background: #1ebe5d; }
+
+    .btn-track {
+      background: var(--dark);
+      color: white;
+    }
+    .btn-track:hover { background: #333; }
+
+    .btn-outline {
+      background: white;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+    .action-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      animation: fadeInUp 0.5s ease 0.7s both;
+    }
+
+    /* ── ERROR STATE ────────────────────────────────────────────── */
+    .error-state {
+      text-align: center;
+      padding: 4rem 1.5rem;
+    }
+    .error-state .error-icon { font-size: 64px; margin-bottom: 1rem; }
+    .error-state h2 { font-size: 1.25rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .error-state p { color: var(--muted); font-size: 14px; margin-bottom: 1.5rem; }
+
+    /* ── ANIMATIONS ─────────────────────────────────────────────── */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── PRINT ──────────────────────────────────────────────────── */
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body { background: white; font-size: 12px; }
+      .navbar, .success-hero, .status-banner, .action-section, .action-row-2 { display: none !important; }
+      .page-wrapper { padding: 0; max-width: 100%; }
+      .order-id-card { box-shadow: none; margin: 0 0 12px; border-radius: 8px; }
+      .nota-card { box-shadow: none; border: 1.5px solid #CCC; border-radius: 8px; margin-bottom: 12px; }
+      .order-id-hint, .copy-btn { display: none; }
+      @page { margin: 12mm; size: A5; }
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .order-id-value { font-size: 1.5rem; }
+      .action-row-2 { grid-template-columns: 1fr 1fr; }
+      .action-row-2 .btn-track { grid-column: 1 / -1; }
     }
   </style>
 </head>
 <body>
-  <button class="no-print print-btn" onclick="window.print()">🖨️ Cetak Nota</button>
-  <div id="nota-content">Memuat data...</div>
 
-  <script src="../../js/data.js"></script>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="top-navbar">
+    <div class="navbar-brand">
+      <img src="../../assets/icon.png" alt="Logo" onerror="this.style.display='none'" />
+      <div>
+        <span>Alam Makmur Jaya</span>
+        <span class="navbar-brand-sub">Toko Bahan Bangunan</span>
+      </div>
+    </div>
+    <a class="navbar-back" href="index.html">🏠 Beranda</a>
+  </nav>
+
+  <!-- MAIN PAGE CONTENT -->
+  <div class="page-wrapper" id="page-content" style="display:none;">
+
+    <!-- SUCCESS HERO -->
+    <div class="success-hero">
+      <div class="success-icon">✅</div>
+      <h1>Pesanan Berhasil!</h1>
+      <p>Terima kasih telah berbelanja. Berikut rincian pesanan Anda.</p>
+    </div>
+
+    <!-- ORDER ID CARD -->
+    <div class="order-id-card">
+      <div class="order-id-label">📋 Nomor Pesanan Anda</div>
+      <div class="order-id-value" id="display-order-id">—</div>
+      <button class="copy-btn" id="copy-btn" onclick="copyOrderId()">
+        <span id="copy-icon">📋</span>
+        <span id="copy-text">Salin Nomor</span>
+      </button>
+      <div class="order-id-hint">Simpan nomor ini untuk cek status pesanan di halaman Lacak Pesanan</div>
+    </div>
+
+    <!-- PAYMENT STATUS BANNER -->
+    <div class="status-banner" id="status-banner">
+      <div class="status-icon" id="status-icon"></div>
+      <div>
+        <div class="status-title" id="status-title"></div>
+        <div class="status-desc" id="status-desc"></div>
+      </div>
+    </div>
+
+    <!-- NOTA CARD -->
+    <div class="nota-card" id="printable-nota">
+      <!-- Store Header -->
+      <div class="nota-store-header">
+        <div class="nota-store-logo">
+          <img src="../../assets/icon.png" alt="Logo" onerror="this.style.display='none'" />
+        </div>
+        <div class="nota-store-name">UD. ALAM MAKMUR JAYA</div>
+        <div class="nota-store-sub">Jl. Mayjen Sungkono No.56, Kebomas — Gresik 61124</div>
+      </div>
+
+      <!-- Dashed Divider -->
+      <div class="nota-divider">
+        <div class="nota-divider-circle"></div>
+        <hr class="nota-divider-line" />
+        <div class="nota-divider-circle"></div>
+      </div>
+
+      <!-- Info Rows -->
+      <div class="nota-info">
+        <div class="nota-info-row">
+          <span class="nota-info-label">No. Pesanan</span>
+          <span class="nota-info-value" id="info-order-id">—</span>
+        </div>
+        <div class="nota-info-row">
+          <span class="nota-info-label">Tanggal</span>
+          <span class="nota-info-value" id="info-tanggal">—</span>
+        </div>
+        <div class="nota-info-row">
+          <span class="nota-info-label">Nama Pembeli</span>
+          <span class="nota-info-value" id="info-nama">—</span>
+        </div>
+        <div class="nota-info-row">
+          <span class="nota-info-label">No. WhatsApp</span>
+          <span class="nota-info-value" id="info-wa">—</span>
+        </div>
+        <div class="nota-info-row">
+          <span class="nota-info-label">Alamat Pengiriman</span>
+          <span class="nota-info-value" id="info-alamat">—</span>
+        </div>
+        <div class="nota-info-row">
+          <span class="nota-info-label">Metode Bayar</span>
+          <span class="nota-info-value" id="info-metode">—</span>
+        </div>
+      </div>
+
+      <!-- Dashed Divider -->
+      <div class="nota-divider">
+        <div class="nota-divider-circle"></div>
+        <hr class="nota-divider-line" />
+        <div class="nota-divider-circle"></div>
+      </div>
+
+      <!-- Items -->
+      <div class="nota-items">
+        <div class="nota-items-title">Rincian Pesanan</div>
+        <table class="nota-table">
+          <thead>
+            <tr>
+              <th>Produk</th>
+              <th>Qty</th>
+              <th>Harga</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody id="items-tbody">
+            <!-- filled by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Catatan Pengiriman (conditional) -->
+      <div class="catatan-box" id="catatan-box" style="display:none;">
+        <div class="catatan-label">📝 Catatan Pengiriman</div>
+        <div id="catatan-text"></div>
+      </div>
+
+      <!-- Grand Total -->
+      <div class="nota-total-bar">
+        <div class="nota-total-label">Grand Total</div>
+        <div class="nota-total-value" id="total-value">Rp 0</div>
+      </div>
+
+      <!-- Footer message -->
+      <div class="nota-footer-msg">
+        Terima kasih telah berbelanja di <strong>UD. Alam Makmur Jaya</strong><br />
+        Nota ini sah sebagai bukti transaksi resmi ✓
+      </div>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="action-section">
+      <button class="action-btn btn-primary" onclick="window.print()">🖨️ Cetak Nota</button>
+    </div>
+    <div class="action-row-2">
+      <button class="action-btn btn-whatsapp" onclick="kirimWhatsApp()">📱 WhatsApp</button>
+      <a class="action-btn btn-track" id="lacak-btn" href="index.html">📦 Lacak Pesanan</a>
+      <a class="action-btn btn-outline" href="index.html">🏠 Beranda</a>
+    </div>
+
+  </div><!-- /page-content -->
+
+  <!-- ERROR STATE (shown if no data) -->
+  <div class="page-wrapper error-state" id="error-content" style="display:none;">
+    <div class="error-icon">⚠️</div>
+    <h2>Data Pesanan Tidak Ditemukan</h2>
+    <p>Halaman ini membutuhkan data checkout yang valid. Anda akan diarahkan ke beranda.</p>
+    <a class="action-btn btn-primary" href="index.html" style="display:inline-flex;">🏠 Kembali ke Beranda</a>
+  </div>
+
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const stored = sessionStorage.getItem('print_nota');
-      if (!stored) {
-        document.getElementById('nota-content').innerHTML = '<p>Data nota tidak ditemukan.</p>';
+    // ── HELPERS ────────────────────────────────────────────────────
+    function fmtRupiah(n) {
+      return 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+    }
+
+    function fmtTanggal(isoStr) {
+      try {
+        return new Date(isoStr).toLocaleString('id-ID', {
+          timeZone: 'Asia/Jakarta',
+          day: 'numeric', month: 'long', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        }) + ' WIB';
+      } catch {
+        return isoStr || '—';
+      }
+    }
+
+    function fmtMetode(m) {
+      const map = { transfer: '🏦 Transfer Bank (BRI / BCA)', qris: '📱 QRIS', cod: '🚚 COD (Bayar di Tempat)' };
+      return map[m] || m || '—';
+    }
+
+    // ── COPY ORDER ID ──────────────────────────────────────────────
+    let _orderId = '';
+
+    function copyOrderId() {
+      if (!_orderId) return;
+      navigator.clipboard.writeText(_orderId).then(() => {
+        const btn = document.getElementById('copy-btn');
+        document.getElementById('copy-icon').textContent = '✅';
+        document.getElementById('copy-text').textContent = 'Tersalin!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          document.getElementById('copy-icon').textContent = '📋';
+          document.getElementById('copy-text').textContent = 'Salin Nomor';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(() => {
+        // Fallback for older browsers
+        const el = document.createElement('textarea');
+        el.value = _orderId;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        document.getElementById('copy-text').textContent = 'Tersalin!';
+        setTimeout(() => { document.getElementById('copy-text').textContent = 'Salin Nomor'; }, 2000);
+      });
+    }
+
+    // ── WHATSAPP SHARE ──────────────────────────────────────────────
+    function kirimWhatsApp() {
+      const nota = JSON.parse(sessionStorage.getItem('print_nota') || '{}');
+      const adminPhone = '6281233649676';
+      const metode = fmtMetode(nota.metodeBayar);
+      const total = fmtRupiah(nota.total);
+      const text = encodeURIComponent(
+        `Halo UD. Alam Makmur Jaya 👋\n\n` +
+        `Saya *${nota.namaPelanggan}* baru saja melakukan pesanan:\n\n` +
+        `📋 *No. Pesanan:* ${nota.noOrder}\n` +
+        `💰 *Total:* ${total}\n` +
+        `💳 *Metode Bayar:* ${nota.metodeBayar?.toUpperCase() || '-'}\n\n` +
+        (nota.metodeBayar !== 'cod' ? `Bukti transfer sudah saya upload / saya lampirkan. Mohon segera diverifikasi.\n\n` : '') +
+        `Terima kasih! 🙏`
+      );
+      window.open(`https://wa.me/${adminPhone}?text=${text}`, '_blank');
+    }
+
+    // ── RENDER NOTA ─────────────────────────────────────────────────
+    function renderNota(d) {
+      _orderId = d.noOrder || '—';
+
+      // Order ID display
+      document.getElementById('display-order-id').textContent = _orderId;
+      document.getElementById('info-order-id').textContent = _orderId;
+
+      // Info rows
+      document.getElementById('info-tanggal').textContent = fmtTanggal(d.tanggal);
+      document.getElementById('info-nama').textContent = d.namaPelanggan || '—';
+      document.getElementById('info-wa').textContent = d.noWhatsapp || '—';
+      document.getElementById('info-alamat').textContent = d.alamat || '—';
+      document.getElementById('info-metode').textContent = fmtMetode(d.metodeBayar);
+
+      // Catatan
+      if (d.catatanPengiriman) {
+        document.getElementById('catatan-box').style.display = 'block';
+        document.getElementById('catatan-text').textContent = d.catatanPengiriman;
+      }
+
+      // Items table
+      const tbody = document.getElementById('items-tbody');
+      const items = d.items || [];
+      tbody.innerHTML = items.map(item => {
+        const nama     = item.namaProduk || item.nama || item.name || 'Produk';
+        const qty      = Number(item.qty) || 1;
+        const satuan   = item.satuan || 'pcs';
+        const harga    = Number(item.hargaSatuan || item.harga || item.price || 0);
+        const subtotal = Number(item.subtotal) || harga * qty;
+        return `
+          <tr>
+            <td>
+              <div class="prod-name">${nama}</div>
+            </td>
+            <td style="text-align:right">${qty} <span style="color:#999;font-size:11px">${satuan}</span></td>
+            <td style="text-align:right">
+              <div>${fmtRupiah(harga)}</div>
+            </td>
+            <td style="text-align:right;font-weight:700;color:#1C1C1E">${fmtRupiah(subtotal)}</td>
+          </tr>`;
+      }).join('');
+
+      // Total
+      const total = Number(d.total) || items.reduce((s, i) => s + (Number(i.subtotal) || (Number(i.hargaSatuan || i.harga || 0) * Number(i.qty))), 0);
+      document.getElementById('total-value').textContent = fmtRupiah(total);
+
+      // Payment status banner
+      const banner    = document.getElementById('status-banner');
+      const icon      = document.getElementById('status-icon');
+      const title     = document.getElementById('status-title');
+      const desc      = document.getElementById('status-desc');
+      const metode    = d.metodeBayar;
+
+      if (metode === 'cod') {
+        banner.className = 'status-banner cod';
+        icon.textContent  = '✅';
+        title.textContent = 'Bayar di Tempat saat barang tiba';
+        desc.textContent  = 'Siapkan uang tunai sesuai total pesanan. Driver kami akan menghubungi Anda sebelum pengiriman.';
+      } else {
+        banner.className  = 'status-banner pending';
+        icon.textContent  = '⏳';
+        title.textContent = 'Menunggu Verifikasi Pembayaran';
+        desc.innerHTML    = `Segera kirimkan bukti transfer/QRIS ke WhatsApp admin kami: <a href="https://wa.me/6281233649676" target="_blank">+62 812-3364-9676</a>. Sertakan <strong>No. Pesanan: ${_orderId}</strong> dalam pesan Anda.`;
+      }
+
+      // Lacak pesanan link
+      const lacakBtn = document.getElementById('lacak-btn');
+      if (lacakBtn) {
+        lacakBtn.href = `track.html?noOrder=${encodeURIComponent(_orderId)}&noWa=${encodeURIComponent(d.noWhatsapp || '')}`;
+      }
+
+      // Show page
+      document.getElementById('page-content').style.display = 'block';
+    }
+
+    // ── INIT ────────────────────────────────────────────────────────
+    (function init() {
+      const raw = sessionStorage.getItem('print_nota');
+      if (!raw) {
+        document.getElementById('error-content').style.display = 'block';
+        setTimeout(() => { window.location.href = 'index.html'; }, 3000);
         return;
       }
-      
-      const trx = JSON.parse(stored);
-      const fmt = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(n);
-      
-      const html = `
-        <h3>UD. ALAM MAKMUR JAYA</h3>
-        <p style="text-align:center;font-size:11px">Jl. Mayjen Sungkono No.56, Kebomas, Gresik</p>
-        <hr>
-        <p><b>No. Pesanan:</b> ${trx.noOrder}</p>
-        <p><b>Tgl:</b> ${new Date(trx.tanggal || trx.createdAt).toLocaleDateString('id-ID')} ${new Date(trx.tanggal || trx.createdAt).toLocaleTimeString('id-ID')}</p>
-        <p><b>Pembeli:</b> ${trx.namaPelanggan}</p>
-        <p><b>Metode:</b> ${(trx.metodeBayar || '').toUpperCase()}</p>
-        <hr>
-        ${(trx.items || []).map(i => `<p>${i.namaProduk || i.nama}<br>${i.qty} ${i.satuan} &times; ${fmt(i.hargaSatuan)} = ${fmt(i.subtotal)}</p>`).join('')}
-        <hr>
-        <p class="total">TOTAL: ${fmt(trx.total)}</p>
-        <p>Status: ${trx.statusPembayaran}</p>
-        <hr>
-        <p style="text-align:center;font-size:11px">Terima kasih telah berbelanja!</p>
-      `;
-      
-      document.getElementById('nota-content').innerHTML = html;
-      
-      if (new URLSearchParams(window.location.search).get('print') === '1') {
-        setTimeout(() => window.print(), 500);
+
+      try {
+        const data = JSON.parse(raw);
+        if (!data || !data.noOrder) throw new Error('Invalid data');
+        renderNota(data);
+      } catch (e) {
+        console.error('Gagal parse data nota:', e);
+        document.getElementById('error-content').style.display = 'block';
+        setTimeout(() => { window.location.href = 'index.html'; }, 3000);
       }
-    });
+    })();
   </script>
 </body>
 </html>

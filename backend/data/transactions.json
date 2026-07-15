@@ -1088,7 +1088,7 @@
     "needsDelivery": false,
     "tanggal": "2026-06-24T11:10:11.031Z",
     "createdAt": "2026-06-24T11:10:11.031Z",
-    "updatedAt": "2026-06-24T11:10:11.031Z",
+    "updatedAt": "2026-07-15T03:48:21.613Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
@@ -1119,6 +1119,18 @@
         "status": "berhasil",
         "timestamp": "2026-06-24T11:10:11.031Z",
         "oleh": "Kasir Satu"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-07-15T03:44:37.779Z",
+        "oleh": "Admin Toko"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "selesai",
+        "timestamp": "2026-07-15T03:48:21.613Z",
+        "oleh": "Admin Toko"
       }
     ]
   },
@@ -1589,7 +1601,7 @@
     "total": 72000,
     "metodeBayar": "cod",
     "statusPembayaran": "lunas",
-    "statusPesanan": "diproses",
+    "statusPesanan": "dikirim",
     "stokDireservasi": true,
     "buktiTransfer": null,
     "catatanPembayaran": null,
@@ -1598,7 +1610,7 @@
     "needsDelivery": false,
     "tanggal": "2026-07-11T15:03:05.488Z",
     "createdAt": "2026-07-11T15:03:05.488Z",
-    "updatedAt": "2026-07-11T15:03:05.488Z",
+    "updatedAt": "2026-07-15T03:08:50.993Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
@@ -1611,6 +1623,12 @@
         "status": "pending",
         "timestamp": "2026-07-11T15:03:05.488Z",
         "oleh": "sistem"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-07-15T03:08:50.993Z",
+        "oleh": "Admin Toko"
       }
     ]
   },
@@ -1645,7 +1663,7 @@
     "needsDelivery": false,
     "tanggal": "2026-07-11T15:25:46.282Z",
     "createdAt": "2026-07-11T15:25:46.282Z",
-    "updatedAt": "2026-07-11T15:25:46.282Z",
+    "updatedAt": "2026-07-13T14:54:10.552Z",
     "statusHistory": [
       {
         "tipe": "pesanan",
@@ -1658,6 +1676,18 @@
         "status": "pending",
         "timestamp": "2026-07-11T15:25:46.282Z",
         "oleh": "sistem"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-07-13T14:54:08.448Z",
+        "oleh": "Admin Toko"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-13T14:54:10.553Z",
+        "oleh": "Admin Toko"
       }
     ]
   },
@@ -1913,6 +1943,600 @@
         "status": "lunas",
         "timestamp": "2026-07-12T03:02:27.536Z",
         "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-dd93cb72",
+    "id_pembayaran": "pay-95173dd4",
+    "noOrder": "AMJ-20260713-001",
+    "namaPelanggan": "test kembali",
+    "alamat": "Suamtera",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-2d3c02d3",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1783954709446-93950ff6.png",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "depan masjid",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-13T14:58:29.430Z",
+    "createdAt": "2026-07-13T14:58:29.430Z",
+    "updatedAt": "2026-07-13T14:58:29.465Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-13T14:58:29.430Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-13T14:58:29.430Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-30d48323",
+    "id_pembayaran": "pay-e4c2ae7a",
+    "noOrder": "AMJ-20260714-001",
+    "namaPelanggan": "tes nama",
+    "alamat": "Depan Wira",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-efdf6691",
+        "productId": "prod-002",
+        "namaProduk": "Pipa PVC AW 1/2 inch",
+        "satuan": "batang",
+        "hargaSatuan": 38000,
+        "hargaPokokSatuan": 30400,
+        "qty": 1,
+        "subtotal": 38000
+      }
+    ],
+    "total": 38000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784000435481-991addaf.png",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "pinggir pabrik",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-14T03:40:35.438Z",
+    "createdAt": "2026-07-14T03:40:35.438Z",
+    "updatedAt": "2026-07-14T03:40:35.508Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-14T03:40:35.438Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-14T03:40:35.438Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-6495b633",
+    "id_pembayaran": "pay-fc70dfc4",
+    "noOrder": "AMJ-20260714-002",
+    "namaPelanggan": "aku ilham",
+    "alamat": "jl gresik",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-aaf6066d",
+        "productId": "prod-002",
+        "namaProduk": "Pipa PVC AW 1/2 inch",
+        "satuan": "batang",
+        "hargaSatuan": 38000,
+        "hargaPokokSatuan": 30400,
+        "qty": 1,
+        "subtotal": 38000
+      }
+    ],
+    "total": 38000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784001129965-56a86ffa.png",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "depan uisi",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-14T03:52:09.938Z",
+    "createdAt": "2026-07-14T03:52:09.938Z",
+    "updatedAt": "2026-07-14T03:52:09.977Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-14T03:52:09.938Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-14T03:52:09.938Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-2fe7d6cb",
+    "id_pembayaran": "pay-324db5a0",
+    "noOrder": "AMJ-20260714-003",
+    "namaPelanggan": "maxim",
+    "alamat": "jl. Sumatera",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-0050e00e",
+        "productId": "prod-002",
+        "namaProduk": "Pipa PVC AW 1/2 inch",
+        "satuan": "batang",
+        "hargaSatuan": 38000,
+        "hargaPokokSatuan": 30400,
+        "qty": 1,
+        "subtotal": 38000
+      }
+    ],
+    "total": 38000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784001740012-58f64f8c.png",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "dekat uisi",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-14T04:02:19.983Z",
+    "createdAt": "2026-07-14T04:02:19.983Z",
+    "updatedAt": "2026-07-14T04:02:20.035Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-14T04:02:19.983Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-14T04:02:19.983Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-2d403021",
+    "id_pembayaran": "pay-1cb44beb",
+    "noOrder": "AMJ-20260715-001",
+    "namaPelanggan": "aku pipa",
+    "alamat": "dekat uisi",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-c2c9d156",
+        "productId": "prod-002",
+        "namaProduk": "Pipa PVC AW 1/2 inch",
+        "satuan": "batang",
+        "hargaSatuan": 38000,
+        "hargaPokokSatuan": 30400,
+        "qty": 1,
+        "subtotal": 38000
+      }
+    ],
+    "total": 38000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784078975568-c18e9442.jpg",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "samping masjid",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-15T01:29:35.554Z",
+    "createdAt": "2026-07-15T01:29:35.554Z",
+    "updatedAt": "2026-07-15T01:29:35.573Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-15T01:29:35.554Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-15T01:29:35.554Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-f026dd04",
+    "id_pembayaran": "pay-accd7af0",
+    "noOrder": "AMJ-20260715-002",
+    "namaPelanggan": "maxim",
+    "alamat": "gresik",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-67257061",
+        "productId": "prod-002",
+        "namaProduk": "Pipa PVC AW 1/2 inch",
+        "satuan": "batang",
+        "hargaSatuan": 38000,
+        "hargaPokokSatuan": 30400,
+        "qty": 1,
+        "subtotal": 38000
+      }
+    ],
+    "total": 38000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784079437334-57abc5c1.jpg",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "utara",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-15T01:37:17.309Z",
+    "createdAt": "2026-07-15T01:37:17.309Z",
+    "updatedAt": "2026-07-15T01:37:17.339Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-15T01:37:17.309Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-15T01:37:17.309Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-72812204",
+    "id_pembayaran": "pay-81002f87",
+    "noOrder": "AMJ-20260715-003",
+    "namaPelanggan": "test kembali",
+    "alamat": "lebak bulus",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-763d24e5",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784080600690-2fcc9618.jpg",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "depan masjid",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-15T01:56:40.670Z",
+    "createdAt": "2026-07-15T01:56:40.670Z",
+    "updatedAt": "2026-07-15T01:56:40.696Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-15T01:56:40.670Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-15T01:56:40.670Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-4b715bc0",
+    "id_pembayaran": "pay-7334af45",
+    "noOrder": "AMJ-20260715-004",
+    "namaPelanggan": "maxim",
+    "alamat": "depan alfa",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-b4be66c2",
+        "productId": "prod-001",
+        "namaProduk": "Semen Tiga Roda 40kg",
+        "satuan": "sak",
+        "hargaSatuan": 72000,
+        "hargaPokokSatuan": 57600,
+        "qty": 1,
+        "subtotal": 72000
+      }
+    ],
+    "total": 72000,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784081045893-9908b3e7.jpg",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "samping indo",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-15T02:04:05.861Z",
+    "createdAt": "2026-07-15T02:04:05.861Z",
+    "updatedAt": "2026-07-15T02:04:05.899Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-15T02:04:05.861Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-15T02:04:05.861Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-13230a94",
+    "id_pembayaran": "pay-70dd1a27",
+    "noOrder": "AMJ-20260715-005",
+    "namaPelanggan": "kelly",
+    "alamat": "samping alfa",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-fac5dff7",
+        "productId": "prod-004",
+        "namaProduk": "Kabel NYM 2x1.5mm",
+        "satuan": "meter",
+        "hargaSatuan": 6500,
+        "hargaPokokSatuan": 5200,
+        "qty": 1,
+        "subtotal": 6500
+      }
+    ],
+    "total": 6500,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784081108893-4f682a83.jpg",
+    "catatanPembayaran": null,
+    "catatanPengiriman": "depan indo",
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-15T02:05:08.873Z",
+    "createdAt": "2026-07-15T02:05:08.873Z",
+    "updatedAt": "2026-07-15T02:05:08.900Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-15T02:05:08.873Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-15T02:05:08.873Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-5b620adb",
+    "id_pembayaran": "pay-7a63fc1e",
+    "noOrder": "AMJ-20260715-006",
+    "namaPelanggan": "alok",
+    "alamat": "rahasia",
+    "noWhatsapp": "6281111111111",
+    "items": [
+      {
+        "id_detail": "det-ad368135",
+        "productId": "prod-004",
+        "namaProduk": "Kabel NYM 2x1.5mm",
+        "satuan": "meter",
+        "hargaSatuan": 6500,
+        "hargaPokokSatuan": 5200,
+        "qty": 1,
+        "subtotal": 6500
+      }
+    ],
+    "total": 6500,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "pending",
+    "statusPesanan": "diproses",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784081587961-0aaebe7e.jpg",
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-15T02:13:07.945Z",
+    "createdAt": "2026-07-15T02:13:07.945Z",
+    "updatedAt": "2026-07-15T02:13:07.965Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-15T02:13:07.945Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-15T02:13:07.945Z",
+        "oleh": "sistem"
+      }
+    ]
+  },
+  {
+    "id": "trx-34c8d76d",
+    "id_pembayaran": "pay-0cf04984",
+    "noOrder": "AMJ-20260715-007",
+    "namaPelanggan": "aku ilham",
+    "alamat": "tes",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-a4f38252",
+        "productId": "prod-004",
+        "namaProduk": "Kabel NYM 2x1.5mm",
+        "satuan": "meter",
+        "hargaSatuan": 6500,
+        "hargaPokokSatuan": 5200,
+        "qty": 1,
+        "subtotal": 6500
+      }
+    ],
+    "total": 6500,
+    "metodeBayar": "transfer",
+    "statusPembayaran": "berhasil",
+    "statusPesanan": "dikirim",
+    "stokDireservasi": true,
+    "buktiTransfer": "payment-proofs/bukti-1784081793682-01891ec5.jpg",
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-15T02:16:33.663Z",
+    "createdAt": "2026-07-15T02:16:33.663Z",
+    "updatedAt": "2026-07-15T03:48:52.612Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-15T02:16:33.663Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-15T02:16:33.663Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "berhasil",
+        "timestamp": "2026-07-15T03:48:40.156Z",
+        "oleh": "Admin Toko"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-07-15T03:48:52.612Z",
+        "oleh": "Admin Toko"
+      }
+    ]
+  },
+  {
+    "id": "trx-231046a8",
+    "id_pembayaran": "pay-f426d932",
+    "noOrder": "AMJ-20260715-008",
+    "namaPelanggan": "test kembali",
+    "alamat": "depan toko",
+    "noWhatsapp": "6281233649676",
+    "items": [
+      {
+        "id_detail": "det-c5b1a36d",
+        "productId": "prod-004",
+        "namaProduk": "Kabel NYM 2x1.5mm",
+        "satuan": "meter",
+        "hargaSatuan": 6500,
+        "hargaPokokSatuan": 5200,
+        "qty": 1,
+        "subtotal": 6500
+      }
+    ],
+    "total": 6500,
+    "metodeBayar": "cod",
+    "statusPembayaran": "lunas",
+    "statusPesanan": "dikirim",
+    "stokDireservasi": true,
+    "buktiTransfer": null,
+    "catatanPembayaran": null,
+    "catatanPengiriman": null,
+    "checkoutToken": null,
+    "needsDelivery": false,
+    "tanggal": "2026-07-15T02:19:25.879Z",
+    "createdAt": "2026-07-15T02:19:25.879Z",
+    "updatedAt": "2026-07-15T03:09:56.720Z",
+    "statusHistory": [
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-15T02:19:25.879Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pembayaran",
+        "status": "pending",
+        "timestamp": "2026-07-15T02:19:25.879Z",
+        "oleh": "sistem"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-07-15T02:37:15.097Z",
+        "oleh": "Admin Toko"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "diproses",
+        "timestamp": "2026-07-15T03:09:53.826Z",
+        "oleh": "Admin Toko"
+      },
+      {
+        "tipe": "pesanan",
+        "status": "dikirim",
+        "timestamp": "2026-07-15T03:09:56.720Z",
+        "oleh": "Admin Toko"
       }
     ]
   }

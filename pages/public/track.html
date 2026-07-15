@@ -74,6 +74,16 @@
   <script src="../../js/api.js"></script>
   <script src="../../js/data.js"></script>
   <script>
+    function escapeHtml(unsafe) {
+      if (!unsafe) return "";
+      return unsafe.toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
     let currentTrx = null;
     let pollingInterval = null;
     let pollingNoOrder = null;

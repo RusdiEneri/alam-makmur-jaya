@@ -46,15 +46,17 @@ async function apiFetch(path, options = {}) {
   const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
 
   if (res.status === 401 || res.status === 403) {
-    // Token kedaluwarsa → paksa logout
-    sessionStorage.clear();
-    const onLoginPage = window.location.pathname.includes("/login.html");
-    if (!onLoginPage) {
-      window.location.replace(
-        window.location.pathname.includes("/pages/")
-          ? "../public/login.html"
-          : "pages/public/login.html",
-      );
+    // Token kedaluwarsa → paksa logout (KECUALI untuk endpoint public)
+    if (!path.startsWith("/public/")) {
+      sessionStorage.clear();
+      const onLoginPage = window.location.pathname.includes("/login.html");
+      if (!onLoginPage) {
+        window.location.replace(
+          window.location.pathname.includes("/pages/")
+            ? "../public/login.html"
+            : "pages/public/login.html",
+        );
+      }
     }
     const errData = await res.json().catch(() => ({}));
     throw new Error(errData.message || "Akses ditolak");
@@ -241,13 +243,22 @@ async function updateStatusPesanan(id, status, catatan) {
 
 async function viewBuktiTransfer(id) {
   const token = sessionStorage.getItem("token");
-  const res = await fetch(`${BASE_URL}/transactions/${id}/bukti-transfer`, {
-    headers: { Authorization: `Bearer ${token}` },
+  // FIX: endpoint backend ada di /api/public/checkout/:id/bukti-transfer
+  const baseHost = BASE_URL.replace(/\/api$/, '');
+  const res = await fetch(`${BASE_URL}/public/checkout/${id}/bukti-transfer`, {
+    headers: { 
+      Authorization: `Bearer ${token}`,
+    },
   });
+  
   if (!res.ok) {
+    if (res.status === 404) {
+      throw new Error("Bukti transfer tidak ditemukan");
+    }
     const errData = await res.json().catch(() => ({}));
     throw new Error(errData.message || "Gagal memuat bukti transfer");
   }
+  
   const blob = await res.blob();
   return URL.createObjectURL(blob);
 }
@@ -293,6 +304,13 @@ async function updateStatusPengiriman(id, status) {
   return apiFetch(`/kasir/deliveries/${id}/status`, {
     method: "PUT",
     body: JSON.stringify({ status }),
+  });
+}
+
+async function updateDelivery(id, payload) {
+  return apiFetch(`/kasir/deliveries/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
   });
 }
 
@@ -489,6 +507,7 @@ window.API = {
   getDeliveries,
   createDelivery,
   updateStatusPengiriman,
+  updateDelivery,
 
   // Retur
   getReturns,

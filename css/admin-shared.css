@@ -23,9 +23,9 @@ html {
   --ag: #1a6b3a; /* admin green */
   --ag-dk: #145530;
   --ag-lt: #e8f4ed;
-  --navy: #0f172a;
-  --navy-s: #1e293b;
-  --navy-b: #2d3f55;
+  --navy: #1c1c1e;
+  --navy-s: #2c2c2e;
+  --navy-b: #3c3c3e;
   --navy-m: #64748b;
   --navy-t: #94a3b8;
   --abg: #f4f6f9;
@@ -124,7 +124,11 @@ button {
 
 .sidebar-nav {
   flex: 1;
-  padding: 12px 10px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
 }
 
 .sidebar-section-label {
@@ -139,20 +143,18 @@ button {
 .sidebar-link {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
+  gap: 12px;
+  padding: 10px 14px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--navy-t);
-  margin-bottom: 2px;
   text-decoration: none;
   position: relative;
   overflow: hidden;
   transition:
     background 0.2s,
-    color 0.2s,
-    padding-left 0.25s;
+    color 0.2s;
 }
 .sidebar-link::before {
   content: "";

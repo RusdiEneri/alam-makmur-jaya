@@ -62,7 +62,7 @@
 
       /* ── SIDEBAR ────────────────────────────────────────── */
       .sidebar {
-        background: #0f172a;
+        background: #1c1c1e;
         display: flex;
         flex-direction: column;
         position: sticky;
@@ -76,7 +76,7 @@
         align-items: center;
         gap: 12px;
         padding: 22px 20px;
-        border-bottom: 1px solid #1e293b;
+        border-bottom: 1px solid #2c2c2e;
         color: white;
         font-weight: 700;
         font-size: 14px;
@@ -130,7 +130,7 @@
         position: relative;
       }
       .sidebar-link:hover {
-        background: #1e293b;
+        background: #2c2c2e;
         color: #e2e8f0;
       }
       .sidebar-link.active {
@@ -151,7 +151,7 @@
       }
       .sidebar-footer {
         padding: 16px 12px;
-        border-top: 1px solid #1e293b;
+        border-top: 1px solid #2c2c2e;
       }
 
       /* ── CONTENT ────────────────────────────────────────── */
@@ -860,6 +860,34 @@
       .btn-transfer-view:hover {
         background: #eff6ff;
       }
+      .btn-konfirmasi-kirim {
+        width: 100%;
+        padding: 13px;
+        font-weight: 700;
+        font-size: 14px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #E85D26, #C04718);
+        color: white;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        box-shadow: 0 4px 12px rgba(232,93,38,0.35);
+      }
+      .btn-konfirmasi-kirim:hover {
+        background: linear-gradient(135deg, #C04718, #9A3612);
+        box-shadow: 0 6px 18px rgba(232,93,38,0.45);
+        transform: translateY(-1px);
+      }
+      .btn-konfirmasi-kirim:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
 
       /* Order status dropdown */
       .status-select {
@@ -1112,28 +1140,10 @@
       <!-- ── CONTENT ─────────────────────────────────────────── -->
       <div class="content-wrapper">
         <header class="top-header">
-          <div style="display: flex; align-items: center; gap: 12px">
-            <button
-              class="hamburger-btn"
-              id="hamburger-btn"
-              onclick="toggleSidebar()"
-              aria-label="Toggle menu"
-            >
-              ☰
-            </button>
-            <header class="top-header">
-  <div class="header-left" style="display:flex;align-items:center;gap:12px;">
-    <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
-    <span class="header-page-title">Transaksi</span>
-  </div>
-  <div style="font-size:12px; color:var(--color-text-muted)" id="last-updated"></div>
-</header>
-            <!-- <div class="header-title">ManajemenTransaksi</div> -->
+          <div class="header-left" style="display:flex;align-items:center;gap:12px;">
+            <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+            <span class="header-page-title">Transaksi</span>
           </div>
-          <div
-            style="font-size: 12px; color: var(--color-text-muted)"
-            id="last-updated"
-          ></div>
         </header>
 
         <main class="main-content">
@@ -1174,21 +1184,10 @@
               <input
                 type="date"
                 class="form-input no-icon"
-                id="filter-date-start"
+                id="filter-date"
                 style="width: 140px"
                 onchange="applyFilters()"
-                title="Dari Tanggal"
-              />
-              <span style="color: var(--color-text-muted); font-size: 13px"
-                >-</span
-              >
-              <input
-                type="date"
-                class="form-input no-icon"
-                id="filter-date-end"
-                style="width: 140px"
-                onchange="applyFilters()"
-                title="Sampai Tanggal"
+                title="Tanggal Transaksi"
               />
             </div>
 
@@ -1387,6 +1386,13 @@
                   >
                     ❌ Tolak Pembayaran
                   </button>
+                  <button
+                    class="btn-konfirmasi-kirim"
+                    id="btn-konfirmasi-kirim"
+                    onclick="handleKonfirmasiDanKirim(event, this)"
+                  >
+                    🚚 Transfer Diterima → Proses &amp; Kirim
+                  </button>
                 </div>
               </div>
               <div
@@ -1400,10 +1406,18 @@
             <div class="modal-card">
               <div class="modal-card-title">Status Pesanan</div>
               <select class="status-select" id="dt-status-pesanan">
-                <!-- <option value="menunggu">⏳ Menunggu Konfirmasi</option> -->
-                <option value="diproses">⚙️ Sedang Diproses</option>
-                <option value="dikirim">🚚 Sedang Dikirim</option>
+                <option value="menunggu">⏳ Menunggu</option>
+                <option value="diproses">⚙️ Diproses</option>
+                <option value="dikirim">🚚 Dikirim</option>
                 <option value="selesai">✅ Selesai</option>
+                <option value="dibatalkan">❌ Dibatalkan</option>
+              </select>
+              
+              <div class="modal-card-title" style="margin-top: 16px;">Status Bayar</div>
+              <select class="status-select" id="dt-status-bayar">
+                <option value="menunggu">Pending / Menunggu</option>
+                <option value="berhasil">Berhasil / Lunas</option>
+                <option value="ditolak">Ditolak</option>
               </select>
               <button
                 class="btn-update-status"
@@ -1497,8 +1511,7 @@
         try {
           allTrx = await API.getTransactions();
           allTrx.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-          document.getElementById("last-updated").textContent =
-            // "Terakhir diperbarui " + new Date().toLocaleTimeString("id-ID");
+
           applyFilters();
         } catch (err) {
           showTableError(err.message);
@@ -1517,8 +1530,7 @@
 
       function applyFilters() {
         const q = document.getElementById("search-input").value.toLowerCase();
-        const dateStart = document.getElementById("filter-date-start").value;
-        const dateEnd = document.getElementById("filter-date-end").value;
+        const dateFilter = document.getElementById("filter-date").value;
         const method = document.getElementById("filter-method").value;
         const payStat = document.getElementById("filter-paystatus").value;
         const ordStat = document.getElementById("filter-ordstatus").value;
@@ -1533,10 +1545,9 @@
             const nm = (t.namaPelanggan || "").toLowerCase();
             if (!no.includes(q) && !nm.includes(q)) return false;
           }
-          if (dateStart || dateEnd) {
+          if (dateFilter) {
             const d = new Date(t.createdAt).toISOString().split("T")[0];
-            if (dateStart && d < dateStart) return false;
-            if (dateEnd && d > dateEnd) return false;
+            if (d !== dateFilter) return false;
           }
           if (method && t.metodeBayar !== method) return false;
           if (payStat) {
@@ -1557,8 +1568,7 @@
 
       function clearFilters() {
         document.getElementById("search-input").value = "";
-        document.getElementById("filter-date-start").value = "";
-        document.getElementById("filter-date-end").value = "";
+        document.getElementById("filter-date").value = "";
         document.getElementById("filter-method").value = "";
         document.getElementById("filter-paystatus").value = "";
         document.getElementById("filter-ordstatus").value = "";
@@ -1687,13 +1697,12 @@
         document.getElementById("dt-subtotal").textContent = fmtRp(t.total);
         document.getElementById("dt-total").textContent = fmtRp(t.total);
 
-        const tbWrap = document.getElementById("transfer-btn-wrap");
-        tbWrap.style.display = t.metodeBayar === "transfer" ? "block" : "none";
-
         resetVerifyPanel(t);
 
         document.getElementById("dt-status-pesanan").value =
           t.statusPesanan || "menunggu";
+        document.getElementById("dt-status-bayar").value =
+          t.statusPembayaran || "menunggu";
 
         document.getElementById("detail-overlay").classList.add("open");
         document.body.style.overflow = "hidden";
@@ -1711,19 +1720,30 @@
         const note = document.getElementById("verify-note");
         const btnK = document.getElementById("btn-konfirmasi");
         const btnT = document.getElementById("btn-tolak");
+        const btnKK = document.getElementById("btn-konfirmasi-kirim");
+        const transferWrap = document.getElementById("transfer-btn-wrap");
 
+        // Reset semua tombol ke state awal
         btnK.className = "btn-verify btn-confirm";
         btnK.textContent = "✅ Konfirmasi Pembayaran";
         btnK.disabled = false;
         btnT.className = "btn-verify btn-reject";
         btnT.textContent = "❌ Tolak Pembayaran";
         btnT.disabled = false;
+        if (btnKK) { btnKK.disabled = false; btnKK.textContent = "🚚 Transfer Diterima → Proses & Kirim"; }
         delete btnK.dataset.confirming;
         delete btnT.dataset.confirming;
 
         const ps = t.statusPembayaran;
+        const isTransfer = t.metodeBayar === "transfer" || t.metodeBayar === "qris";
 
-        if (ps === "menunggu" && t.metodeBayar === "transfer") {
+        // Tampilkan tombol lihat bukti untuk transaksi transfer/qris
+        if (transferWrap) {
+          transferWrap.style.display = isTransfer ? "block" : "none";
+        }
+
+        // Tampilkan panel verifikasi untuk pembayaran transfer/qris yang belum dikonfirmasi
+        if ((ps === "menunggu" || ps === "pending") && isTransfer) {
           card.className = "verify-card";
           actions.style.display = "block";
           note.style.display = "none";
@@ -1758,6 +1778,7 @@
    PAYMENT VERIFY (Double-Confirm)
 ═══════════════════════════════════════════════════ */
       async function handleVerify(e, btn, targetStatus) {
+        if (e && e.preventDefault) e.preventDefault();
         addRipple(e, btn);
 
         if (!btn.dataset.confirming) {
@@ -1827,6 +1848,12 @@
 
           const idx = allTrx.findIndex((x) => x.id === currentTrx.id);
           if (idx !== -1) allTrx[idx] = { ...allTrx[idx], ...currentTrx };
+          
+          if (typeof showToast === 'function') {
+            showToast("Status pembayaran berhasil diperbarui");
+          } else {
+            alert("Status pembayaran berhasil diperbarui");
+          }
         } catch (err) {
           alert("Gagal verifikasi: " + err.message);
           btn.disabled = false;
@@ -1842,15 +1869,37 @@
    UPDATE ORDER STATUS
 ═══════════════════════════════════════════════════ */
       async function updateOrderStatus(e) {
+        if (e && e.preventDefault) e.preventDefault();
         const btn = e.currentTarget;
         addRipple(e, btn);
 
         const newStatus = document.getElementById("dt-status-pesanan").value;
+        const newPayStatus = document.getElementById("dt-status-bayar").value;
         const orig = btn.textContent;
         btn.textContent = "Menyimpan…";
         btn.disabled = true;
+        
+        // FIX BUG #2: Untuk COD yang status selesai, auto-set payment status
+        if (newStatus === "selesai" && currentTrx.metodeBayar === "cod") {
+          // Update payment status dulu jika masih pending
+          if (["menunggu", "pending"].includes(currentTrx.statusPembayaran)) {
+            try {
+              await API.updateStatusBayar(currentTrx.id, "berhasil", "");
+              currentTrx.statusPembayaran = "berhasil";
+              
+              // Update badge pembayaran di UI
+              const payHtml = buildPayBadge("berhasil", "cod");
+              document.getElementById("dt-badge-pay").innerHTML = payHtml;
+              updateTableBadge(currentTrx.id, "pay", payHtml);
+              resetVerifyPanel(currentTrx);
+            } catch (err) {
+              console.warn("Gagal auto-update payment:", err);
+            }
+          }
+        }
 
         try {
+          // Update Order Status
           await API.updateStatusPesanan(currentTrx.id, newStatus, "");
           currentTrx.statusPesanan = newStatus;
 
@@ -1861,9 +1910,46 @@
             .querySelector(".badge")
             ?.classList.add("badge-flip");
           updateTableBadge(currentTrx.id, "ord", ordHtml);
+          
+          // Update Payment Status
+          if (newPayStatus !== currentTrx.statusPembayaran) {
+            await API.updateStatusBayar(currentTrx.id, newPayStatus, "");
+            currentTrx.statusPembayaran = newPayStatus;
+            
+            const payHtml = buildPayBadge(newPayStatus, currentTrx.metodeBayar);
+            document.getElementById("dt-badge-pay").innerHTML = payHtml;
+            updateTableBadge(currentTrx.id, "pay", payHtml);
+            resetVerifyPanel(currentTrx);
+          }
 
           const idx = allTrx.findIndex((x) => x.id === currentTrx.id);
           if (idx !== -1) allTrx[idx].statusPesanan = newStatus;
+
+          // AUTO-SYNC: Buat delivery record jika status diubah ke 'dikirim'
+          if (newStatus === 'dikirim' || newStatus === 'selesai') {
+            try {
+              const deliveryData = {
+                transaksiId:   currentTrx.id,                                          // ← field name sesuai backend
+                noOrder:       currentTrx.noOrder,
+                namaPelanggan: currentTrx.namaPelanggan,
+                alamat:        currentTrx.alamat || '-',                                // backend wajib non-empty
+                tanggalKirim:  currentTrx.tanggal || currentTrx.createdAt || new Date().toISOString(),
+                kurir:         '',
+                kendaraan:     '',
+                catatan:       currentTrx.catatanPengiriman || ''
+              };
+              await API.createDelivery(deliveryData);
+              console.log('✅ Auto-created delivery record for', currentTrx.noOrder);
+            } catch (err) {
+              console.warn('⚠️ Auto-create delivery skipped:', err.message);
+            }
+          }
+          
+          if (typeof showToast === 'function') {
+            showToast("Status pesanan berhasil diperbarui");
+          } else {
+            alert("Status pesanan berhasil diperbarui");
+          }
         } catch (err) {
           alert("Gagal update status: " + err.message);
         } finally {
@@ -1879,15 +1965,115 @@
 ═══════════════════════════════════════════════════ */
       async function viewBukti() {
         if (!currentTrx) return;
+        const btn = document.querySelector('.btn-transfer-view');
+        const origText = btn ? btn.textContent : '';
+        if (btn) { btn.disabled = true; btn.textContent = 'Memuat...'; }
         try {
-          const url = await API.viewBuktiTransfer(currentTrx.id);
+          let url;
+          // Coba 1: Fetch blob via endpoint API
+          try {
+            url = await API.viewBuktiTransfer(currentTrx.id);
+          } catch (apiErr) {
+            console.warn('API blob fetch gagal, coba fallback:', apiErr.message);
+            // Coba 2: Gunakan static URL dari field buktiTransfer
+            // backend menyimpan "payment-proofs/filename.jpg" di field buktiTransfer
+            // Express meng-serve /uploads/ secara statis
+            if (currentTrx.buktiTransfer) {
+              const base = window.location.hostname === 'localhost'
+                ? `http://localhost:3000`
+                : `http://${window.location.hostname}:3000`;
+              url = `${base}/uploads/${currentTrx.buktiTransfer}`;
+            } else {
+              throw new Error('Bukti transfer belum diupload oleh customer.');
+            }
+          }
           const img = document.getElementById("lightbox-img");
           img.src = url;
           img.classList.remove("zoomed");
           document.getElementById("lightbox").classList.add("open");
           document.body.style.overflow = "hidden";
         } catch (err) {
-          alert("Gagal memuat bukti transfer: " + err.message);
+          alert("Gagal memuat bukti transfer: " + err.message + "\n\nPastikan customer sudah mengupload bukti transfer.");
+        } finally {
+          if (btn) { btn.disabled = false; btn.textContent = origText; }
+        }
+      }
+
+
+      /* ═══════════════════════════════════════════════════
+   ONE-CLICK: KONFIRMASI TRANSFER + SET DIKIRIM
+═══════════════════════════════════════════════════ */
+      async function handleKonfirmasiDanKirim(e, btn) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!currentTrx) return;
+
+        if (!btn.dataset.confirming) {
+          btn.dataset.confirming = "1";
+          btn.textContent = "\u26a0\ufe0f Yakin? Klik lagi untuk konfirmasi";
+          setTimeout(() => {
+            if (btn.dataset.confirming) {
+              delete btn.dataset.confirming;
+              btn.textContent = "\ud83d\ude9a Transfer Diterima \u2192 Proses & Kirim";
+            }
+          }, 4000);
+          return;
+        }
+
+        delete btn.dataset.confirming;
+        btn.disabled = true;
+        btn.textContent = "Memproses...";
+
+        try {
+          // 1. Konfirmasi pembayaran
+          await API.updateStatusBayar(currentTrx.id, "berhasil", "");
+          currentTrx.statusPembayaran = "berhasil";
+
+          const payHtml = buildPayBadge("berhasil", currentTrx.metodeBayar);
+          document.getElementById("dt-badge-pay").innerHTML = payHtml;
+          updateTableBadge(currentTrx.id, "pay", payHtml);
+
+          // 2. Update status pesanan ke dikirim
+          await API.updateStatusPesanan(currentTrx.id, "dikirim", "");
+          currentTrx.statusPesanan = "dikirim";
+
+          const ordHtml = buildOrdBadge("dikirim");
+          document.getElementById("dt-badge-ord").innerHTML = ordHtml;
+          document.getElementById("dt-status-pesanan").value = "dikirim";
+          updateTableBadge(currentTrx.id, "ord", ordHtml);
+
+          const idx = allTrx.findIndex((x) => x.id === currentTrx.id);
+          if (idx !== -1) {
+            allTrx[idx].statusPembayaran = "berhasil";
+            allTrx[idx].statusPesanan = "dikirim";
+          }
+
+          // 3. Auto-create delivery record
+          try {
+            await API.createDelivery({
+              transaksiId:   currentTrx.id,                                          // ← field name sesuai backend
+              noOrder:       currentTrx.noOrder,
+              namaPelanggan: currentTrx.namaPelanggan,
+              alamat:        currentTrx.alamat || '-',
+              tanggalKirim:  currentTrx.tanggal || currentTrx.createdAt || new Date().toISOString(),
+              kurir:         '',
+              kendaraan:     '',
+              catatan:       currentTrx.catatanPengiriman || ''
+            });
+            console.log("\u2705 Delivery record created for", currentTrx.noOrder);
+          } catch (delivErr) {
+            console.warn("\u26a0\ufe0f Delivery record creation skipped (might already exist):", delivErr.message);
+          }
+
+          // 4. Update panel UI
+          resetVerifyPanel(currentTrx);
+
+          if (typeof showToast === 'function') {
+            showToast("\u2705 Pembayaran dikonfirmasi & pesanan siap dikirim!");
+          }
+        } catch (err) {
+          alert("Gagal memproses: " + err.message);
+          btn.disabled = false;
+          btn.textContent = "\ud83d\ude9a Transfer Diterima \u2192 Proses & Kirim";
         }
       }
 

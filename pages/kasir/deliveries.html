@@ -24,7 +24,7 @@
 
     /* ── SIDEBAR ───────────────────────────────────────── */
     .sidebar { 
-      background: #0F172A; 
+      background: #1c1c1e; 
       display: flex; 
       flex-direction: column; 
       position: sticky; 
@@ -38,7 +38,7 @@
       align-items: center; 
       gap: 12px; 
       padding: 22px 20px; 
-      border-bottom: 1px solid #1E293B; 
+      border-bottom: 1px solid #2c2c2e; 
       color: white; 
       font-weight: 700; 
       font-size: 14px;
@@ -65,7 +65,7 @@
     .sidebar-nav { padding: 16px 12px; flex: 1; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
     .sidebar-section { font-size: 10px; font-weight: 700; color: #475569; letter-spacing: 1px; text-transform: uppercase; padding: 14px 14px 6px; }
     .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #94A3B8; transition: 0.2s; position: relative; }
-    .sidebar-link:hover { background: #1E293B; color: #E2E8F0; }
+    .sidebar-link:hover { background: #2c2c2e; color: #E2E8F0; }
     .sidebar-link.active { 
       background: rgba(232, 93, 38, 0.15); 
       color: #E85D26; 
@@ -82,7 +82,7 @@
       background: #E85D26; 
       border-radius: 0 3px 3px 0; 
     }
-    .sidebar-footer { padding: 16px 12px; border-top: 1px solid #1E293B; }
+    .sidebar-footer { padding: 16px 12px; border-top: 1px solid #2c2c2e; }
 
     /* ── CONTENT ────────────────────────────────────────── */
     .content-wrapper { display: flex; flex-direction: column; height: 100vh; overflow-y: auto; min-width: 0; }
@@ -578,7 +578,6 @@
           <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
           <span class="header-page-title">Monitor Pengiriman</span>
         </div>
-        <div style="font-size:12px;color:var(--color-text-muted)" id="last-updated"></div>
       </header>
 
       <main class="main-content">
@@ -750,38 +749,86 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function loadDeliveries() {
+  const btn = document.getElementById('refresh-btn');
+  const icon = document.getElementById('refresh-icon');
+
   try {
-    console.log('📦 Fetching deliveries...');
-    const btn = document.getElementById('refresh-btn');
-    const icon = document.getElementById('refresh-icon');
-    
-    if (btn) {
-      btn.disabled = true;
-      if (icon) icon.style.animation = 'spin 1s linear infinite';
+    console.log('📦 Loading deliveries...');
+    if (btn) { btn.disabled = true; }
+    if (icon) { icon.style.animation = 'spin 1s linear infinite'; }
+
+    // 1. Fetch existing delivery records
+    let deliveries = await API.getDeliveries();
+    deliveries = Array.isArray(deliveries) ? deliveries : [];
+
+    // 2. Fetch semua transaksi yang butuh delivery
+    let transactions = [];
+    try {
+      const trxRaw = await API.getTransactions();
+      transactions = Array.isArray(trxRaw) ? trxRaw
+                   : (trxRaw && Array.isArray(trxRaw.data) ? trxRaw.data
+                   : (trxRaw && Array.isArray(trxRaw.transaksi) ? trxRaw.transaksi : []));
+    } catch (err) {
+      console.warn('⚠️ Could not fetch transactions for sync:', err);
     }
 
-    // Fetch from API
-    const data = await API.getDeliveries();
-    console.log('✅ Deliveries received:', data);
-    
-    allDeliveries = Array.isArray(data) ? data : [];
-    
-    // Update last updated time
-    const lastUp = document.getElementById('last-updated');
-    if (lastUp) {
-      const now = new Date();
-      lastUp.textContent = `Terakhir diperbarui ${now.toLocaleTimeString('id-ID')}`;
+    const needsDeliveryTrx = transactions.filter(t =>
+      t.needsDelivery === true ||
+      t.statusPesanan === 'dikirim' ||
+      t.statusPesanan === 'selesai'
+    );
+
+    console.log('📋 Found', needsDeliveryTrx.length, 'transactions needing delivery');
+
+    // 3. Auto-create delivery records untuk transaksi yang belum punya record
+    let created = 0;
+    for (const trx of needsDeliveryTrx) {
+      const existingDelivery = deliveries.find(d =>
+        d.transaksiId === trx.id ||   // field name sesuai backend
+        d.noOrder === trx.noOrder
+      );
+
+      if (!existingDelivery) {
+        console.log('✨ Auto-creating delivery for', trx.noOrder);
+        const deliveryData = {
+          transaksiId:   trx.id,            // ← sesuai backend schema
+          noOrder:       trx.noOrder,
+          namaPelanggan: trx.namaPelanggan,
+          alamat:        trx.alamat || '-', // backend wajib non-empty
+          tanggalKirim:  trx.tanggal || trx.createdAt || new Date().toISOString(),
+          kurir:         '',                // ← bukan namaKurir
+          kendaraan:     '',
+          catatan:       trx.catatanPengiriman || ''
+        };
+
+        try {
+          const created_rec = await API.createDelivery(deliveryData);
+          // Tambahkan ke array lokal agar tabel langsung terisi
+          // Backend mengembalikan { delivery: {...} }
+          const rec = (created_rec && created_rec.delivery) ? created_rec.delivery
+                    : (created_rec && created_rec.id ? created_rec
+                    : { ...deliveryData, id: `local-${Date.now()}-${trx.id}` });
+          deliveries.push(rec);
+          created++;
+        } catch (err) {
+          console.warn('⚠️ Failed to create delivery for', trx.noOrder, ':', err);
+        }
+      }
     }
-    
-    // Render table
+
+
+    if (created > 0) {
+      console.log('✅ Auto-created', created, 'delivery record(s)');
+    }
+
+    console.log('✅ Total deliveries:', deliveries.length);
+    allDeliveries = deliveries;
     renderTable();
-    
+
   } catch (err) {
     console.error('❌ Error loading deliveries:', err);
     alert('Gagal memuat data pengiriman: ' + err.message);
   } finally {
-    const btn = document.getElementById('refresh-btn');
-    const icon = document.getElementById('refresh-icon');
     if (btn) btn.disabled = false;
     if (icon) icon.style.animation = '';
   }
@@ -935,7 +982,8 @@ async function updateStatus(id, newStatus) {
 
 function tandaiSelesai(id) {
   if (confirm('Tandai pengiriman ini sebagai selesai?')) {
-    updateStatus(id, 'selesai');
+    // FIX: Status backend menggunakan 'sampai' bukan 'selesai'
+    updateStatus(id, 'sampai');
   }
 }
 
@@ -1008,8 +1056,11 @@ async function submitSchedule() {
       catatan: document.getElementById('form-catatan').value.trim(),
     };
     
-    // Update delivery
+    // Update delivery details
     await API.updateDelivery(id, payload);
+    
+    // Set status ke dikirim di backend (agar sinkron dengan transactions)
+    await API.updateStatusPengiriman(id, 'dikirim');
     
     // Update local data
     const delivery = allDeliveries.find(d => d.id === id);
@@ -1051,7 +1102,7 @@ function showToast(message) {
     position: fixed;
     bottom: 24px;
     right: 24px;
-    background: #0F172A;
+    background: #1c1c1e;
     color: white;
     padding: 12px 24px;
     border-radius: 8px;
