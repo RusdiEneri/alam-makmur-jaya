@@ -25,12 +25,32 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <style>
-      .header-page-title { 
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  color: var(--color-text) !important;
-  margin: 0 !important;
-}
+      :root {
+        --color-primary: #e85d26;
+        --color-primary-dark: #c04718;
+        --color-primary-400: #f5987a;
+        --color-danger: #dc2626;
+        --color-border: #e2e8f0;
+        --color-text: #1e293b;
+        --color-bg-subtle: #f8fafc;
+
+        --space-2: 8px;
+        --space-3: 12px;
+        --space-4: 16px;
+        --space-6: 24px;
+
+        --text-lg: 18px;
+        --font-bold: 700;
+
+        --navbar-height: 64px;
+        --sidebar-width: 260px;
+        --radius-md: 8px;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+        --z-dropdown: 80;
+        --duration-base: 0.2s;
+        --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
       /* ── RESET & BASE ───────────────────────────────────── */
       *,
       *::before,
@@ -62,7 +82,7 @@
 
       /* ── SIDEBAR ────────────────────────────────────────── */
       .sidebar {
-        background: #23190F;
+        background: #23190f;
         display: flex;
         flex-direction: column;
         position: sticky;
@@ -135,7 +155,7 @@
       }
       .sidebar-link.active {
         background: rgba(232, 93, 38, 0.15);
-        color: #E85D26;
+        color: #e85d26;
         font-weight: 600;
       }
       .sidebar-link.active::before {
@@ -146,7 +166,7 @@
         transform: translateY(-50%) scaleY(1);
         width: 3px;
         height: 60%;
-        background: #E85D26;
+        background: #e85d26;
         border-radius: 0 3px 3px 0;
       }
       .sidebar-footer {
@@ -158,27 +178,138 @@
       .content-wrapper {
         display: flex;
         flex-direction: column;
-        height: 100vh;
+        min-height: 100vh;
         overflow-y: auto;
         min-width: 0;
       }
       .top-header {
         background: white;
-        height: 64px;
         border-bottom: 1px solid var(--color-border);
+        padding: 0 var(--space-6);
+        height: var(--navbar-height);
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 24px;
+        gap: var(--space-4);
         position: sticky;
         top: 0;
-        z-index: 80;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        z-index: var(--z-dropdown);
+        box-shadow: var(--shadow-sm);
       }
-      .header-title {
-        font-size: 17px;
+      /* ── HEADER RIGHT & USER CHIP ────────────────────────────────── */
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .header-user {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f8fafc;
+        border: 1px solid var(--color-border, #e2e8f0);
+        padding: 6px 12px;
+        border-radius: 999px;
+        cursor: default;
+      }
+
+      .header-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #e85d26, #f5987a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
         font-weight: 700;
+        color: white;
       }
+
+      .header-user-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--color-text, #1e293b);
+      }
+
+      /* ── SIDEBAR OVERLAY (Mobile) ──────────────────────────────── */
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(2px);
+        z-index: 99;
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
+      }
+
+      .sidebar-overlay.open {
+        display: block;
+        opacity: 1;
+      }
+
+      /* ── RESPONSIVE MOBILE (Sidebar & Header) ──────────────────── */
+      @media (max-width: 768px) {
+        .app-layout {
+          grid-template-columns: 1fr !important;
+        }
+
+        .sidebar {
+          position: fixed !important;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 260px;
+          transform: translateX(-100%);
+          z-index: 1000;
+          transition: transform 0.3s ease-out;
+        }
+
+        .sidebar.open {
+          transform: translateX(0);
+        }
+
+        .hamburger-btn {
+          display: flex;
+        }
+
+        .header-user-name {
+          display: none; /* Sembunyikan nama di layar kecil */
+        }
+      }
+
+      .hamburger-btn {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+        background: transparent;
+        cursor: pointer;
+        font-size: 18px;
+        color: var(--color-text);
+        transition: background var(--duration-base) var(--ease-out);
+      }
+
+      .hamburger-btn:hover {
+        background: var(--color-bg-subtle);
+      }
+      .header-page-title {
+        font-size: var(--text-lg);
+        font-weight: var(--font-bold);
+        color: var(--color-text);
+      }
+
       .main-content {
         padding: 24px;
       }
@@ -235,16 +366,16 @@
         transform: translateY(-1px);
       }
       .btn-primary {
-        background: #E85D26;
+        background: #e85d26;
         color: white;
       }
       .btn-primary:hover {
-        background: #C04718;
+        background: #c04718;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(232, 93, 38, 0.3);
       }
       .btn-page.active {
-        background: #E85D26;
+        background: #e85d26;
       }
       .btn-danger {
         background: var(--color-danger);
@@ -338,7 +469,7 @@
       }
       .form-input:focus {
         outline: none;
-        border-color: #E85D26;
+        border-color: #e85d26;
         box-shadow: 0 0 0 3px rgba(232, 93, 38, 0.15);
         background: white;
       }
@@ -361,7 +492,7 @@
       }
       .form-select:focus {
         outline: none;
-        border-color: #E85D26;
+        border-color: #e85d26;
         box-shadow: 0 0 0 3px rgba(232, 93, 38, 0.15);
       }
       .filter-divider {
@@ -423,7 +554,7 @@
 
       .order-no {
         font-weight: 700;
-        color: #E85D26;
+        color: #e85d26;
         font-size: 13px;
       }
       .buyer-name {
@@ -478,7 +609,7 @@
       .pay-berhasil,
       .pay-lunas {
         background: rgba(26, 107, 58, 0.12);
-        color: #1A6B3A;
+        color: #1a6b3a;
       }
       .pay-ditolak {
         background: rgba(220, 38, 38, 0.12);
@@ -510,7 +641,7 @@
       }
       .ord-selesai {
         background: #f0fdf4;
-        color: #1A6B3A;
+        color: #1a6b3a;
       }
 
       /* Flip animation for badges */
@@ -623,29 +754,25 @@
         .app-layout {
           grid-template-columns: 1fr !important;
         }
-        .detail-grid {
-          grid-template-columns: 1fr !important;
-          gap: 16px !important;
-          padding: 0 !important;
+        .sidebar {
+          position: fixed !important;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 260px;
+          transform: translateX(-100%);
+          z-index: 1000;
+          transition: transform 0.3s ease-out;
         }
-        .detail-body {
-          padding: 18px 14px !important;
+        .sidebar.open {
+          transform: translateX(0);
         }
-        .detail-topbar {
-          padding: 0 14px !important;
+        /* PENTING: Munculkan hamburger di mobile */
+        .hamburger-btn {
+          display: flex !important;
         }
-        .btn-close-detail {
-          margin-right: 4px;
-        }
-        .right-col {
-          gap: 14px;
-        }
-        .verify-actions {
-          gap: 8px;
-        }
-        .btn-verify {
-          padding: 12px 10px;
-          font-size: 14px;
+        .header-user-name {
+          display: none;
         }
       }
 
@@ -750,7 +877,7 @@
       }
       .total-row.grand .total-amount {
         font-size: 20px;
-        color: #E85D26;
+        color: #e85d26;
       }
 
       /* ── RIGHT PANEL (Verification & Status) ────────────── */
@@ -762,8 +889,8 @@
 
       /* Verifikasi card - gradient orange light */
       .verify-card {
-        background: linear-gradient(135deg, #FDF1EC, #FEE4D6);
-        border: 2px solid #FDC9AD;
+        background: linear-gradient(135deg, #fdf1ec, #fee4d6);
+        border: 2px solid #fdc9ad;
         border-radius: 14px;
         padding: 22px;
       }
@@ -793,7 +920,7 @@
       }
       .verify-status-note.ok {
         background: rgba(232, 93, 38, 0.1);
-        color: #C04718;
+        color: #c04718;
       }
       .verify-status-note.err {
         background: rgba(220, 38, 38, 0.1);
@@ -823,11 +950,11 @@
         overflow: hidden;
       }
       .btn-confirm {
-        background: #E85D26;
+        background: #e85d26;
         color: white;
       }
       .btn-confirm:hover {
-        background: #C04718;
+        background: #c04718;
       }
       .btn-confirm.confirming {
         background: #d97706;
@@ -867,7 +994,7 @@
         font-size: 14px;
         border-radius: 10px;
         border: none;
-        background: linear-gradient(135deg, #E85D26, #C04718);
+        background: linear-gradient(135deg, #e85d26, #c04718);
         color: white;
         cursor: pointer;
         transition: 0.2s;
@@ -876,11 +1003,11 @@
         align-items: center;
         justify-content: center;
         gap: 6px;
-        box-shadow: 0 4px 12px rgba(232,93,38,0.35);
+        box-shadow: 0 4px 12px rgba(232, 93, 38, 0.35);
       }
       .btn-konfirmasi-kirim:hover {
-        background: linear-gradient(135deg, #C04718, #9A3612);
-        box-shadow: 0 6px 18px rgba(232,93,38,0.45);
+        background: linear-gradient(135deg, #c04718, #9a3612);
+        box-shadow: 0 6px 18px rgba(232, 93, 38, 0.45);
         transform: translateY(-1px);
       }
       .btn-konfirmasi-kirim:disabled {
@@ -908,7 +1035,7 @@
       }
       .status-select:focus {
         outline: none;
-        border-color: #E85D26;
+        border-color: #e85d26;
       }
 
       .btn-update-status {
@@ -918,7 +1045,7 @@
         font-size: 14px;
         border-radius: 8px;
         border: none;
-        background: #E85D26;
+        background: #e85d26;
         color: white;
         cursor: pointer;
         transition: 0.2s;
@@ -927,7 +1054,7 @@
         overflow: hidden;
       }
       .btn-update-status:hover {
-        background: #C04718;
+        background: #c04718;
       }
 
       /* ── LIGHTBOX ───────────────────────────────────────── */
@@ -1104,7 +1231,7 @@
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
           <div class="sidebar-brand-icon">
-            <img src="../../assets/icon.png" alt="Logo UD. Alam Makmur Jaya"/>
+            <img src="../../assets/icon.png" alt="Logo UD. Alam Makmur Jaya" />
           </div>
           <div>UD. Alam Makmur Jaya</div>
         </div>
@@ -1140,9 +1267,26 @@
       <!-- ── CONTENT ─────────────────────────────────────────── -->
       <div class="content-wrapper">
         <header class="top-header">
-          <div class="header-left" style="display:flex;align-items:center;gap:12px;">
-            <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+          <div class="header-left">
+            <button
+              class="hamburger-btn"
+              id="hamburger-btn"
+              onclick="toggleSidebar()"
+              aria-label="Toggle menu"
+            >
+              ☰
+            </button>
             <span class="header-page-title">Transaksi</span>
+          </div>
+
+          <div class="header-right">
+            <!-- User chip -->
+            <div class="header-user">
+              <div class="header-avatar" id="header-avatar">A</div>
+              <span class="header-user-name" id="header-username"
+                >Loading...</span
+              >
+            </div>
           </div>
         </header>
 
@@ -1412,13 +1556,29 @@
                 <option value="selesai">✅ Selesai</option>
                 <option value="dibatalkan">❌ Dibatalkan</option>
               </select>
-              
-              <div class="modal-card-title" style="margin-top: 16px;">Status Bayar</div>
+
+              <div class="modal-card-title" style="margin-top: 16px">
+                Status Bayar
+              </div>
               <select class="status-select" id="dt-status-bayar">
                 <option value="menunggu">Pending / Menunggu</option>
                 <option value="berhasil">Berhasil / Lunas</option>
                 <option value="ditolak">Ditolak</option>
               </select>
+              <div
+                id="dt-status-bayar-hint"
+                style="
+                  display: none;
+                  margin-top: 8px;
+                  padding: 10px 12px;
+                  border-radius: 8px;
+                  background: #f1f5f9;
+                  color: #475569;
+                  font-size: 13px;
+                  font-weight: 500;
+                  line-height: 1.4;
+                "
+              ></div>
               <button
                 class="btn-update-status"
                 onclick="updateOrderStatus(event)"
@@ -1488,8 +1648,42 @@
       /* ═══════════════════════════════════════════════════
    AUTH
 ═══════════════════════════════════════════════════ */
-      if (!sessionStorage.getItem("token"))
-        window.location.replace("../public/login.html");
+      /* ═══════════════════════════════════════════════════
+ AUTH & USER POPULATION
+═══════════════════════════════════════════════════ */
+      (function checkAuth() {
+        const userStr = sessionStorage.getItem("user");
+        if (!sessionStorage.getItem("token") || !userStr) {
+          window.location.replace("../public/login.html");
+          return;
+        }
+
+        try {
+          // Parse data user dari sessionStorage
+          const user = JSON.parse(userStr);
+
+          // Ambil nama (fallback ke name, email, atau "Admin")
+          const name = user.nama || user.name || user.email || "Admin";
+
+          // Buat inisial (2 huruf pertama dari nama)
+          const initials = name
+            .split(" ")
+            .map((w) => w[0])
+            .join("")
+            .toUpperCase()
+            .slice(0, 2);
+
+          // Masukkan ke elemen HTML header
+          const elHeaderUser = document.getElementById("header-username");
+          if (elHeaderUser) elHeaderUser.textContent = name;
+
+          const elHeaderAvatar = document.getElementById("header-avatar");
+          if (elHeaderAvatar) elHeaderAvatar.textContent = initials;
+        } catch (e) {
+          console.error("Failed to parse user session:", e);
+          window.location.replace("../public/login.html");
+        }
+      })();
 
       /* ═══════════════════════════════════════════════════
    STATE
@@ -1625,8 +1819,24 @@
       }
 
       function buildPayBadge(status, method) {
-        if (method === "cod")
-          return `<span class="badge pay-berhasil"><span class="dot"></span>COD</span>`;
+        const isOfflineOrCod =
+          method === "cod" || method === "tunai" || method === "piutang";
+        const methodLabel =
+          method === "cod"
+            ? "COD"
+            : method === "tunai"
+              ? "Tunai"
+              : method === "piutang"
+                ? "Piutang"
+                : "";
+
+        if (isOfflineOrCod) {
+          // Tampilkan status sebenarnya untuk COD/offline
+          if (["berhasil", "lunas"].includes(status))
+            return `<span class="badge pay-berhasil"><span class="dot"></span>${methodLabel} ✓</span>`;
+          // Masih pending — tampilkan badge netral/menunggu
+          return `<span class="badge pay-menunggu"><span class="dot"></span>${methodLabel}</span>`;
+        }
         if (["berhasil", "lunas"].includes(status))
           return `<span class="badge pay-berhasil"><span class="dot"></span>Berhasil</span>`;
         if (status === "ditolak")
@@ -1704,6 +1914,28 @@
         document.getElementById("dt-status-bayar").value =
           t.statusPembayaran || "menunggu";
 
+        // Disable status bayar select for COD and offline orders
+        const isOfflineOrCod =
+          t.metodeBayar === "cod" ||
+          t.metodeBayar === "tunai" ||
+          t.metodeBayar === "piutang";
+        document.getElementById("dt-status-bayar").disabled = isOfflineOrCod;
+
+        // Show/hide hint why status bayar is disabled
+        const hint = document.getElementById("dt-status-bayar-hint");
+        if (isOfflineOrCod) {
+          const methodName =
+            t.metodeBayar === "cod"
+              ? "COD"
+              : t.metodeBayar === "tunai"
+                ? "Tunai"
+                : "Piutang";
+          hint.style.display = "block";
+          hint.textContent = `ℹ️ Status bayar untuk metode ${methodName} dikelola otomatis. Status akan berubah menjadi "Berhasil" saat pesanan diselesaikan.`;
+        } else {
+          hint.style.display = "none";
+        }
+
         document.getElementById("detail-overlay").classList.add("open");
         document.body.style.overflow = "hidden";
       }
@@ -1730,12 +1962,16 @@
         btnT.className = "btn-verify btn-reject";
         btnT.textContent = "❌ Tolak Pembayaran";
         btnT.disabled = false;
-        if (btnKK) { btnKK.disabled = false; btnKK.textContent = "🚚 Transfer Diterima → Proses & Kirim"; }
+        if (btnKK) {
+          btnKK.disabled = false;
+          btnKK.textContent = "🚚 Transfer Diterima → Proses & Kirim";
+        }
         delete btnK.dataset.confirming;
         delete btnT.dataset.confirming;
 
         const ps = t.statusPembayaran;
-        const isTransfer = t.metodeBayar === "transfer" || t.metodeBayar === "qris";
+        const isTransfer =
+          t.metodeBayar === "transfer" || t.metodeBayar === "qris";
 
         // Tampilkan tombol lihat bukti untuk transaksi transfer/qris
         if (transferWrap) {
@@ -1749,16 +1985,23 @@
           note.style.display = "none";
         } else if (
           ["berhasil", "lunas"].includes(ps) ||
-          t.metodeBayar === "cod"
+          t.metodeBayar === "cod" ||
+          t.metodeBayar === "tunai" ||
+          t.metodeBayar === "piutang"
         ) {
           card.className = "verify-card neutral";
           actions.style.display = "none";
           note.style.display = "block";
           note.className = "verify-status-note ok";
-          note.textContent =
-            t.metodeBayar === "cod"
-              ? "🚚 Pembayaran COD — Bayar saat tiba."
-              : "✅ Pembayaran telah dikonfirmasi.";
+          if (t.metodeBayar === "cod") {
+            note.textContent = "🚚 Pembayaran COD — Bayar saat tiba.";
+          } else if (t.metodeBayar === "tunai") {
+            note.textContent = "💵 Pembayaran Tunai (Kasir).";
+          } else if (t.metodeBayar === "piutang") {
+            note.textContent = "💰 Pembayaran Piutang (Kasir).";
+          } else {
+            note.textContent = "✅ Pembayaran telah dikonfirmasi.";
+          }
         } else if (ps === "ditolak") {
           card.className = "verify-card danger";
           actions.style.display = "none";
@@ -1848,8 +2091,8 @@
 
           const idx = allTrx.findIndex((x) => x.id === currentTrx.id);
           if (idx !== -1) allTrx[idx] = { ...allTrx[idx], ...currentTrx };
-          
-          if (typeof showToast === 'function') {
+
+          if (typeof showToast === "function") {
             showToast("Status pembayaran berhasil diperbarui");
           } else {
             alert("Status pembayaran berhasil diperbarui");
@@ -1878,25 +2121,11 @@
         const orig = btn.textContent;
         btn.textContent = "Menyimpan…";
         btn.disabled = true;
-        
-        // FIX BUG #2: Untuk COD yang status selesai, auto-set payment status
-        if (newStatus === "selesai" && currentTrx.metodeBayar === "cod") {
-          // Update payment status dulu jika masih pending
-          if (["menunggu", "pending"].includes(currentTrx.statusPembayaran)) {
-            try {
-              await API.updateStatusBayar(currentTrx.id, "berhasil", "");
-              currentTrx.statusPembayaran = "berhasil";
-              
-              // Update badge pembayaran di UI
-              const payHtml = buildPayBadge("berhasil", "cod");
-              document.getElementById("dt-badge-pay").innerHTML = payHtml;
-              updateTableBadge(currentTrx.id, "pay", payHtml);
-              resetVerifyPanel(currentTrx);
-            } catch (err) {
-              console.warn("Gagal auto-update payment:", err);
-            }
-          }
-        }
+
+        const isOfflineOrCod =
+          currentTrx.metodeBayar === "cod" ||
+          currentTrx.metodeBayar === "tunai" ||
+          currentTrx.metodeBayar === "piutang";
 
         try {
           // Update Order Status
@@ -1910,12 +2139,37 @@
             .querySelector(".badge")
             ?.classList.add("badge-flip");
           updateTableBadge(currentTrx.id, "ord", ordHtml);
-          
+
+          // Auto-sync local payment status for COD/Tunai when order is completed or cancelled
+          if (
+            newStatus === "selesai" &&
+            (currentTrx.metodeBayar === "cod" ||
+              currentTrx.metodeBayar === "tunai")
+          ) {
+            currentTrx.statusPembayaran = "berhasil";
+            document.getElementById("dt-status-bayar").value = "berhasil";
+            const payHtml = buildPayBadge("berhasil", currentTrx.metodeBayar);
+            document.getElementById("dt-badge-pay").innerHTML = payHtml;
+            updateTableBadge(currentTrx.id, "pay", payHtml);
+            resetVerifyPanel(currentTrx);
+          } else if (
+            newStatus === "dibatalkan" &&
+            (currentTrx.statusPembayaran === "pending" ||
+              currentTrx.statusPembayaran === "menunggu")
+          ) {
+            currentTrx.statusPembayaran = "ditolak";
+            document.getElementById("dt-status-bayar").value = "ditolak";
+            const payHtml = buildPayBadge("ditolak", currentTrx.metodeBayar);
+            document.getElementById("dt-badge-pay").innerHTML = payHtml;
+            updateTableBadge(currentTrx.id, "pay", payHtml);
+            resetVerifyPanel(currentTrx);
+          }
+
           // Update Payment Status
-          if (newPayStatus !== currentTrx.statusPembayaran) {
+          if (!isOfflineOrCod && newPayStatus !== currentTrx.statusPembayaran) {
             await API.updateStatusBayar(currentTrx.id, newPayStatus, "");
             currentTrx.statusPembayaran = newPayStatus;
-            
+
             const payHtml = buildPayBadge(newPayStatus, currentTrx.metodeBayar);
             document.getElementById("dt-badge-pay").innerHTML = payHtml;
             updateTableBadge(currentTrx.id, "pay", payHtml);
@@ -1923,29 +2177,38 @@
           }
 
           const idx = allTrx.findIndex((x) => x.id === currentTrx.id);
-          if (idx !== -1) allTrx[idx].statusPesanan = newStatus;
+          if (idx !== -1) {
+            allTrx[idx].statusPesanan = newStatus;
+            allTrx[idx].statusPembayaran = currentTrx.statusPembayaran;
+          }
 
           // AUTO-SYNC: Buat delivery record jika status diubah ke 'dikirim'
-          if (newStatus === 'dikirim' || newStatus === 'selesai') {
+          if (newStatus === "dikirim" || newStatus === "selesai") {
             try {
               const deliveryData = {
-                transaksiId:   currentTrx.id,                                          // ← field name sesuai backend
-                noOrder:       currentTrx.noOrder,
+                transaksiId: currentTrx.id, // ← field name sesuai backend
+                noOrder: currentTrx.noOrder,
                 namaPelanggan: currentTrx.namaPelanggan,
-                alamat:        currentTrx.alamat || '-',                                // backend wajib non-empty
-                tanggalKirim:  currentTrx.tanggal || currentTrx.createdAt || new Date().toISOString(),
-                kurir:         '',
-                kendaraan:     '',
-                catatan:       currentTrx.catatanPengiriman || ''
+                alamat: currentTrx.alamat || "-", // backend wajib non-empty
+                tanggalKirim:
+                  currentTrx.tanggal ||
+                  currentTrx.createdAt ||
+                  new Date().toISOString(),
+                kurir: "",
+                kendaraan: "",
+                catatan: currentTrx.catatanPengiriman || "",
               };
               await API.createDelivery(deliveryData);
-              console.log('✅ Auto-created delivery record for', currentTrx.noOrder);
+              console.log(
+                "✅ Auto-created delivery record for",
+                currentTrx.noOrder,
+              );
             } catch (err) {
-              console.warn('⚠️ Auto-create delivery skipped:', err.message);
+              console.warn("⚠️ Auto-create delivery skipped:", err.message);
             }
           }
-          
-          if (typeof showToast === 'function') {
+
+          if (typeof showToast === "function") {
             showToast("Status pesanan berhasil diperbarui");
           } else {
             alert("Status pesanan berhasil diperbarui");
@@ -1965,26 +2228,33 @@
 ═══════════════════════════════════════════════════ */
       async function viewBukti() {
         if (!currentTrx) return;
-        const btn = document.querySelector('.btn-transfer-view');
-        const origText = btn ? btn.textContent : '';
-        if (btn) { btn.disabled = true; btn.textContent = 'Memuat...'; }
+        const btn = document.querySelector(".btn-transfer-view");
+        const origText = btn ? btn.textContent : "";
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = "Memuat...";
+        }
         try {
           let url;
           // Coba 1: Fetch blob via endpoint API
           try {
             url = await API.viewBuktiTransfer(currentTrx.id);
           } catch (apiErr) {
-            console.warn('API blob fetch gagal, coba fallback:', apiErr.message);
+            console.warn(
+              "API blob fetch gagal, coba fallback:",
+              apiErr.message,
+            );
             // Coba 2: Gunakan static URL dari field buktiTransfer
             // backend menyimpan "payment-proofs/filename.jpg" di field buktiTransfer
             // Express meng-serve /uploads/ secara statis
             if (currentTrx.buktiTransfer) {
-              const base = window.location.hostname === 'localhost'
-                ? `http://localhost:3000`
-                : `http://${window.location.hostname}:3000`;
+              const base =
+                window.location.hostname === "localhost"
+                  ? `http://localhost:3000`
+                  : `http://${window.location.hostname}:3000`;
               url = `${base}/uploads/${currentTrx.buktiTransfer}`;
             } else {
-              throw new Error('Bukti transfer belum diupload oleh customer.');
+              throw new Error("Bukti transfer belum diupload oleh customer.");
             }
           }
           const img = document.getElementById("lightbox-img");
@@ -1993,12 +2263,18 @@
           document.getElementById("lightbox").classList.add("open");
           document.body.style.overflow = "hidden";
         } catch (err) {
-          alert("Gagal memuat bukti transfer: " + err.message + "\n\nPastikan customer sudah mengupload bukti transfer.");
+          alert(
+            "Gagal memuat bukti transfer: " +
+              err.message +
+              "\n\nPastikan customer sudah mengupload bukti transfer.",
+          );
         } finally {
-          if (btn) { btn.disabled = false; btn.textContent = origText; }
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = origText;
+          }
         }
       }
-
 
       /* ═══════════════════════════════════════════════════
    ONE-CLICK: KONFIRMASI TRANSFER + SET DIKIRIM
@@ -2013,7 +2289,8 @@
           setTimeout(() => {
             if (btn.dataset.confirming) {
               delete btn.dataset.confirming;
-              btn.textContent = "\ud83d\ude9a Transfer Diterima \u2192 Proses & Kirim";
+              btn.textContent =
+                "\ud83d\ude9a Transfer Diterima \u2192 Proses & Kirim";
             }
           }, 4000);
           return;
@@ -2050,30 +2327,40 @@
           // 3. Auto-create delivery record
           try {
             await API.createDelivery({
-              transaksiId:   currentTrx.id,                                          // ← field name sesuai backend
-              noOrder:       currentTrx.noOrder,
+              transaksiId: currentTrx.id, // ← field name sesuai backend
+              noOrder: currentTrx.noOrder,
               namaPelanggan: currentTrx.namaPelanggan,
-              alamat:        currentTrx.alamat || '-',
-              tanggalKirim:  currentTrx.tanggal || currentTrx.createdAt || new Date().toISOString(),
-              kurir:         '',
-              kendaraan:     '',
-              catatan:       currentTrx.catatanPengiriman || ''
+              alamat: currentTrx.alamat || "-",
+              tanggalKirim:
+                currentTrx.tanggal ||
+                currentTrx.createdAt ||
+                new Date().toISOString(),
+              kurir: "",
+              kendaraan: "",
+              catatan: currentTrx.catatanPengiriman || "",
             });
-            console.log("\u2705 Delivery record created for", currentTrx.noOrder);
+            console.log(
+              "\u2705 Delivery record created for",
+              currentTrx.noOrder,
+            );
           } catch (delivErr) {
-            console.warn("\u26a0\ufe0f Delivery record creation skipped (might already exist):", delivErr.message);
+            console.warn(
+              "\u26a0\ufe0f Delivery record creation skipped (might already exist):",
+              delivErr.message,
+            );
           }
 
           // 4. Update panel UI
           resetVerifyPanel(currentTrx);
 
-          if (typeof showToast === 'function') {
+          if (typeof showToast === "function") {
             showToast("\u2705 Pembayaran dikonfirmasi & pesanan siap dikirim!");
           }
         } catch (err) {
           alert("Gagal memproses: " + err.message);
           btn.disabled = false;
-          btn.textContent = "\ud83d\ude9a Transfer Diterima \u2192 Proses & Kirim";
+          btn.textContent =
+            "\ud83d\ude9a Transfer Diterima \u2192 Proses & Kirim";
         }
       }
 
@@ -2181,144 +2468,161 @@
       /* ═══════════════════════════════════════════════════
    EXPORT PDF (Client-Side) - FIXED
 ═══════════════════════════════════════════════════ */
-async function exportPDF(e) {
-  const btn = document.getElementById("btn-pdf");
-  const sp = document.getElementById("sp-pdf");
-  addRipple(e, btn);
-  btn.disabled = true;
-  sp.style.display = "inline-block";
+      async function exportPDF(e) {
+        const btn = document.getElementById("btn-pdf");
+        const sp = document.getElementById("sp-pdf");
+        addRipple(e, btn);
+        btn.disabled = true;
+        sp.style.display = "inline-block";
 
-  try {
-    // Load jsPDF dan autoTable dari CDN
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
-    await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js');
+        try {
+          // Load jsPDF dan autoTable dari CDN
+          await loadScript(
+            "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+          );
+          await loadScript(
+            "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js",
+          );
 
-    const { jsPDF } = window.jspdf;
-    
-    // Gunakan landscape orientation agar lebih lebar
-    const doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: 'a4'
-    });
+          const { jsPDF } = window.jspdf;
 
-    // Header
-    doc.setFontSize(16);
-    doc.setFont("helvetica", "bold");
-    doc.text("UD. ALAM MAKMUR JAYA", 15, 20);
-    
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text("Toko Bahan Bangunan", 15, 26);
-    doc.text("Laporan Transaksi", 15, 32);
-    doc.text(`Tanggal: ${new Date().toLocaleDateString('id-ID')}`, 15, 38);
+          // Gunakan landscape orientation agar lebih lebar
+          const doc = new jsPDF({
+            orientation: "landscape",
+            unit: "mm",
+            format: "a4",
+          });
 
-    // Prepare data
-    const data = filteredTrx.length ? filteredTrx : allTrx;
-    const rows = data.map(t => [
-      t.noOrder || "-",
-      fmtDate(t.createdAt),
-      t.namaPelanggan || "-",
-      fmtRp(t.total),
-      (t.metodeBayar || "-").toUpperCase(),
-      t.statusPembayaran || "-",
-      t.statusPesanan || "-"
-    ]);
+          // Header
+          doc.setFontSize(16);
+          doc.setFont("helvetica", "bold");
+          doc.text("UD. ALAM MAKMUR JAYA", 15, 20);
 
-    // Table dengan konfigurasi yang lebih baik
-    doc.autoTable({
-      startY: 45,
-      head: [["No. Pesanan", "Tanggal", "Pembeli", "Total", "Metode", "Status Bayar", "Status Pesanan"]],
-      body: rows,
-      theme: "striped",
-      headStyles: { 
-        fillColor: [232, 93, 38], // Orange brand
-        textColor: 255,
-        fontSize: 9,
-        fontStyle: 'bold',
-        cellPadding: 3
-      },
-      bodyStyles: { 
-        fontSize: 8,
-        cellPadding: 3
-      },
-      alternateRowStyles: {
-        fillColor: [245, 245, 245]
-      },
-      // Column styles - atur lebar kolom
-      columnStyles: {
-        0: { cellWidth: 28 },  // No. Pesanan
-        1: { cellWidth: 25 },  // Tanggal
-        2: { cellWidth: 30 },  // Pembeli
-        3: { cellWidth: 22 },  // Total
-        4: { cellWidth: 18 },  // Metode
-        5: { cellWidth: 22 },  // Status Bayar
-        6: { cellWidth: 25 }   // Status Pesanan
-      },
-      // Auto resize untuk fit
-      margin: { top: 45, left: 10, right: 10 },
-      // Page break
-      pageBreak: 'auto',
-      // Table width
-      tableWidth: 'auto'
-    });
+          doc.setFontSize(10);
+          doc.setFont("helvetica", "normal");
+          doc.text("Toko Bahan Bangunan", 15, 26);
+          doc.text("Laporan Transaksi", 15, 32);
+          doc.text(
+            `Tanggal: ${new Date().toLocaleDateString("id-ID")}`,
+            15,
+            38,
+          );
 
-    // Add footer dengan nomor halaman
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
-      doc.setFontSize(8);
-      doc.setTextColor(150);
-      doc.text(
-        `Halaman ${i} dari ${pageCount}`,
-        doc.internal.pageSize.getWidth() / 2,
-        doc.internal.pageSize.getHeight() - 10,
-        { align: 'center' }
-      );
-    }
+          // Prepare data
+          const data = filteredTrx.length ? filteredTrx : allTrx;
+          const rows = data.map((t) => [
+            t.noOrder || "-",
+            fmtDate(t.createdAt),
+            t.namaPelanggan || "-",
+            fmtRp(t.total),
+            (t.metodeBayar || "-").toUpperCase(),
+            t.statusPembayaran || "-",
+            t.statusPesanan || "-",
+          ]);
 
-    // Save
-    const date = new Date().toISOString().split("T")[0];
-    doc.save(`Transaksi_AMJ_${date}.pdf`);
+          // Table dengan konfigurasi yang lebih baik
+          doc.autoTable({
+            startY: 45,
+            head: [
+              [
+                "No. Pesanan",
+                "Tanggal",
+                "Pembeli",
+                "Total",
+                "Metode",
+                "Status Bayar",
+                "Status Pesanan",
+              ],
+            ],
+            body: rows,
+            theme: "striped",
+            headStyles: {
+              fillColor: [232, 93, 38], // Orange brand
+              textColor: 255,
+              fontSize: 9,
+              fontStyle: "bold",
+              cellPadding: 3,
+            },
+            bodyStyles: {
+              fontSize: 8,
+              cellPadding: 3,
+            },
+            alternateRowStyles: {
+              fillColor: [245, 245, 245],
+            },
+            // Column styles - atur lebar kolom
+            columnStyles: {
+              0: { cellWidth: 28 }, // No. Pesanan
+              1: { cellWidth: 25 }, // Tanggal
+              2: { cellWidth: 30 }, // Pembeli
+              3: { cellWidth: 22 }, // Total
+              4: { cellWidth: 18 }, // Metode
+              5: { cellWidth: 22 }, // Status Bayar
+              6: { cellWidth: 25 }, // Status Pesanan
+            },
+            // Auto resize untuk fit
+            margin: { top: 45, left: 10, right: 10 },
+            // Page break
+            pageBreak: "auto",
+            // Table width
+            tableWidth: "auto",
+          });
 
-  } catch (err) {
-    console.error("PDF export error:", err);
-    alert("Gagal ekspor PDF: " + err.message);
-  } finally {
-    btn.disabled = false;
-    sp.style.display = "none";
-  }
-}
+          // Add footer dengan nomor halaman
+          const pageCount = doc.internal.getNumberOfPages();
+          for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setTextColor(150);
+            doc.text(
+              `Halaman ${i} dari ${pageCount}`,
+              doc.internal.pageSize.getWidth() / 2,
+              doc.internal.pageSize.getHeight() - 10,
+              { align: "center" },
+            );
+          }
 
-// Helper to load script
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    if (document.querySelector(`script[src="${src}"]`)) {
-      resolve();
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = src;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
+          // Save
+          const date = new Date().toISOString().split("T")[0];
+          doc.save(`Transaksi_AMJ_${date}.pdf`);
+        } catch (err) {
+          console.error("PDF export error:", err);
+          alert("Gagal ekspor PDF: " + err.message);
+        } finally {
+          btn.disabled = false;
+          sp.style.display = "none";
+        }
+      }
 
-// Helper to load script
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    if (document.querySelector(`script[src="${src}"]`)) {
-      resolve();
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = src;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
+      // Helper to load script
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          if (document.querySelector(`script[src="${src}"]`)) {
+            resolve();
+            return;
+          }
+          const script = document.createElement("script");
+          script.src = src;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      // Helper to load script
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          if (document.querySelector(`script[src="${src}"]`)) {
+            resolve();
+            return;
+          }
+          const script = document.createElement("script");
+          script.src = src;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
 
       /* ═══════════════════════════════════════════════════
    UI HELPERS

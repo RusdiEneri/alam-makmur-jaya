@@ -223,7 +223,7 @@ router.post('/', (req, res) => {
     items:             itemDetails,
     total,
     metodeBayar,
-    statusPembayaran:  (isTunai || metodeBayar === 'cod') ? 'lunas' : 'pending',
+    statusPembayaran:  isTunai ? 'lunas' : 'pending',
     statusPesanan:     isTunai ? 'selesai' : 'diproses',
     stokDireservasi:   true,
     buktiTransfer:     null,

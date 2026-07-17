@@ -1005,8 +1005,8 @@
           showActions
             ? `<td>
           <div style="display:flex; flex-wrap:wrap; gap:4px;">
-            ${statusB === "pending" ? `<button class="btn-sm primary" onclick="changeStatusBayar('${o.id}','berhasil')">💰 Terima</button>` : ""}
-            ${statusB === "berhasil" && statusP !== "selesai" ? `<button class="btn-sm secondary" onclick="changeStatusPesanan('${o.id}','selesai')">✓ Selesai</button>` : ""}
+            ${statusB === "pending" && !["cod", "tunai", "piutang"].includes(o.metodeBayar) ? `<button class="btn-sm primary" onclick="changeStatusBayar('${o.id}','berhasil')">💰 Terima</button>` : ""}
+            ${(statusB === "berhasil" || statusB === "lunas" || ["cod", "tunai", "piutang"].includes(o.metodeBayar)) && statusP !== "selesai" ? `<button class="btn-sm secondary" onclick="changeStatusPesanan('${o.id}','selesai')">✓ Selesai</button>` : ""}
             <button class="btn-sm secondary" onclick="printNotaHandler('${o.id}')">🖨️ Nota</button>
             <button class="btn-sm secondary" onclick="copyPesanKonfirmasi('${o.noOrder}', ${total}, '${statusB}')">📱 WA</button>
           </div>

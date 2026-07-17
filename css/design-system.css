@@ -8,31 +8,31 @@
 
 :root {
 
-  /* ── COLOR PALETTE ─────────────────────────────────────── */
+  /* ── COLOR PALETTE ────────────────────────────────────── */
 
-  /* Primary: Green */
-  --color-primary-50:  #F0FDF4;
-  --color-primary-100: #DCFCE7;
-  --color-primary-200: #BBF7D0;
-  --color-primary-300: #86EFAC;
-  --color-primary-400: #4ADE80;
-  --color-primary-500: #22C55E;
-  --color-primary-600: #16A34A;   /* brand primary */
-  --color-primary-700: #15803D;
-  --color-primary-800: #166534;
-  --color-primary-900: #14532D;
+  /* Primary: ORANGE BRAND (#E85D26) */
+  --color-primary-50:  #FDF1EC;
+  --color-primary-100: #FEE4D6;
+  --color-primary-200: #FDC9AD;
+  --color-primary-300: #F5987A;
+  --color-primary-400: #F17A5A;
+  --color-primary-500: #E85D26;   /* brand primary */
+  --color-primary-600: #C04718;   /* darker orange */
+  --color-primary-700: #A03A12;
+  --color-primary-800: #853110;
+  --color-primary-900: #6D280D;
 
-  /* Accent: Amber */
-  --color-accent-50:  #FFFBEB;
-  --color-accent-100: #FEF3C7;
-  --color-accent-200: #FDE68A;
-  --color-accent-300: #FCD34D;
-  --color-accent-400: #FBBF24;
-  --color-accent-500: #F59E0B;    /* brand accent */
-  --color-accent-600: #D97706;
-  --color-accent-700: #B45309;
-  --color-accent-800: #92400E;
-  --color-accent-900: #78350F;
+  /* Accent: Green (untuk success states) */
+  --color-accent-50:  #F0FDF4;
+  --color-accent-100: #DCFCE7;
+  --color-accent-200: #BBF7D0;
+  --color-accent-300: #86EFAC;
+  --color-accent-400: #4ADE80;
+  --color-accent-500: #22C55E;    /* brand accent */
+  --color-accent-600: #16A34A;
+  --color-accent-700: #15803D;
+  --color-accent-800: #166534;
+  --color-accent-900: #14532D;
 
   /* Danger: Red */
   --color-danger-50:  #FEF2F2;
@@ -59,9 +59,9 @@
   --color-gray-900: #111827;
 
   /* Semantic aliases */
-  --color-primary:       var(--color-primary-600);
-  --color-primary-light: var(--color-primary-50);
-  --color-primary-dark:  var(--color-primary-700);
+  --color-primary:       var(--color-primary-500);  /* #E85D26 */
+  --color-primary-light: var(--color-primary-50);   /* #FDF1EC */
+  --color-primary-dark:  var(--color-primary-600);  /* #C04718 */
 
   --color-accent:        var(--color-accent-500);
   --color-accent-light:  var(--color-accent-50);
@@ -71,10 +71,10 @@
   --color-danger-light:  var(--color-danger-50);
   --color-danger-dark:   var(--color-danger-700);
 
-  --color-success:       #10B981;
-  --color-success-light: #ECFDF5;
-  --color-warning:       var(--color-accent-500);
-  --color-warning-light: var(--color-accent-50);
+  --color-success:       var(--color-accent-500);
+  --color-success-light: var(--color-accent-50);
+  --color-warning:       #F59E0B;
+  --color-warning-light: #FFFBEB;
 
   /* Surfaces */
   --color-bg:            #FFFFFF;
@@ -203,10 +203,10 @@
   --shadow-inner:
     inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
 
-  /* Colored brand shadows */
-  --shadow-primary:    0 8px 24px rgba(22, 163, 74, 0.28);
-  --shadow-primary-lg: 0 16px 40px rgba(22, 163, 74, 0.32);
-  --shadow-accent:     0 8px 24px rgba(245, 158, 11, 0.30);
+  /* Colored brand shadows - ORANGE */
+  --shadow-primary:    0 8px 24px rgba(232, 93, 38, 0.28);   /* #E85D26 */
+  --shadow-primary-lg: 0 16px 40px rgba(232, 93, 38, 0.32);
+  --shadow-accent:     0 8px 24px rgba(34, 197, 94, 0.30);   /* Green untuk success */
   --shadow-danger:     0 8px 24px rgba(220, 38, 38, 0.28);
 
 
@@ -241,7 +241,7 @@
   --container-xl:  1280px;
   --container-2xl: 1536px;
 
-  --sidebar-width: 256px;
+  --sidebar-width: 260px;
   --navbar-height: 64px;
 }
 
@@ -329,8 +329,8 @@
   color: var(--color-success);
 }
 .badge-warning {
-  background: var(--color-accent-100);
-  color: var(--color-accent-700);
+  background: var(--color-warning-light);
+  color: var(--color-warning);
 }
 
 /* Divider */

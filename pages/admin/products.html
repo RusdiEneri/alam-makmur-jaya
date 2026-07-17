@@ -12,11 +12,52 @@
 <link rel="stylesheet" href="../../css/admin-shared.css"/>
 <link rel="stylesheet" href="../../css/animations.css"/>
 <style>
-  .header-page-title { 
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  color: var(--color-text) !important;
-  margin: 0 !important;
+ :root  {
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --navbar-height: 64px;
+  --radius-md: 8px;
+  --radius-full: 999px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+  --color-border: #e2e8f0;
+  --color-bg-subtle: #f8fafc;
+  --color-text: #1e293b;
+  --color-primary: #E85D26;
+  --color-primary-400: #F5987A;
+  --font-bold: 700;
+  --text-lg: 18px;
+}
+  /* ── FIX HEADER HEIGHT STABILITY ──────────────────────────── */
+.top-header {
+  height: 64px !important;
+  min-height: 64px !important;
+  max-height: 64px !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+}
+
+.header-left,
+.header-right {
+  flex-shrink: 0 !important;
+}
+
+.header-page-title {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+/* Prevent layout shift */
+.content-wrapper {
+  min-width: 0 !important;
+}
+
+/* Ensure sticky works properly */
+.top-header {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: var(--font-sans); background: #F0F2F5; color: var(--color-text); min-height: 100vh; }
@@ -35,9 +76,8 @@ button { font-family: inherit; cursor: pointer; }
   top: 0; 
   height: 100vh; 
   z-index: 100;
-  width: 260px; /* Fixed width */
-  min-width: 260px; /* Prevent shrinking */
 }
+
 .sidebar-brand { 
   display: flex; 
   align-items: center; 
@@ -47,7 +87,7 @@ button { font-family: inherit; cursor: pointer; }
   color: white; 
   font-weight: 700; 
   font-size: 14px;
-  flex-shrink: 0; /* Prevent shrinking */
+  background: rgba(255, 255, 255, 0.02); /* Detail yang sebelumnya hilang */
 }
 
 .sidebar-brand-icon { 
@@ -61,6 +101,7 @@ button { font-family: inherit; cursor: pointer; }
   flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Detail yang sebelumnya hilang */
 }
 
 .sidebar-brand-icon img {
@@ -77,9 +118,32 @@ button { font-family: inherit; cursor: pointer; }
   gap: 2px; 
   overflow-y: auto; 
 }
-.sidebar-section { font-size: 10px; font-weight: 700; color: #ffffff; letter-spacing: 1px; text-transform: uppercase; padding: 14px 14px 6px; }
-.sidebar-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #94A3B8; transition: 0.2s; position: relative; }
-.sidebar-link:hover { background: #2c2c2e; color: #E2E8F0; }
+
+.sidebar-section-label,
+.sidebar-section { 
+  font-size: 10px; 
+  font-weight: 700; 
+  color: #ffffff; 
+  letter-spacing: 1px; 
+  text-transform: uppercase; 
+  padding: 14px 14px 6px; 
+}
+.sidebar-link { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  padding: 10px 14px; 
+  border-radius: 8px; 
+  font-size: 14px; 
+  font-weight: 500; 
+  color: #94a3b8; 
+  transition: 0.2s; 
+  position: relative; 
+}
+.sidebar-link:hover { 
+  background: #2c2c2e; 
+  color: #e2e8f0; 
+}
 
 /* FIX: Active state dengan warna orange */
 .sidebar-link.active { 
@@ -100,23 +164,133 @@ button { font-family: inherit; cursor: pointer; }
   border-radius: 0 3px 3px 0; 
 }
 
-.sidebar-footer { padding: 16px 12px; border-top: 1px solid #2c2c2e; }
-
+.sidebar-footer { 
+  padding: 16px 12px; 
+  border-top: 1px solid #2c2c2e; 
+}
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 99;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+.sidebar-overlay.open {
+  display: block;
+  opacity: 1;
+}
 /* ── CONTENT ─────────────────────────────────────── */
 .content-wrapper { display: flex; flex-direction: column; height: 100vh; overflow-y: auto; min-width: 0; }
 
+/* ── TOP HEADER (Konsisten dengan dashboard.html) ───────────────────────── */
 .top-header { 
   background: white; 
-  height: 64px; 
   border-bottom: 1px solid var(--color-border); 
+  padding: 0 var(--space-6, 24px); 
+  height: var(--navbar-height, 64px); 
   display: flex; 
   align-items: center; 
   justify-content: space-between; 
-  padding: 0 24px; 
+  gap: var(--space-4, 16px); 
   position: sticky; 
   top: 0; 
   z-index: 80; 
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04); 
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.04)); 
+}
+
+.header-left { 
+  display: flex; 
+  align-items: center; 
+  gap: var(--space-4, 16px); 
+}
+
+.hamburger-btn { 
+  display: none; /* Muncul hanya di mobile via media query */
+  align-items: center; 
+  justify-content: center; 
+  width: 36px; 
+  height: 36px; 
+  border-radius: var(--radius-md, 8px); 
+  border: 1px solid var(--color-border); 
+  background: transparent; 
+  cursor: pointer; 
+  font-size: 18px; 
+  color: var(--color-text); 
+  transition: background 0.2s; 
+}
+
+.hamburger-btn:hover { 
+  background: var(--color-bg-subtle, #f1f5f9); 
+}
+
+.header-page-title { 
+  font-size: var(--text-lg, 18px); 
+  font-weight: var(--font-bold, 700); 
+  color: var(--color-text); 
+}
+
+.header-right { 
+  display: flex; 
+  align-items: center; 
+  gap: var(--space-3, 12px); 
+}
+
+.header-user { 
+  display: flex; 
+  align-items: center; 
+  gap: var(--space-2, 8px); 
+  background: var(--color-bg-subtle, #f8fafc); 
+  border: 1px solid var(--color-border); 
+  padding: 6px 12px; 
+  border-radius: 999px; 
+  cursor: default; 
+}
+
+.header-avatar { 
+  width: 28px; 
+  height: 28px; 
+  border-radius: 50%; 
+  background: linear-gradient(135deg, var(--color-primary, #E85D26), var(--color-primary-400, #F5987A)); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-size: 11px; 
+  font-weight: 700; 
+  color: white; 
+}
+
+.header-user-name { 
+  font-size: 14px; 
+  font-weight: 600; 
+  color: var(--color-text); 
+}
+
+/* Tampilkan hamburger di mobile */
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr; /* Sidebar tidak lagi mengambil ruang grid */
+  }
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    transform: translateX(-100%); /* Sembunyikan sidebar ke kiri layar */
+    z-index: 1000;
+    transition: transform 0.3s ease-out;
+  }
+
+  .sidebar.open {
+    transform: translateX(0); /* Munculkan sidebar saat class 'open' ditambahkan */
+  }
+
+  .hamburger-btn { 
+    display: flex; 
+  }
 }
 .header-title { 
   font-size: 18px !important;
@@ -125,11 +299,6 @@ button { font-family: inherit; cursor: pointer; }
   margin: 0 !important;
   line-height: 1.2 !important;
 }
-/* .header-page-title {
-        font-size: var(--text-lg);
-        font-weight: var(--font-bold);
-        color: var(--color-text);
-      } */
 .main-content { padding: 24px; }
 
 /* ─ STOCK ALERT BANNER (FR-05) ──────────────────── */
@@ -354,19 +523,22 @@ th.sort-desc .sort-arrow { color: #E85D26; }
 </aside>
 <!-- CONTENT -->
 <div class="content-wrapper">
-<header class="top-header">
-<div style="display:flex;align-items:center;gap:12px;">
-<!-- <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button> -->
-<!-- <span class="header-title">Produk & Stok</span> -->
- <header class="top-header">
-  <div class="header-left" style="display:flex;align-items:center;gap:12px;">
+<!-- ═══════════════════════════════════════════
+     TOP HEADER
+     ═══════════════════════════════════════════ -->
+<header class="top-header" style="height: 64px; min-height: 64px;">
+  <div class="header-left">
     <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
-    <span class="header-page-title">Produk & Stok</span>
+    <h1 class="header-page-title" style="margin: 0; font-size: 18px; font-weight: 700;">Produk & Stok</h1>
   </div>
-  <div style="font-size:12px; color:var(--color-text-muted)" id="last-updated"></div>
-</header>
-</div>
-<div style="font-size:12px; color:var(--color-text-muted)" id="last-updated"></div>
+  
+  <div class="header-right">
+    <!-- User chip -->
+    <div class="header-user" style="display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 999px;">
+      <div class="header-avatar" id="header-avatar" style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #E85D26, #F5987A); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white;">A</div>
+      <span class="header-user-name" id="header-username" style="font-size: 14px; font-weight: 600; color: #1e293b;">Loading...</span>
+    </div>
+  </div>
 </header>
 <main class="main-content">
 <!-- STOCK ALERT BANNER (FR-05) -->
@@ -644,9 +816,41 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function checkAuth() {
-  const u = sessionStorage.getItem('user');
-  if (!u) {
+  const userStr = sessionStorage.getItem('user');
+  if (!userStr) {
     console.warn('⚠️ No user session, redirecting to login');
+    window.location.href = '../public/login.html';
+    return;
+  }
+
+  try {
+    // Parse data user dari sessionStorage
+    const user = JSON.parse(userStr);
+    
+    // Ambil nama (fallback ke name, email, atau "Admin")
+    const name = user.nama || user.name || user.email || "Admin";
+    
+    // Buat inisial (2 huruf pertama dari nama)
+    const initials = name
+      .split(" ")
+      .map((w) => w[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+
+    // Masukkan ke elemen HTML header
+    const elHeaderUser = document.getElementById("header-username");
+    if (elHeaderUser) {
+      elHeaderUser.textContent = name;
+    }
+    
+    const elHeaderAvatar = document.getElementById("header-avatar");
+    if (elHeaderAvatar) {
+      elHeaderAvatar.textContent = initials;
+    }
+    
+  } catch (e) {
+    console.error("❌ Failed to parse user session:", e);
     window.location.href = '../public/login.html';
   }
 }
@@ -1376,6 +1580,22 @@ async function deleteSatuan(id) {
     alert('Gagal menghapus satuan: ' + err.message);
   }
 }
+(function() {
+  const header = document.querySelector('.top-header');
+  if (header) {
+    // Force height after load
+    window.addEventListener('load', () => {
+      header.style.height = '64px';
+      header.style.minHeight = '64px';
+    });
+    
+    // Also fix on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      header.style.height = '64px';
+      header.style.minHeight = '64px';
+    });
+  }
+})();
 </script>
 </body>
 </html>

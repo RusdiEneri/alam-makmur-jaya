@@ -22,6 +22,31 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
+    :root {
+      --color-primary: #E85D26;
+      --color-primary-dark: #C04718;
+      --color-primary-400: #F5987A;
+      --color-danger: #DC2626;
+      --color-border: #e2e8f0;
+      --color-text: #1e293b;
+      --color-bg-subtle: #f8fafc;
+      
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      
+      --text-lg: 18px;
+      --font-bold: 700;
+      
+      --navbar-height: 64px;
+      --sidebar-width: 260px;
+      --radius-md: 8px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+      --z-dropdown: 80;
+      --duration-base: 0.2s;
+      --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+    }
     /* BASE */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--font-sans); background: #F0F2F5; color: var(--color-text); min-height: 100vh; }
@@ -73,9 +98,91 @@
     }
     .sidebar-footer { padding: 16px 12px; border-top: 1px solid #2c2c2e; }
 
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 99;
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+    }
+
+    .sidebar-overlay.open {
+      display: block;
+      opacity: 1;
+    }
+
     /* CONTENT WRAPPER */
-    .content-wrapper { display: flex; flex-direction: column; min-width: 0; height: 100vh; overflow-y: auto; }
-    .top-header { background: white; height: 64px; border-bottom: 1px solid var(--color-border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 90; }
+    .content-wrapper { display: flex; flex-direction: column; min-width: 0; min-height: 100vh; overflow-y: auto; }
+    
+    .top-header { 
+      background: white; 
+      border-bottom: 1px solid var(--color-border); 
+      padding: 0 var(--space-6); 
+      height: var(--navbar-height); 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      gap: var(--space-4); 
+      position: sticky; 
+      top: 0; 
+      z-index: var(--z-dropdown); 
+      box-shadow: var(--shadow-sm); 
+    }
+    .header-left { display: flex; align-items: center; gap: var(--space-4); }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .header-user { display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid var(--color-border); padding: 6px 12px; border-radius: 999px; cursor: default; }
+    .header-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #E85D26, #F5987A); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
+    .header-user-name { font-size: 14px; font-weight: 600; color: var(--color-text); }
+    
+    .hamburger-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: transparent;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--color-text);
+      transition: background var(--duration-base) var(--ease-out);
+    }
+    .hamburger-btn:hover { background: var(--color-bg-subtle); }
+    
+    .header-page-title {
+      font-size: var(--text-lg);
+      font-weight: var(--font-bold);
+      color: var(--color-text);
+    }
+
+    @media (max-width: 768px) {
+      .app-layout {
+        grid-template-columns: 1fr !important;
+      }
+      .sidebar {
+        position: fixed !important;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 260px;
+        transform: translateX(-100%);
+        z-index: 1000;
+        transition: transform 0.3s ease-out;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .hamburger-btn {
+        display: flex !important;
+      }
+      .header-user-name {
+        display: none;
+      }
+    }
     .page-heading { font-size: 18px; font-weight: 700; }
     .main-content { padding: 24px; }
 
@@ -97,8 +204,8 @@
     .btn-export { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
     .btn-excel { background: #217346; color: white; }
     .btn-excel:hover { background: #1a5c38; }
-    .btn-pdf { background: #E85D26; color: white; }
-    .btn-pdf:hover { background: #C04718; }
+    .btn-pdf { background: #C62828 ; color: white; }
+    .btn-pdf:hover { background: #a72626; }
     .btn-export:disabled { opacity: 0.65; cursor: not-allowed; }
     .btn-spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -210,11 +317,19 @@
   <!-- CONTENT -->
   <div class="content-wrapper">
     <header class="top-header no-print">
-      <div style="display:flex;align-items:center;gap:12px;">
+      <div class="header-left">
         <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
-        <div class="page-heading">Laporan Keuangan</div>
+        <span class="header-page-title">Laporan Keuangan</span>
       </div>
-      <div style="font-size:12px; color:var(--color-text-muted);" id="last-updated"></div>
+      
+      <div class="header-right">
+        <div style="font-size:12px; color:var(--color-text-muted); margin-right: 8px;" id="last-updated"></div>
+        <!-- User chip -->
+        <div class="header-user">
+          <div class="header-avatar" id="header-avatar">A</div>
+          <span class="header-user-name" id="header-username">Loading...</span>
+        </div>
+      </div>
     </header>
 
     <main class="main-content">
@@ -372,9 +487,35 @@
 <script src="../../js/admin-shared.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════
-   AUTH
+   AUTH & USER POPULATION
 ═══════════════════════════════════════════════════════ */
-if (!sessionStorage.getItem('token')) window.location.replace('../public/login.html');
+(function checkAuth() {
+  const userStr = sessionStorage.getItem('user');
+  if (!sessionStorage.getItem("token") || !userStr) {
+    window.location.replace("../public/login.html");
+    return;
+  }
+
+  try {
+    const user = JSON.parse(userStr);
+    const name = user.nama || user.name || user.email || "Admin";
+    const initials = name
+      .split(" ")
+      .map((w) => w[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+
+    const elHeaderUser = document.getElementById("header-username");
+    if (elHeaderUser) elHeaderUser.textContent = name;
+    
+    const elHeaderAvatar = document.getElementById("header-avatar");
+    if (elHeaderAvatar) elHeaderAvatar.textContent = initials;
+  } catch (e) {
+    console.error("Failed to parse user session:", e);
+    window.location.replace("../public/login.html");
+  }
+})();
 /* handleLogout — provided globally by admin-shared.js */
 
 /* toggleSidebar/closeSidebar — provided globally by admin-shared.js */
@@ -492,8 +633,8 @@ async function loadReport() {
     renderTopProductsPrintTable(topProds);
     updatePeriodLabels();
 
-    document.getElementById('last-updated').textContent =
-      'Diperbarui: ' + new Date().toLocaleTimeString('id-ID', { timeZone: 'Asia/Jakarta' });
+    // document.getElementById('last-updated').textContent =
+    //   'Diperbarui: ' + new Date().toLocaleTimeString('id-ID', { timeZone: 'Asia/Jakarta' });
 
     setTimeout(() => fadeContent(true), 100);
   } catch (err) {

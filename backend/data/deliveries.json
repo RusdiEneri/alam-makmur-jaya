@@ -311,5 +311,47 @@
     "updatedAt": "2026-07-15T03:49:35.026Z",
     "estimasiTiba": "00:49",
     "waktuKirim": "2026-07-15T03:49:35.026Z"
+  },
+  {
+    "id": "del-ba7d8413",
+    "transaksiId": "trx-e31d1bbd",
+    "noOrder": "AMJ-20260716-001",
+    "namaPelanggan": "aldo",
+    "alamat": "jjl veteran",
+    "tanggalKirim": "2026-07-16T04:04:27.686Z",
+    "kurir": null,
+    "kendaraan": null,
+    "status": "dijadwalkan",
+    "catatan": "",
+    "createdAt": "2026-07-16T04:07:15.536Z",
+    "updatedAt": "2026-07-16T04:07:15.536Z"
+  },
+  {
+    "id": "del-d2164fec",
+    "transaksiId": "trx-272dd079",
+    "noOrder": "AMJ-20260716-002",
+    "namaPelanggan": "Pelanggan Offline",
+    "alamat": "Walk-in (Kasir)",
+    "tanggalKirim": "2026-07-16T04:09:06.106Z",
+    "kurir": null,
+    "kendaraan": null,
+    "status": "dijadwalkan",
+    "catatan": "",
+    "createdAt": "2026-07-16T04:10:13.088Z",
+    "updatedAt": "2026-07-16T04:10:13.088Z"
+  },
+  {
+    "id": "del-674adb81",
+    "transaksiId": "trx-68208ff2",
+    "noOrder": "AMJ-20260717-001",
+    "namaPelanggan": "alok",
+    "alamat": "gresik",
+    "tanggalKirim": "2026-07-16T17:54:01.377Z",
+    "kurir": null,
+    "kendaraan": null,
+    "status": "dijadwalkan",
+    "catatan": "dekat uisi",
+    "createdAt": "2026-07-16T17:54:43.737Z",
+    "updatedAt": "2026-07-16T17:54:43.737Z"
   }
 ]

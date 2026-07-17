@@ -151,8 +151,16 @@ router.put('/:id/status-bayar', authenticate, staffOnly, (req, res) => {
   if (idx === -1) return res.status(404).json({ message: 'Transaksi tidak ditemukan' });
 
   const trx = transactions[idx];
-
   // Transition rules for Pembayaran
+
+  // COD, tunai, piutang — status bayar dikelola otomatis oleh sistem, tidak boleh diubah manual
+  const isOfflineOrCod = ['cod', 'tunai', 'piutang'].includes(trx.metodeBayar);
+  if (isOfflineOrCod) {
+    return res.status(400).json({ 
+      message: `Status pembayaran untuk metode ${trx.metodeBayar.toUpperCase()} dikelola otomatis oleh sistem` 
+    });
+  }
+
   if (trx.metodeBayar === 'transfer' && trx.statusPembayaran !== 'pending') {
     return res.status(400).json({ message: 'Status pembayaran transfer yang sudah diproses tidak dapat diubah lagi' });
   }
@@ -315,9 +323,24 @@ router.put('/:id/status-pesanan', authenticate, staffOnly, (req, res) => {
     return res.status(400).json({ message: 'Pesanan transfer tidak boleh dikirim karena pembayaran belum berhasil' });
   }
   
-  // pesanan tidak boleh selesai jika pembayaran masih pending
-  if (status === 'selesai' && trx.statusPembayaran === 'pending') {
+  // pesanan tidak boleh selesai jika pembayaran masih pending (kecuali untuk COD dan offline/piutang/tunai)
+  const isOfflineOrCod = trx.metodeBayar === 'cod' || trx.metodeBayar === 'tunai' || trx.metodeBayar === 'piutang';
+  if (status === 'selesai' && (trx.statusPembayaran === 'pending' || trx.statusPembayaran === 'menunggu') && !isOfflineOrCod) {
     return res.status(400).json({ message: 'Pesanan tidak boleh selesai jika pembayaran masih pending' });
+  }
+
+  // Auto-set status pembayaran untuk COD & tunai menjadi lunas/berhasil saat pesanan selesai
+  if (status === 'selesai' && (trx.metodeBayar === 'cod' || trx.metodeBayar === 'tunai')) {
+    if (trx.statusPembayaran === 'pending' || trx.statusPembayaran === 'menunggu' || trx.statusPembayaran === 'lunas') {
+      trx.statusPembayaran = 'berhasil';
+      if (!trx.statusHistory) trx.statusHistory = [];
+      trx.statusHistory.push({
+        tipe: 'pembayaran',
+        status: 'berhasil',
+        timestamp: new Date().toISOString(),
+        oleh: req.user.nama || 'Sistem'
+      });
+    }
   }
 
   let atomicProducts = null;
