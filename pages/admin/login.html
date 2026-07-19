@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masuk — UD. Alam Makmur Jaya</title>
+    <link rel="icon" href="../../assets/icon.png" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/style.css" />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f0ede8;
+      }
+      .login-wrap {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+      .login-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 420px;
+        border: 1.5px solid #e5e5e5;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      }
+      .login-logo {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .login-logo .big {
+        font-size: 40px;
+      }
+      .login-logo h1 {
+        font-family: "Fraunces", serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1c1c1e;
+        margin-top: 8px;
+      }
+      .login-logo p {
+        font-size: 13px;
+        color: #6b6b6b;
+      }
+      .demo-box {
+        background: #f9f8f6;
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 1.5rem;
+        border: 1px dashed #d1cfc9;
+      }
+      .demo-box p {
+        font-size: 12px;
+        color: #6b6b6b;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+      .demo-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        margin: 4px 0;
+        color: #2d2d2d;
+      }
+      .demo-item .role {
+        background: #e85d26;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 99px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .demo-item .role.user {
+        background: #1a6b3a;
+      }
+      .btn-submit {
+        width: 100%;
+        padding: 13px;
+        background: #e85d26;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        transition: background 0.2s;
+      }
+      .btn-submit:hover {
+        background: #c04718;
+      }
+      .err {
+        background: #fee2e2;
+        color: #dc2626;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: none;
+      }
+      #toggle-password {
+        position: absolute;
+        right: 12px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #6b7280;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        transition:
+          color 0.2s ease,
+          opacity 0.2s ease;
+        opacity: 0.7;
+      }
+      #toggle-password:hover {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="index.html" class="brand">
+        <span class="brand-icon">
+  <img src="../../assets/icon.png" alt="Logo UD. Alam Makmur Jaya" style="width: 50px; height: 50px;"/>
+</span>
+        <div>
+          <span class="brand-name">Alam Makmur Jaya</span>
+          <span class="brand-sub">Toko Bahan Bangunan</span>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Beranda</a>
+        <a href="../public/catalog.html">Katalog</a>
+        <a href="cart.html"
+          >🛒 Keranjang <span id="cart-count" class="badge">0</span></a
+        >
+      </div>
+    </nav>
+
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="login-logo">
+          <div class="big"><img src="../../assets/logo-memanjang.png" alt="Logo UD. Alam Makmur Jaya" style="width: 321px; height: 187px"/></div>
+          <!-- <h1>Selamat Datang</h1>
+          <p>Masuk ke akun Anda untuk melanjutkan</p> -->
+        </div>
+
+        <div class="demo-box">
+          <p>🔑 Akun Demo:</p>
+          <div class="demo-item">
+            <span>admin@amj.com / password123</span>
+            <span class="role">Admin</span>
+          </div>
+          <!-- <div class="demo-item">
+            <span>kasir@amj.com / password123</span>
+            <span class="role">Kasir</span>
+          </div> -->
+        </div>
+
+        <div class="err" id="err-msg">Email atau password salah!</div>
+
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input
+            class="form-input"
+            type="text"
+            id="username"
+            placeholder="Masukkan username"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div
+            class="input-password-wrapper"
+            style="position: relative; display: flex; align-items: center"
+          >
+            <input
+              class="form-input"
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              value=""
+              style="
+                padding-right: 44px;
+                width: 100%;
+                box-sizing: border-box;
+                flex: 1;
+              "
+            />
+            <button
+              type="button"
+              id="toggle-password"
+              aria-label="Tampilkan password"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7
+                   a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243
+                   M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29
+                   m7.532 7.532l3.29 3.29M3 3l3.59 3.59
+                   m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7
+                   a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <button class="btn-submit" onclick="doLogin()">Masuk →</button>
+      </div>
+    </div>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/data.js"></script>
+    <script>
+      // Redirect kalau sudah login
+      const existing = API.getCurrentUser();
+
+      if (existing) {
+        const role = (existing.role || "").toLowerCase();
+        if (role === "admin") {
+          window.location.href = "../admin/dashboard.html";
+        } else if (role === "kasir") {
+          window.location.href = "../kasir/pos.html";
+        }
+      }
+
+      async function doLogin() {
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+
+        try {
+          const result = await API.login(username, password);
+          const user = result.user;
+
+          if (!user || !user.role) {
+            throw new Error("Data user tidak valid dari server");
+          }
+
+          const role = user.role.toLowerCase();
+          if (role !== "admin" && role !== "kasir") {
+            throw new Error("Akses ditolak: Area ini khusus internal toko.");
+          }
+
+          // Simpan ulang untuk kompatibilitas dengan kode lama
+          if (result.token) {
+            sessionStorage.setItem("token", result.token);
+          }
+
+          sessionStorage.setItem("user", JSON.stringify(user));
+          sessionStorage.setItem("currentUser", JSON.stringify(user));
+          localStorage.setItem("currentUser", JSON.stringify(user));
+
+          showToast(
+            "✓ Berhasil masuk sebagai " +
+              (user.nama || user.name || user.email),
+          );
+
+            if (role === "admin") {
+              window.location.href = "../admin/dashboard.html";
+            } else if (role === "kasir") {
+              window.location.href = "../kasir/pos.html";
+            }
+        } catch (err) {
+          document.getElementById("err-msg").textContent =
+            err.message || "Email atau password salah";
+          document.getElementById("err-msg").style.display = "block";
+        }
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") doLogin();
+      });
+
+      const ICON_EYE_OPEN = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7
+         -1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+  </svg>`;
+
+      const ICON_EYE_CLOSED = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7
+         a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243
+         M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29
+         m7.532 7.532l3.29 3.29M3 3l3.59 3.59
+         m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7
+         a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+  </svg>`;
+
+      const toggleBtn = document.getElementById("toggle-password");
+      const passwordInput = document.getElementById("password");
+      let isVisible = false;
+      toggleBtn.addEventListener("click", () => {
+        isVisible = !isVisible;
+        passwordInput.type = isVisible ? "text" : "password";
+        toggleBtn.innerHTML = isVisible ? ICON_EYE_OPEN : ICON_EYE_CLOSED;
+        toggleBtn.setAttribute(
+          "aria-label",
+          isVisible ? "Sembunyikan password" : "Tampilkan password",
+        );
+      });
+    </script>
+  </body>
+</html>
