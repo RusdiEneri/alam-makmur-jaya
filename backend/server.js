@@ -12,29 +12,35 @@ const allowedOrigins = [
   'http://localhost:3000'
 ];
 
-// Cek apakah di .env CORS dimatikan (menggunakan string 'false')
-const disableCorsProtection = process.env.ALLOWED_ORIGINS === 'false';
+// Cek apakah di .env CORS dimatikan (menggunakan string 'false' atau '*')
+const disableCorsProtection = 
+  process.env.ALLOWED_ORIGINS === 'false' || 
+  process.env.ALLOWED_ORIGINS === '*';
 
-// Tambahkan origin production dari env JIKA nilainya bukan 'false'
+// Tambahkan origin production dari env JIKA nilainya aktif
 if (process.env.ALLOWED_ORIGINS && !disableCorsProtection) {
   process.env.ALLOWED_ORIGINS.split(',').forEach(o => allowedOrigins.push(o.trim()));
 }
 
 app.use(cors({
   origin: (origin, callback) => {
-    // 1. JIKA SAKLAR NYALA: Izinkan SEMUA request (Cocok buat gonta-ganti Wi-Fi)
-    if (disableCorsProtection) {
+    // 1. JIKA SAKLAR NYALA atau tidak ada origin (Postman/Mobile): Izinkan request
+    if (!origin || disableCorsProtection) {
       return callback(null, true);
     }
 
-    // 2. JIKA SAKLAR MATI (Mode Strict): Cek array allowedOrigins
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS: origin ${origin} tidak diizinkan`));
-    }
+    // 2. Mode Strict: Cek apakah domain terdaftar di allowedOrigins
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } 
+    
+    // 3. JIKA DITOLAK: Berikan `false` secara elegan ke library CORS.
+    // Jangan lempar `new Error()` di sini agar tidak memicu crash 500 tanpa header.
+    return callback(null, false);
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
@@ -74,6 +80,7 @@ app.use(express.static(path.join(__dirname, '..'), {
     }
   }
 }));
+
 // Serve uploads untuk bukti transfer (jika ada)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   setHeaders(res) {
