@@ -788,6 +788,17 @@ MODAL: KELOLA SATUAN (FR-02)
 <script src="../../js/api.js"></script>
 <script src="../../js/admin-shared.js"></script>
 <script>
+function handleLogout() {
+        // 1. Hapus semua token dan sesi yang tersimpan di browser
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('user'); // Hapus jika kamu menyimpan data info user
+        sessionStorage.clear();          // Bersihkan session storage untuk berjaga-jaga
+
+        // 2. Redirect ke halaman utama (Landing Page / Login)
+        // Berkat aturan vercel.json kemarin, cukup arahkan ke '/' untuk kembali ke index
+        window.location.href = '/';
+      }
 // Script Variables
 let allProducts = [];
 let allSatuan = [];
