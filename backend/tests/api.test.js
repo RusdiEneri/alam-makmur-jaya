@@ -12,7 +12,7 @@
 const { test, before } = require('node:test');
 const assert = require('node:assert/strict');
 
-const BASE = 'http://localhost:3000/api';
+const BASE = 'https://alam-makmur-jaya-production.up.railway.app/api';
 
 // ── Helper ────────────────────────────────────────────────────
 async function api(path, opts = {}) {
