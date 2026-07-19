@@ -20,14 +20,15 @@ const configuredApiBase =
   window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL
     ? String(window.APP_CONFIG.API_BASE_URL)
     : "";
-const BASE_URL = configuredApiBase
-  ? configuredApiBase.endsWith("/api")
-    ? configuredApiBase
-    : configuredApiBase.replace(/\/?$/, "") + "/api"
-  : (() => {
-      const hostname = window.location.hostname || "localhost";
-      return `http://${hostname}:3000/api`;
-    })();
+// const BASE_URL = configuredApiBase
+//   ? configuredApiBase.endsWith("/api")
+//     ? configuredApiBase
+//     : configuredApiBase.replace(/\/?$/, "") + "/api"
+//   : (() => {
+//       const hostname = window.location.hostname || "localhost";
+//       return `http://${hostname}:3000/api`;
+//     })();
+const BASE_URL = `https://alam-makmur-jaya-production.up.railway.app/api`;
 
 // ═══════════════════════════════════════════
 // CORE FETCH HELPER
