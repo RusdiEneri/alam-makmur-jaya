@@ -55,7 +55,7 @@ async function apiFetch(path, options = {}) {
         window.location.replace(
           window.location.pathname.includes("/pages/")
             ? "../public/login.html"
-            : "pages/public/login.html",
+            : "pages/public/login.html" || "/login.html",
         );
       }
     }
@@ -84,7 +84,7 @@ function logout() {
   sessionStorage.clear();
   const p = window.location.pathname;
   window.location.replace(
-    p.includes("/pages/") ? "../public/login.html" : "pages/public/login.html",
+    p.includes("/pages/") ? "../public/login.html" : "pages/public/login.html" || "/login.html",
   );
 }
 

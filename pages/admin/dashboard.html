@@ -1902,13 +1902,15 @@
       (function authGuard() {
         const user = API.getCurrentUser();
         if (!user) {
-          window.location.replace("../public/login.html");
+          // window.location.replace("../public/login.html");
+          window.location.replace("login.html");
           throw new Error("Not authenticated");
         }
 
         const role = (user.role || "").toLowerCase();
         if (role !== "admin" && role !== "kasir") {
-          window.location.replace("../public/login.html");
+          // window.location.replace("../public/login.html");
+          window.location.replace("login.html");
           throw new Error("Unauthorized role");
         }
 

@@ -1654,7 +1654,7 @@
       (function checkAuth() {
         const userStr = sessionStorage.getItem("user");
         if (!sessionStorage.getItem("token") || !userStr) {
-          window.location.replace("../public/login.html");
+          window.location.replace("login.html");
           return;
         }
 
@@ -1681,7 +1681,7 @@
           if (elHeaderAvatar) elHeaderAvatar.textContent = initials;
         } catch (e) {
           console.error("Failed to parse user session:", e);
-          window.location.replace("../public/login.html");
+          window.location.replace("login.html");
         }
       })();
 

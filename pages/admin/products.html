@@ -819,7 +819,7 @@ function checkAuth() {
   const userStr = sessionStorage.getItem('user');
   if (!userStr) {
     console.warn('⚠️ No user session, redirecting to login');
-    window.location.href = '../public/login.html';
+    window.location.href = 'login.html';
     return;
   }
 
@@ -851,7 +851,7 @@ function checkAuth() {
     
   } catch (e) {
     console.error("❌ Failed to parse user session:", e);
-    window.location.href = '../public/login.html';
+    window.location.href = 'login.html';
   }
 }
 

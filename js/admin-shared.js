@@ -353,7 +353,8 @@
       if (typeof API !== "undefined" && API.logout) {
         API.logout();
       } else {
-        window.location.replace("../public/login.html");
+        window.location.replace("login.html");
+        // window.location.replace("../public/login.html");
       }
     });
     el.addEventListener("click", (e) => {

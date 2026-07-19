@@ -1605,7 +1605,7 @@
 
       // Check auth
       if (!API.getCurrentUser()) {
-        window.location.href = '../public/login.html';
+        window.location.href = 'login.html';
       } else {
         const user = API.getCurrentUser();
         document.getElementById('header-username').textContent = user.nama || user.name || 'Kasir';
