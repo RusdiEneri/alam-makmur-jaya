@@ -5,6 +5,10 @@
       "destination": "/pages/public/index.html"
     },
     {
+      "source": "/public/:page.html",
+      "destination": "/pages/public/:page.html"
+    },
+    {
       "source": "/:page.html",
       "destination": "/pages/public/:page.html"
     }
