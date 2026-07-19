@@ -5,8 +5,12 @@
       "destination": "/pages/public/index.html"
     },
     {
-      "source": "/public/:page.html",
-      "destination": "/pages/public/:page.html"
+      "source": "/admin/:path*",
+      "destination": "/pages/admin/:path*"
+    },
+    {
+      "source": "/kasir/:path*",
+      "destination": "/pages/kasir/:path*"
     },
     {
       "source": "/:page.html",
