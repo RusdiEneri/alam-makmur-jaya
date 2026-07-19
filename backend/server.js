@@ -6,41 +6,40 @@ const multer  = require('multer');
 const app     = express();
 
 // ── Middleware global ──────────────────────────────────────────
+// ── Middleware global ──────────────────────────────────────────
 const allowedOrigins = [
   'http://localhost:5500',
   'http://127.0.0.1:5500',
   'http://localhost:3000'
 ];
 
-// Cek apakah di .env CORS dimatikan (menggunakan string 'false' atau '*')
 const disableCorsProtection = 
   process.env.ALLOWED_ORIGINS === 'false' || 
   process.env.ALLOWED_ORIGINS === '*';
 
-// Tambahkan origin production dari env JIKA nilainya aktif
 if (process.env.ALLOWED_ORIGINS && !disableCorsProtection) {
   process.env.ALLOWED_ORIGINS.split(',').forEach(o => allowedOrigins.push(o.trim()));
 }
 
 app.use(cors({
   origin: (origin, callback) => {
-    // 1. JIKA SAKLAR NYALA atau tidak ada origin (Postman/Mobile): Izinkan request
     if (!origin || disableCorsProtection) {
       return callback(null, true);
     }
 
-    // 2. Mode Strict: Cek apakah domain terdaftar di allowedOrigins
-    if (allowedOrigins.includes(origin)) {
+    // 🔥 HACK INSTAN: Otomatis izinkan semua domain yang mengandung 'vercel.app' atau 'localhost'
+    const isVercel = origin.includes('vercel.app');
+    const isLocal = origin.includes('localhost') || origin.includes('127.0.0.1');
+
+    if (isVercel || isLocal || allowedOrigins.includes(origin)) {
       return callback(null, true);
     } 
     
-    // 3. JIKA DITOLAK: Berikan `false` secara elegan ke library CORS.
-    // Jangan lempar `new Error()` di sini agar tidak memicu crash 500 tanpa header.
     return callback(null, false);
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept']
 }));
 
 app.use(express.json());
