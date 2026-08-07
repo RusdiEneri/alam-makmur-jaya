@@ -96,9 +96,9 @@ Dikembangkan untuk UD. Alam Makmur Jaya.
   <br/>
   <img src="https://img.shields.io/badge/✦%20Quote%20of%20the%20Day%20✦-7c3aed?style=flat-square&labelColor=1a1a2e" />
   <br/><br/>
-  <i>❝ Dunia ini mengagumkan. Orang-orang hidup dengan saling mencintai dan menghormati satu sama lain. ❞</i>
+  <i>❝ Seorang pemimpin tidak perlu menunjukkan kekuatannya untuk membuat temannya patuh. Kekuatan hanya perlu digunakan untuk melindungi temannya. ❞</i>
   <br/>
-  <sub>— <b>Photo</b> · <i>Kino no Tabi: The Beautiful World - The Animated Series</i></sub>
+  <sub>— <b>Isao Kondou</b> · <i>Gintama°</i></sub>
   <br/><br/>
   <img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=6&height=2&width=60%" />
 </div>
