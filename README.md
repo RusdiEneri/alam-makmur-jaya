@@ -96,9 +96,9 @@ Dikembangkan untuk UD. Alam Makmur Jaya.
   <br/>
   <img src="https://img.shields.io/badge/✦%20Quote%20of%20the%20Day%20✦-7c3aed?style=flat-square&labelColor=1a1a2e" />
   <br/><br/>
-  <i>❝ Orang bilang bahwa "Orang bodoh belajar dari pengalaman, sementara orang bijak belajar dari sejarah". Kuharap kau bukan termasuk orang yang bodoh. ❞</i>
+  <i>❝ Dari pada berhenti dan khawatir, lebih baik terus maju selangkah demi selangkah. Meskipun jejak kakiku kemarin akan menghilang, dan meskipun jalan yang aku lalui besok akan gelap, tapi aku tidak akan menoleh kebelakang ataupun pesimis dengan masa depan. Aku hanya ingin merasakan hidupku yang sekarang. Karena meskipun aku mengelaknya, waktu akan terus berjalan. ❞</i>
   <br/>
-  <sub>— <b>Nobuchika Ginoza</b> · <i>Psycho-Pass</i></sub>
+  <sub>— <b>Chtholly Nota Seniorious</b> · <i>Shuumatsu Nani Shitemasu ka? Isogashii desu ka? Sukutte Moratte Ii desu ka?</i></sub>
   <br/><br/>
   <img src="https://capsule-render.vercel.app/api?type=rect&color=gradient&customColorList=6&height=2&width=60%" />
 </div>
