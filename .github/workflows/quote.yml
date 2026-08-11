@@ -1,0 +1,64 @@
+name: Update Quote Log
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/quote.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Fetch Random Anime Quote & Write to Log
+        run: |
+          # Fetch all quotes
+          curl -s https://cabrata.github.io/quotesnime-database/quotes.json -o quotes.json
+
+          # Ambil random index
+          COUNT=$(jq length quotes.json)
+          if [ "$COUNT" -eq 0 ]; then
+            echo "No quotes found!"
+            exit 1
+          fi
+          INDEX=$((RANDOM % COUNT))
+
+          # Ambil field dari quote terpilih
+          CHAR=$(jq -r ".[$INDEX].character" quotes.json)
+          ANIME=$(jq -r ".[$INDEX].anime" quotes.json)
+          QUOTE=$(jq -r ".[$INDEX].quotes" quotes.json)
+          
+          # Waktu saat ini (WIB)
+          TIME=$(TZ='Asia/Jakarta' date '+%Y-%m-%d %H:%M:%S WIB')
+
+          # Tulis ke log.txt. 
+          # (Timestamp dimasukkan ke dalam file agar isi file SELALU berubah dan memicu commit rutin             untuk "penghijauan" profil)
+          cat > log.txt << EOF
+          Last updated: $TIME
+
+          Character: $CHAR
+          Anime: $ANIME
+
+          "$QUOTE"
+          EOF
+
+          # Hapus file json sementara agar tidak ikut ter-commit ke repo
+          rm quotes.json
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name 'RusdiEneri'
+          git config --global user.email 'nuruddinrusydiilham@gmail.com'
+          git add log.txt
+          git diff --cached --quiet || git commit -m "chore: update quote log ($(TZ='Asia/Jakarta' date '+%Y-%m-%d %H:%M WIB'))"
+          git push
